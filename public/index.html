@@ -1,0 +1,87 @@
+<html>
+    <head>
+        <title>EYES-thetic 24:7</title>
+    </head>
+    <body>
+    <h2>EYES-thetic 24/7 user input</h1>
+    <p>Select your clothing preference!</p>
+
+    <form id="recommendForm">
+        <label for ="gender">Choose gender: </label>
+        <select id ="gender" name="gender">
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
+        </select>
+        <br>
+
+        <label for ="season">Choose season: </label>
+        <select id ="season" name="season">
+            <option value="Fall">Fall</option>
+            <option value="Summer">Summer</option>
+            <option value="Winter">Winter</option>
+            <option value="Spring">Spring</option>
+        </select>
+        <br>
+
+        <label for="usage">Choose usage: </label>
+        <select id="usage" name="usage">
+            <option value="Casual">Casual</option>
+            <option value="Formal">Formal</option>
+            <option value="Sports">Sports</option>
+        </select>
+        <br>
+
+        <button type="button" onclick="submitForm()">Get Recommendations</button>
+    </form>
+    
+    <h3>Recommendations:</h3>
+    <div id="results"></div>
+
+    <script>
+        async function submitForm() {
+            const form = document.getElementById('recommendForm');
+
+            // collect form data
+            const data = {
+                gender: form.gender.value,
+                season: form.season.value,
+                usage: form.usage.value
+            };
+
+            try {
+                // Send data to the backend
+                const response = await fetch('/recommend', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                // Parse and display the response
+                const recommendations = await response.json();
+                const resultsDiv = document.getElementById('results');
+
+                // Check if any recommendations were returned
+                if (recommendations.message) {
+                    resultsDiv.innerHTML = `<p>${recommendations.message}</p>`;
+                    return;
+                }
+
+                // Display recommendations in a formatted way
+                resultsDiv.innerHTML = recommendations.map(pair => `
+                    <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
+                        <p><b>Top:</b> ${pair.top_name} [ID: ${pair.top_id} ${pair.top_colour}]</p>
+                        <p><b>Bottom:</b> ${pair.bottom_name} [ID: ${pair.bottom_id} ${pair.bottom_colour}]</p>
+                        <p><b>Season:</b> ${pair.season}</p>
+                        <p><b>Usage:</b> ${pair.usage}</p>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error fetching recommendations:', error);
+                document.getElementById('results').innerHTML = `<p>Error fetching recommendations. Please try again later.</p>`;
+            }
+        }
+    </script>
+    </body>
+</html>
