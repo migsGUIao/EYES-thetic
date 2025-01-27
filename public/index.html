@@ -71,8 +71,14 @@
                 // Display recommendations in a formatted way
                 resultsDiv.innerHTML = recommendations.map(pair => `
                     <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
-                        <p><b>Top:</b> ${pair.top_name} [ID: ${pair.top_id} ${pair.top_colour}]</p>
-                        <p><b>Bottom:</b> ${pair.bottom_name} [ID: ${pair.bottom_id} ${pair.bottom_colour}]</p>
+                        <h4>Topwear</h4>
+                        <img src="${pair.top_image}" alt="${pair.top_name}" style="width: 100px; height: auto;" />
+                        <p><b>Top:</b> ${pair.top_name} (${pair.top_colour})</p>
+
+                        <h4>Bottomwear</h4>
+                        <img src="${pair.bottom_image}" alt="${pair.bottom_name}" style="width: 100px; height: auto;" />
+                        <p><b>Bottom:</b> ${pair.bottom_name} (${pair.bottom_colour})</p>
+
                         <p><b>Season:</b> ${pair.season}</p>
                         <p><b>Usage:</b> ${pair.usage}</p>
                     </div>

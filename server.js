@@ -30,6 +30,20 @@ fs.createReadStream('styles.csv')
     console.log('CSV file successfully processed.');
   });
 
+// load images
+let imageData = [];
+fs.createReadStream('images.csv')
+    .pipe(csv())
+    .on('data', (row) => {
+        imageData.push({
+            id: row.filename.replace('.jpg', ''), // Remove .jpg extension for consistency with styles.csv
+            imageUrl: row.link
+        });
+    })
+    .on('end', () => {
+        console.log('Images CSV file successfully processed.');
+   });
+
 // Recommendation route
 app.post('/recommend', (req, res) => {
   const { gender, season, usage } = req.body;
@@ -38,7 +52,7 @@ app.post('/recommend', (req, res) => {
     return res.status(400).json({ error: 'Missing filters: gender, season, or usage.' });
   }
 
-  // Define neutral colors
+  // Neutral colors
   const neutralColors = ['Black', 'White', 'Grey', 'Beige', 'Navy Blue', 'Brown'];
 
   // Filter data
@@ -64,13 +78,19 @@ app.post('/recommend', (req, res) => {
   const recommendations = [];
   for (const top of topwear) {
       for (const bottom of bottomwear) {
+
+        const topImage = imageData.find(img => img.id === top.id);
+        const bottomImage = imageData.find(img => img.id === bottom.id);
+
         recommendations.push({
             top_id: top.id,
             top_name: top.productDisplayName,
             top_colour: top.baseColour,
+            top_image: topImage ? topImage.imageUrl : null,
             bottom_id: bottom.id,
             bottom_name: bottom.productDisplayName,
             bottom_colour: bottom.baseColour,
+            bottom_image: bottomImage ? bottomImage.imageUrl : null,
             season: top.season, // Both should match in filteredData
             usage: top.usage   // Both should match in filteredData
         });
