@@ -13,23 +13,39 @@ app.use(express.static('public'));
 let fashionData = new Map();
 let imageData = new Map();
 
+let = missingRecords = 0;
+let = totalRecords = 0;
+
 // Load dataset into memory
 fs.createReadStream('styles.csv')
   .pipe(csv())
   .on('data', (row) => {
+
+    totalRecords++;
+
+    if (!row.id || !row.gender || !row.season || !row.usage || !row.subcategory || !row.productDisplayName || !row.baseColour) {
+      missingRecords++;
+      console.log(`⚠️ Skipping row due to missing data:`, row);
+      return;
+    }
+  
     // Push relevant columns only
     fashionData.set(row.id, {
       id: row.id,
-      gender: row.gender.toLowerCase(),
-      season: row.season,
-      usage: row.usage,
-      subCategory: row.subCategory,
-      productDisplayName: row.productDisplayName,
-      baseColour: row.baseColour,
+      gender: row.gender.toLowerCase().trim(),
+      season: row.season.trim(),
+      usage: row.usage.trim(),
+      subCategory: row.subCategory.trim(),
+      productDisplayName: row.productDisplayName.trim(),
+      baseColour: row.baseColour.trim(),
     });
   })
   .on('end', () => {
     console.log(`styles.csv loaded into memory with ${fashionData.size} records.`);
+    console.log(`📌 Expected records: 44447`);
+    console.log(`✅ Successfully loaded: ${fashionData.size}`);
+    console.log(`⚠️ Skipped (missing/invalid data): ${missingRecords}`);
+    console.log(`🔍 Total rows read from CSV: ${totalRecords}`);
   });
 
 // load images
