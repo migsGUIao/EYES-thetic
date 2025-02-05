@@ -10,15 +10,17 @@ const PORT = 3000;
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
+let fashionData = new Map();
+let imageData = new Map();
+
 // Load dataset into memory
-let fashionData = [];
 fs.createReadStream('styles.csv')
   .pipe(csv())
   .on('data', (row) => {
     // Push relevant columns only
-    fashionData.push({
+    fashionData.set(row.id, {
       id: row.id,
-      gender: row.gender,
+      gender: row.gender.toLowerCase(),
       season: row.season,
       usage: row.usage,
       subCategory: row.subCategory,
@@ -27,21 +29,17 @@ fs.createReadStream('styles.csv')
     });
   })
   .on('end', () => {
-    console.log('CSV file successfully processed.');
+    console.log(`styles.csv loaded into memory with ${fashionData.size} records.`);
   });
 
 // load images
-let imageData = [];
 fs.createReadStream('images.csv')
     .pipe(csv())
     .on('data', (row) => {
-        imageData.push({
-            id: row.filename.replace('.jpg', ''), // Remove .jpg extension for consistency with styles.csv
-            imageUrl: row.link
-        });
+        imageData.set(row.filename.replace('.jpg', ''), row.link); // Remove .jpg extension for consistency with styles.csv
     })
     .on('end', () => {
-        console.log('Images CSV file successfully processed.');
+        console.log(`images.csv loaded into memory with ${imageData.size} records.`);
    });
 
 // Recommendation route
@@ -53,52 +51,53 @@ app.post('/recommend', (req, res) => {
   }
 
   // Neutral colors
-  const neutralColors = ['Black', 'White', 'Grey', 'Beige', 'Navy Blue', 'Brown'];
+  const neutralColors = new Set(['Black', 'White', 'Grey', 'Beige', 'Navy Blue', 'Brown']);
 
-  // Filter data
-  const filteredData = fashionData.filter((item) => {
-    return (
-      item.gender.toLowerCase() === gender.toLowerCase() &&
-      item.season.toLowerCase() === season.toLowerCase() &&
-      item.usage.toLowerCase() === usage.toLowerCase() &&
-      neutralColors.includes(item.baseColour)
-    );
-  });
+  // Store matched topwear and bottomwear
+  let topwear = [];
+  let bottomwear = [];
 
-  console.log('Filtered Data:', filteredData); // Log the filtered data
+  // Iterate over Map instead of filtering an array
+  for (const item of fashionData.values()) {
+    if (
+        item.gender.toLowerCase() === gender.toLowerCase() &&
+        item.season.toLowerCase() === season.toLowerCase() &&
+        item.usage.toLowerCase() === usage.toLowerCase() &&
+        neutralColors.has(item.baseColour)
+    ) {
+        if (item.subCategory === 'Topwear') {
+            topwear.push(item);
+        } else if (item.subCategory === 'Bottomwear') {
+            bottomwear.push(item);
+        }
+    }
+  }
 
-  // Separate topwear and bottomwear
-  const topwear = filteredData.filter(item => item.subCategory === 'Topwear');
-  const bottomwear = filteredData.filter(item => item.subCategory === 'Bottomwear');
-
-  console.log('Topwear:', topwear); // Log topwear items
-  console.log('Bottomwear:', bottomwear); // Log bottomwear items
+  console.log(`Filtered topwear count: ${topwear.length}`);
+  console.log(`Filtered bottomwear count: ${bottomwear.length}`);
 
   // Pair tops and bottoms
   const recommendations = [];
   for (const top of topwear) {
       for (const bottom of bottomwear) {
 
-        const topImage = imageData.find(img => img.id === top.id);
-        const bottomImage = imageData.find(img => img.id === bottom.id);
-
         recommendations.push({
             top_id: top.id,
             top_name: top.productDisplayName,
             top_colour: top.baseColour,
-            top_image: topImage ? topImage.imageUrl : null,
+            top_image: imageData.get(top.id) || null, // O(1) lookup
             bottom_id: bottom.id,
             bottom_name: bottom.productDisplayName,
             bottom_colour: bottom.baseColour,
-            bottom_image: bottomImage ? bottomImage.imageUrl : null,
+            bottom_image: imageData.get(bottom.id) || null, // O(1) lookup
             season: top.season, // Both should match in filteredData
             usage: top.usage   // Both should match in filteredData
+
         });
       }
   }
 
-  console.log('Recommendations:', recommendations); // Log final recommendations
-
+  console.log(`Generated ${recommendations.length}`); // Log final recommendations
 
   if (recommendations.length === 0) {
     return res.json({ message: 'No matching recommendations found.' });
