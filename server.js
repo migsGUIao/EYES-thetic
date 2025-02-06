@@ -13,39 +13,24 @@ app.use(express.static('public'));
 let fashionData = new Map();
 let imageData = new Map();
 
-let = missingRecords = 0;
-let = totalRecords = 0;
-
 // Load dataset into memory
 fs.createReadStream('styles.csv')
   .pipe(csv())
   .on('data', (row) => {
-
-    totalRecords++;
-
-    if (!row.id || !row.gender || !row.season || !row.usage || !row.subcategory || !row.productDisplayName || !row.baseColour) {
-      missingRecords++;
-      console.log(`⚠️ Skipping row due to missing data:`, row);
-      return;
-    }
   
     // Push relevant columns only
     fashionData.set(row.id, {
       id: row.id,
-      gender: row.gender.toLowerCase().trim(),
-      season: row.season.trim(),
-      usage: row.usage.trim(),
-      subCategory: row.subCategory.trim(),
-      productDisplayName: row.productDisplayName.trim(),
-      baseColour: row.baseColour.trim(),
+      gender: row.gender,
+      season: row.season,
+      usage: row.usage,
+      subCategory: row.subCategory,
+      productDisplayName: row.productDisplayName,
+      baseColour: row.baseColour,
     });
   })
   .on('end', () => {
     console.log(`styles.csv loaded into memory with ${fashionData.size} records.`);
-    console.log(`📌 Expected records: 44447`);
-    console.log(`✅ Successfully loaded: ${fashionData.size}`);
-    console.log(`⚠️ Skipped (missing/invalid data): ${missingRecords}`);
-    console.log(`🔍 Total rows read from CSV: ${totalRecords}`);
   });
 
 // load images
@@ -61,6 +46,8 @@ fs.createReadStream('images.csv')
 // Recommendation route
 app.post('/recommend', (req, res) => {
   const { gender, season, usage } = req.body;
+  console.log(`Received request: Gender=${gender}, Season=${season}, Usage=${usage}`);
+
 
   if (!gender || !season || !usage) {
     return res.status(400).json({ error: 'Missing filters: gender, season, or usage.' });
@@ -81,9 +68,9 @@ app.post('/recommend', (req, res) => {
         item.usage.toLowerCase() === usage.toLowerCase() &&
         neutralColors.has(item.baseColour)
     ) {
-        if (item.subCategory === 'Topwear') {
+        if (item.subCategory === 'Topwear' && item.gender === 'Men' || item.subCategory === 'Topwear' && item.gender === 'Women') {
             topwear.push(item);
-        } else if (item.subCategory === 'Bottomwear') {
+        } else if (item.subCategory === 'Bottomwear' && item.gender === 'Men' || item.subCategory === 'Bottomwear' && item.gender == 'Women') {
             bottomwear.push(item);
         }
     }
@@ -106,6 +93,7 @@ app.post('/recommend', (req, res) => {
             bottom_name: bottom.productDisplayName,
             bottom_colour: bottom.baseColour,
             bottom_image: imageData.get(bottom.id) || null, // O(1) lookup
+            gender: gender,
             season: top.season, // Both should match in filteredData
             usage: top.usage   // Both should match in filteredData
 
@@ -121,6 +109,7 @@ app.post('/recommend', (req, res) => {
 
   // Return a limited set of recommendations (e.g., top 10)
   res.json(recommendations.slice(0, 10));
+  console.log(recommendations.slice(0,10));
 });
 
 // Start the server
