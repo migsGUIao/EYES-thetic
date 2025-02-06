@@ -90,3 +90,59 @@ function speakText(text) {
 
     window.speechSynthesis.speak(utterance);
 }
+
+// Keybinds
+let keyBuffer = "";
+let keyTimer = null;
+
+function resetKeyBuffer() {
+    keyBuffer = "";
+    if (keyTimer) {
+        clearTimeout(keyTimer);
+        keyTimer = null;
+    }
+}
+
+document.addEventListener('keydown', (e) => {
+
+const tag = document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
+        return;
+    }
+
+    if (e.key === "ArrowRight") {
+        showNextRecommendation();
+    }
+
+    keyBuffer += e.key.toUpperCase();
+
+    // If the buffer is not yet complete, set a timeout for 1 sec to reset.
+    if (keyBuffer.length < 3) {
+        if (keyTimer) {
+            clearTimeout(keyTimer);
+        }
+        keyTimer = setTimeout(resetKeyBuffer, 1000);
+    }
+
+    // When we have exactly 3 characters, attempt to map them.
+    if (keyBuffer.length === 3) {
+        const code = keyBuffer;
+        resetKeyBuffer(); 
+        
+        const genderMapping = { 'M': 'Men', 'L': 'Women' };
+        const seasonMapping = { 'F': 'Fall', 'Z': 'Summer', 'W': 'Winter', 'Q': 'Spring' };
+        const usageMapping  = { 'C': 'Casual', 'F': 'Formal', 'S': 'Sports' };
+
+        const genderVal = genderMapping[code.charAt(0)];
+        const seasonVal = seasonMapping[code.charAt(1)];
+        const usageVal  = usageMapping[code.charAt(2)];
+
+        if (genderVal && seasonVal && usageVal) {
+            document.getElementById('gender').value = genderVal;
+            document.getElementById('season').value = seasonVal;
+            document.getElementById('usage').value = usageVal;
+
+            submitForm();
+        }
+    }
+});

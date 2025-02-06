@@ -1,0 +1,36 @@
+MFC - Men, Fall, Casual
+MFF - Men, Fall, Formal
+MFS - Men, Fall, Sports
+
+MZC - Men, Summer, Casual
+MZF - Men, Summer, Formal
+MZS - Men, Summer, Sports
+
+MWC - Men, Winter, Casual
+MWF - Men, Winter, Formal
+MWS - Men, Winter, Sport
+
+MQC - Men, Spring, Casual
+MQF - Men, Spring, Formal
+MQS - Men, Spring, Sport
+
+LFC - Women, Fall, Casual
+LFF - Women, Fall, Formal
+LFS - Women, Fall, Sports
+
+LZC - Women, Summer, Casual
+LZF - Women, Summer, Formal
+LZS - Women, Summer, Sports
+
+LWC - Women, Winter, Casual
+LWF - Women, Winter, Formal
+LWS - Women, Winter, Sport
+
+LQC - Women, Spring, Casual
+LQF - Women, Spring, Formal
+LQS - Women, Spring, Sport
+
+*--------------------------------*
+How to go to next recommendation?
+-> Press right arrow key
+*--------------------------------*
