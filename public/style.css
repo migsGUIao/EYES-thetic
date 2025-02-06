@@ -1,0 +1,12 @@
+#recommendation-container {
+    margin-top: 20px;
+}
+.recommendation-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+}
+.recommendation-box img {
+    width: 150px;
+    height: auto;
+}

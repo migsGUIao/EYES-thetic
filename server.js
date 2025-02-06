@@ -6,7 +6,6 @@ const fs = require('fs');
 const app = express();
 const PORT = 3000;
 
-// Middleware
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
