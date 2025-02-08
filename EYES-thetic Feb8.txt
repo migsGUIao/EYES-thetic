@@ -1,0 +1,38 @@
+EYES-thetic Feb 8
+
+Goal: Appropriate color combinations per usage and season
+
+Seasonal Color Palettes
+Winter: Deep, cool, bright colors (Avoid muted tones)
+Spring: Light, warm, bright colors (Should wear crisp, clear tones)
+Summer: Light, cool, muted colors (Avoid sharp contrasts)
+Fall: Deep, warm, muted colors (Can wear both muted and clear colors)
+
+Men Colors:
+Winter - Navy blue, blue, teal, turquoise blue, fluorescent green, magenta
+Spring - Off white, cream, beige, tan, taupe, nude, peach, yellow, pink, khaki, skin
+Summer - Silver, steel, lavender, mauve, sea green
+Fall - Maroon, burgundy, coffee brown, mushroom brown, Rust, Olive, Mustard, Taupe
+
+Women Colors:
+Winter - Blue, Turquoise blue, Teal, magenta
+Spring - Off white, cream, peach, beige, tan, taupe, nude, yellow, skin
+Summer - Siver, Grey, Grey Melange, Steel, Lavender, Sea Green, Mauve, Rose
+Fall - Brown, bronze, copper, maroon, coffee brown, olive, burgundy, rust, mustard, taupe, mushroom brown
+
+--------------------------------------
+Problems observed
+- Kids clothing were labeled as 'Men'
+- Women, Fall, Formal - no recommendations
+    - 42 recommendation without the colorcombo
+- Women, Fall, Sports - limited recommendations
+    - 5427 recommendationss without the colorcombo
+- Women, Winter, Formal - no recommendations
+    - 1 recommendation without colorcombo
+- Women, Winter, Sports - no recommendations
+    - 4 recos without colorcombo
+- Women, Spring, casual -> no recommendations
+    - 6 recos without colorcombo
+- Women, Spring, Formal 
+    - no recos talaga
+

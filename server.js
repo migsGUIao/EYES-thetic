@@ -45,38 +45,68 @@ fs.createReadStream('images.csv')
 // Recommendation route
 app.post('/recommend', (req, res) => {
   const { gender, season, usage } = req.body;
-  console.log(`Received request: Gender=${gender}, Season=${season}, Usage=${usage}`);
-
+  console.log(`\nReceived request: Gender=${gender}, Season=${season}, Usage=${usage}`);
 
   if (!gender || !season || !usage) {
     return res.status(400).json({ error: 'Missing filters: gender, season, or usage.' });
   }
 
-  // Neutral colors
   const neutralColors = new Set(['Black', 'White', 'Grey', 'Beige', 'Navy Blue', 'Brown']);
+  
+  const seasonColorMen = {
+    fall: new Set(['Maroon', 'Burgundy', 'Coffee Brown', 'Mushroom Brown', 'Rust', 'Olive', 'Mustard', 'Taupe']),
+    summer: new Set(['Blue', 'Teal', 'Turquoise Blue', 'Fluorescent Green', 'Magenta', 'Lime Green', 'Sea Green', 'Lavender']),
+    winter: new Set(['Navy Blue', 'Blue', 'Teal', 'Turquoise Blue', 'Fluorescent Green', 'Magenta']),
+    spring: new Set(['Off White', 'Cream', 'Beige', 'Tan', 'Taupe', 'Nude', 'Peach', 'Yellow', 'Pink', 'Khaki', 'Skin'])
+  };
+  const menColors = seasonColorMen[season.toLowerCase()];
+
+  const seasonColorWomen = {
+    fall: new Set(['Brown', 'Bronze', 'Copper', 'Maroon', 'Coffee Brown', 'Olive', 'Burgundy', 'Rust', 'Mustard', 'Taupe, Mushroom Brown']),
+    summer: new Set(['Silver', 'Grey', 'Grey Melange', 'Steel', 'Lavender', 'Sea Green', 'Mauve', 'Rose']),
+    winter: new Set(['Blue', 'Turquoise Blue', 'Teal', 'Magenta']),
+    spring: new Set(['Off White', 'Cream', 'Peach', 'Beige', 'Tan', 'Taupe', 'Nude' , 'Yellow', 'Skin'])
+  };
+  const womenColors = seasonColorWomen[season.toLowerCase()];
 
   // Store matched topwear and bottomwear
   let topwear = [];
   let bottomwear = [];
 
+  let topColors = []
+  let bottomColors = []
+
   // Iterate over Map instead of filtering an array
   for (const item of fashionData.values()) {
-    if (
-        item.gender.toLowerCase() === gender.toLowerCase() &&
-        item.season.toLowerCase() === season.toLowerCase() &&
-        item.usage.toLowerCase() === usage.toLowerCase() &&
-        neutralColors.has(item.baseColour)
-    ) {
-        if (item.subCategory === 'Topwear' && item.gender === 'Men' || item.subCategory === 'Topwear' && item.gender === 'Women') {
-            topwear.push(item);
-        } else if (item.subCategory === 'Bottomwear' && item.gender === 'Men' || item.subCategory === 'Bottomwear' && item.gender == 'Women') {
-            bottomwear.push(item);
-        }
-    }
+      topColors.push(item.baseColour)
+      bottomColors.push(item.baseColour)
+
+      if (item.gender === gender && item.season === season && item.usage === usage) {
+
+          if (gender === 'Men' && menColors.has(item.baseColour)) {
+              if (item.subCategory === 'Topwear') {
+                  topwear.push(item);
+              } else if (item.subCategory === 'Bottomwear') {
+                  bottomwear.push(item);
+              }
+          }
+
+          else if (gender === 'Women' /*&& womenColors.has(item.baseColour)*/) {
+              if (item.subCategory === 'Topwear') {
+                  topwear.push(item);
+              } else if (item.subCategory === 'Bottomwear') {
+                  bottomwear.push(item);
+              }
+          }
+      }
   }
 
-  console.log(`Filtered topwear count: ${topwear.length}`);
+  // Topwear and bottomwear count!
+  console.log(`\nFiltered topwear count: ${topwear.length}`);
   console.log(`Filtered bottomwear count: ${bottomwear.length}`);
+
+  console.log(`\nTopwear colors: ${removeDuplicates(topColors)}`);
+  console.log(`Bottomwear colors: ${removeDuplicates(bottomColors)}`);
 
   // Pair tops and bottoms
   const recommendations = [];
@@ -107,11 +137,22 @@ app.post('/recommend', (req, res) => {
   }
 
   // Return a limited set of recommendations (e.g., top 10)
-  res.json(recommendations.slice(0, 10));
-  console.log(recommendations.slice(0,10));
+  res.json(recommendations.slice(0, 50));
+  //console.log(recommendations.slice(0,10));
 });
 
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+// Sanity check function to remove duplicate colors
+function removeDuplicates(data) {
+  let unique = []
+  data.forEach(element => {
+    if (!unique.includes(element)) {
+      unique.push(element)
+    }
+  });
+  return unique;
+}
