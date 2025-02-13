@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <!-- <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="../public/style.css">
+
+    <title>EYES-thetic 24/7 | Login</title>
+</head>
+<body>
+    <!-- Top bar -->
+    <div class="logo-bar">
+        <!-- Website name -->
+        <div id="web-name">
+            <h2>EYES-thetic 24/7</h2>
+        </div>
+        <!-- Sign-up button -->
+        <button id="register" class="button-outline">
+            Sign-up
+        </button>
+    </div>
+    <!-- Top bar end -->
+
+    <!-- Login form -->
+    <div class="content-login">
+        <form id="login">
+            <!-- Username -->
+            <div class="input-box">
+                <input type="text" name="username" id="username" placeholder="Enter username" required />
+                <i class="uil uil-at"></i>
+            </div>
+            <!-- Password -->
+            <div class="input-box">
+                <input type="text" name="password" id="password" placeholder="Enter password" required />
+                <i class="uil uil-lock password"></i>
+                <i class="uil uil-eye-slash pw_hide"></i>
+            </div>
+            <!-- Login button -->
+            <div class="input-box">
+                <button type="login" id="login" class="button-fill">
+                    Login
+                </button>
+            </div>
+            
+        </form>
+    </div>
+    <!-- Login form end -->
+</body>
+</html>
