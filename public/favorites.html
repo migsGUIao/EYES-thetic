@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Favorites</title>
+  <style>
+    .favorite-box {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    .favorite-box img {
+      width: 150px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <h2>My Favorite Clothing Recommendations</h2>
+  <p><a href="index.html">View Homepage</a></p>
+  <div id="favoritesContainer"></div>
+
+  <script>
+    function loadFavorites() {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      let html = '';
+
+      if (favorites.length === 0) {
+        html = '<p>No favorites saved yet.</p>';
+      } else {
+        favorites.forEach(fav => {
+          html += `
+            <div class="favorite-box">
+              <h4>Topwear</h4>
+              ${fav.top_image ? `<img src="${fav.top_image}" alt="${fav.top_name}" />` : '<p>No Image Available</p>'}
+              <p><b>Top:</b> ${fav.top_name} (${fav.top_colour})</p>
+              <h4>Bottomwear</h4>
+              ${fav.bottom_image ? `<img src="${fav.bottom_image}" alt="${fav.bottom_name}" />` : '<p>No Image Available</p>'}
+              <p><b>Bottom:</b> ${fav.bottom_name} (${fav.bottom_colour})</p>
+              <p><b>Season:</b> ${fav.season}</p>
+              <p><b>Usage:</b> ${fav.usage}</p>
+            </div>
+          `;
+        });
+      }
+
+      document.getElementById('favoritesContainer').innerHTML = html;
+    }
+
+    // Load favorites on page load
+    window.onload = loadFavorites;
+  </script>
+</body>
+</html>

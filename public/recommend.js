@@ -54,17 +54,21 @@ function showNextRecommendation() {
 
     const html = `
         <div class="recommendation-box">
-        <h4>Topwear</h4>
-        ${rec.top_image ? `<img src="${rec.top_image}" alt="${rec.top_name}" />` : '<p>No Image Available</p>'}
-        <p><b>Top:</b> ${rec.top_name} (${rec.top_colour})</p>
+            <h4>Topwear</h4>
+            ${rec.top_image ? `<img src="${rec.top_image}" alt="${rec.top_name}" />` : '<p>No Image Available</p>'}
+            <p><b>Top:</b> ${rec.top_name} (${rec.top_colour})</p>
 
-        <h4>Bottomwear</h4>
-        ${rec.bottom_image ? `<img src="${rec.bottom_image}" alt="${rec.bottom_name}" />` : '<p>No Image Available</p>'}
-        <p><b>Bottom:</b> ${rec.bottom_name} (${rec.bottom_colour})</p>
-        
-        <p><b>Gender:<b> ${rec.gender}</p>
-        <p><b>Season:</b> ${rec.season}</p>
-        <p><b>Usage:</b> ${rec.usage}</p>
+            <h4>Bottomwear</h4>
+            ${rec.bottom_image ? `<img src="${rec.bottom_image}" alt="${rec.bottom_name}" />` : '<p>No Image Available</p>'}
+            <p><b>Bottom:</b> ${rec.bottom_name} (${rec.bottom_colour})</p>
+            
+            <p><b>Gender:<b> ${rec.gender}</p>
+            <p><b>Season:</b> ${rec.season}</p>
+            <p><b>Usage:</b> ${rec.usage}</p>
+
+            <!-- Favorite Button -->
+            <button onclick='saveFavorite(${JSON.stringify(rec)})'>Favorite</button>
+
         </div>
     `;
     document.getElementById('recommendation').innerHTML = html;
@@ -90,6 +94,20 @@ function speakText(text) {
 
     window.speechSynthesis.speak(utterance);
 }
+
+function saveFavorite(rec) {
+    // Retrieve existing favorites from localStorage
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    
+    // Optionally, check if the recommendation already exists to avoid duplicates
+    if (!favorites.some(item => item.top_id === rec.top_id && item.bottom_id === rec.bottom_id)) {
+        favorites.push(rec);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        alert('Favorite saved!');
+    } else {
+        alert('This recommendation is already in favorites!');
+        }
+  }
 
 // Keybinds
 let keyBuffer = "";
