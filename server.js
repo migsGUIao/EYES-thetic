@@ -138,7 +138,7 @@ app.post('/recommend', (req, res) => {
 
   // Return a limited set of recommendations (e.g., top 10)
   res.json(recommendations.slice(0, 50));
-  //console.log(recommendations.slice(0,10));
+  console.log(recommendations.slice(0,10));
 });
 
 // Start the server
@@ -156,3 +156,5 @@ function removeDuplicates(data) {
   });
   return unique;
 }
+
+
