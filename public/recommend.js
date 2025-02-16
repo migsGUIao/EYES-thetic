@@ -71,7 +71,7 @@ function showNextRecommendation() {
             <p><b>Usage:</b> ${rec.usage}</p>
 
             <!-- Favorite Button -->
-            <!-- <button onclick='saveFavorite(${JSON.stringify(rec)})'>Favorite</button> -->
+            <button onclick='saveFavorite(${JSON.stringify(rec)})'>Favorite</button> 
 
         </div>
     `;

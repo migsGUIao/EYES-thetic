@@ -16,6 +16,13 @@ let imageData = new Map();
 fs.createReadStream('styles.csv')
   .pipe(csv())
   .on('data', (row) => {
+    
+    if (
+      row.productDisplayName.toLowerCase().includes("kids") &&
+      row.gender.trim().toLowerCase() === "men"
+    ) {
+      row.gender = "Boys";
+    }
   
     // Push relevant columns only
     fashionData.set(row.id, {
