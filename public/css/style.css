@@ -1,3 +1,7 @@
+
+/* We dont need this na since we're using tailwind
+
+
 #recommendation-container {
     margin-top: 20px;
 }
@@ -40,4 +44,4 @@
 }
 input[type=text] {
     border-radius: 8px;
-}
+} */

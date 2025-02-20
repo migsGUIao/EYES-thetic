@@ -3,6 +3,8 @@ let currentIndex = 0;
 
 async function submitForm() {
     const form = document.getElementById('recommendForm');
+    
+    console.log("recommend.js is loaded!"); // Debugging
 
     // collect form data
     const data = {

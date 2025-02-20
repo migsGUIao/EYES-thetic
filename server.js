@@ -2,12 +2,21 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const csv = require('csv-parser');
 const fs = require('fs');
+const path = require('path'); // Add this line
 
 const app = express();
 const PORT = 3000;
 
 app.use(bodyParser.json());
 app.use(express.static('public'));
+
+// Serve the views folder
+app.use(express.static(path.join(__dirname, 'views')));
+
+// Default route to serve index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
 
 let fashionData = new Map();
 let imageData = new Map();
