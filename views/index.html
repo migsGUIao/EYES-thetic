@@ -2,20 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EYES-thetic 24:7</title>
-    <link rel="stylesheet" href="/css/tailwind.css"> 
-</head>
-<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-6 text-center">
+    
+    <!-- for the creation of other html files, make sure this line is present for tailwind :D -->
+    <script src="https://cdn.tailwindcss.com"></script> </head>
+
+<body class="bg-white flex flex-col items-center justify-center min-h-screen text-center px-6 mt-20">
 
     <!-- Navigation Bar (Login & Signup) -->
-    <div class="absolute top-4 right-4 flex space-x-2">
-        <a href="login.html" class="bg-yellow-400 text-black font-semibold py-2 px-4 rounded-full hover:bg-yellow-500 transition">
-            Login
-        </a>
-        <a href="signup.html" class="border border-yellow-400 text-black font-semibold py-2 px-4 rounded-full hover:bg-yellow-400 hover:text-black transition">
-            Sign-up
-        </a>
-    </div>
+    <nav class="w-full flex justify-center items-center py-4 px-8 shadow-md bg-white fixed top-0 left-0">
+        <div class="flex space-x-6">
+            <a href="index.html" class="text-gray-600 hover:text-black">HOME</a>
+            <a href="closet.html" class="text-gray-600 hover:text-black">VIRTUAL CLOSET</a>
+            <a href="favorites.html" class="text-gray-600 hover:text-black">FAVORITES</a>
+            <a href="login.html" class="text-gray-600 hover:text-black">Login</a>
+            <a href="signup.html" class="text-gray-600 hover:text-black">Sign-up</a>
+        </div>
+    </nav>
 
     <!-- Header -->
 <h1 class="text-5xl font-bold">Welcome!</h1>
@@ -23,6 +27,16 @@
         I am your EYES-thetic assistant to help you with your fashion needs! <br>
         To start, let me know what you are looking for:
     </p>
+
+    <!-- Buttons -->
+    <div class="mt-6 flex space-x-4">
+        <button class="bg-yellow-400 text-black font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition shadow-md">
+            Random Recommendation
+        </button>
+        <button class="bg-yellow-400 text-black font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition shadow-md">
+            Recommendation From Closet
+        </button>
+    </div>
 
     <!-- Form Container -->
     <div class="bg-white shadow-lg rounded-lg p-6 mt-6 w-full max-w-lg">
@@ -33,6 +47,7 @@
                 <label for="gender" class="block text-gray-800 font-semibold mb-1">Choose Gender:</label>
                 <select id="gender" name="gender" 
                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <option value="" disabled selected>Gender</option>
                     <option value="Men">Men</option>
                     <option value="Women">Women</option>
                 </select>
@@ -43,6 +58,7 @@
                 <label for="season" class="block text-gray-800 font-semibold mb-1">Choose Season:</label>
                 <select id="season" name="season" 
                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <option value="" disabled selected>Season</option>
                     <option value="Fall">Fall</option>
                     <option value="Summer">Summer</option>
                     <option value="Winter">Winter</option>
@@ -55,6 +71,7 @@
                 <label for="usage" class="block text-gray-800 font-semibold mb-1">Choose Usage:</label>
                 <select id="usage" name="usage" 
                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <option value="" disabled selected>Usage</option>
                     <option value="Casual">Casual</option>
                     <option value="Formal">Formal</option>
                     <option value="Sports">Sports</option>
@@ -74,7 +91,7 @@
     <div id="recommendation-container" class="mt-4 w-full max-w-md">
         <div id="recommendation" class="p-4 bg-white shadow-md rounded-lg"></div>
         <button id="nextRecommendation" onclick="showNextRecommendation()" 
-            class="hidden mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">
+            class="hidden mt-4 w-full font-semibold bg-yellow-400 text-black py-2 rounded-lg hover:bg-yellow-500 transition">
             Next Recommendation
         </button>
     </div>
