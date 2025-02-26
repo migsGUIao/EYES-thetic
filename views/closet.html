@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Closet</title>
+    
+    <!-- for the creation of other html files, make sure this line is present for tailwind :D -->
+    <script src="https://cdn.tailwindcss.com"></script> </head>
+    <!-- TensorFlow.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <!-- MobileNet Pre-trained Model -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+
+
+<body class="bg-white flex flex-col items-center justify-center min-h-screen text-center px-6">
+    <!-- Navigation Bar (Login & Signup) -->
+    <nav class="w-full flex justify-center items-center py-4 px-8 shadow-md bg-white fixed top-0 left-0">
+        <div class="flex space-x-6">
+            <a href="index.html" class="text-gray-600 hover:text-black">HOME</a>
+            <a href="closet.html" class="text-gray-600 hover:text-black">VIRTUAL CLOSET</a>
+            <a href="favorites.html" class="text-gray-600 hover:text-black">FAVORITES</a>
+            <a href="login.html" class="text-gray-600 hover:text-black">Login</a>
+            <a href="signup.html" class="text-gray-600 hover:text-black">Sign-up</a>
+        </div>
+    </nav>
+        <!-- Upload Options -->
+        <h3 class="text-lg font-bold text-black mb-4">How would you like to add items to your closet?</h3>
+
+        <button id="openCamBtn" class="w-full bg-slate-400 text-black font-semibold py-3 mb-4">
+            Take a Photo
+        </button>
+
+        <!-- Camera Popup -->
+        <div id="cameraModal" class="fixed flex inset-0 items-center justify-center bg-black bg-opacity-50 hidden">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md text-center relative flex flex-col items-center">
+                <!-- Close Button -->
+                <button id="closeCamBtn" class="absolute top-2 right-2 text-gray-700 hover:text-black text-2xl">&times;</button>
+
+                <!-- Camera Section -->
+                <h3 class="text-lg font-bold text-black">Take a Photo</h3>
+                <video id="video" class="w-96 h-72 bg-gray-300 rounded-md mt-4" autoplay></video>
+                <canvas id="canvas" class="hidden"></canvas>
+                <p id="detectionMsg" class="text-red-500 font-semibold mt-2"></p>
+
+                <!-- Capture Button -->
+                <button id="captureBtn" class="bg-yellow-400 text-black font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition mt-4">
+                    Capture Photo
+                </button>
+            </div>
+        </div>
+
+        <button id="uploadBtn" class="w-full bg-slate-400 text-black font-semibold py-3 ">
+            Upload Image
+        </button>
+        <input type="file" id="fileInput" accept="image/png, image/jpeg, image/jpg, image/webp" class="hidden">
+
+        <!-- Photo Container to Display Captured Images -->
+        <div id="photoContainer" class="mt-4 grid grid-cols-4 gap-4"></div>
+
+    <script src="/upload.js" defer></script>
+</body>
+</html>
