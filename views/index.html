@@ -13,11 +13,12 @@
     <!-- Navigation Bar (Login & Signup) -->
     <nav class="w-full flex justify-center items-center py-4 px-8 shadow-md bg-white fixed top-0 left-0">
         <div class="flex space-x-6">
-            <a href="index.html" class="text-gray-600 hover:text-black">HOME</a>
+            <a href="index.html" class="font-bold text-black relative">
+                HOME
+                <span class="absolute -bottom-1 left-0 w-full h-1 bg-yellow-400"></span>
+            </a>
             <a href="closet.html" class="text-gray-600 hover:text-black">VIRTUAL CLOSET</a>
             <a href="favorites.html" class="text-gray-600 hover:text-black">FAVORITES</a>
-            <a href="login.html" class="text-gray-600 hover:text-black">Login</a>
-            <a href="signup.html" class="text-gray-600 hover:text-black">Sign-up</a>
         </div>
     </nav>
 
@@ -93,6 +94,12 @@
         <button id="nextRecommendation" onclick="showNextRecommendation()" 
             class="hidden mt-4 w-full font-semibold bg-yellow-400 text-black py-2 rounded-lg hover:bg-yellow-500 transition">
             Next Recommendation
+        </button>
+
+        <!-- Add to Favorites Button -->
+        <button id="favoriteBtn" onclick="saveToFavorites()" 
+            class="hidden mt-2 w-full font-semibold border-2 border-yellow-400 text-black py-2 rounded-lg hover:bg-yellow-500 transition mb-4">
+            Add to Favorites
         </button>
     </div>
 

@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Favorites</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
   <style>
     .favorite-box {
       border: 1px solid #ccc;
@@ -14,11 +18,25 @@
       height: auto;
     }
   </style>
-</head>
+
 <body>
-  <h2>My Favorite Clothing Recommendations</h2>
-  <p><a href="index.html">View Homepage</a></p>
-  <div id="favoritesContainer"></div>
+  <!-- Navigation Bar -->
+  <nav class="w-full flex justify-center items-center py-4 px-8 shadow-md bg-white fixed top-0 left-0">
+    <div class="flex space-x-6">
+        <a href="index.html" class="text-gray-600 hover:text-black">HOME</a>
+        <a href="closet.html" class="text-gray-600 hover:text-black">VIRTUAL CLOSET</a>
+        <a href="favorites.html" class="font-bold text-black relative">
+            FAVORITES
+            <span class="absolute -bottom-1 left-0 w-full h-1 bg-yellow-400"></span>
+        </a>
+    </div>
+  </nav>
+
+  <div class="mt-24"> 
+    <h2 class="text-3xl font-bold ml-20">My Favorite Clothing Recommendations</h2>
+    <!-- <p><a href="index.html" class="text-blue-500 hover:underline">View Homepage</a></p> -->
+    <div id="favoritesContainer" class="mt-6 flex flex-wrap justify-center items-center gap-4"></div>
+</div>>
 
   <script>
     function loadFavorites() {

@@ -49,6 +49,7 @@ function showNextRecommendation() {
     if (currentIndex >= recommendations.length) {
         document.getElementById('recommendation').innerHTML = "<p>No more recommendations available.</p>";
         document.getElementById('nextRecommendation').style.display = 'none';
+        document.getElementById('favoriteBtn').style.display = 'none'; // Hide favorite button
         return;
     }
 
@@ -81,6 +82,13 @@ function showNextRecommendation() {
 
     document.getElementById('nextRecommendation').style.display =
         (currentIndex < recommendations.length - 1) ? 'block' : 'none';
+
+    // Show favorite button and update its function dynamically
+    const favoriteBtn = document.getElementById('favoriteBtn');
+    favoriteBtn.style.display = 'block';
+    favoriteBtn.onclick = function () {
+        saveFavorite(rec);
+    };
 
     currentIndex++;
 }
