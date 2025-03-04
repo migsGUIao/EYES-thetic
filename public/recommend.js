@@ -49,7 +49,7 @@ function showNextRecommendation() {
     if (currentIndex >= recommendations.length) {
         document.getElementById('recommendation').innerHTML = "<p>No more recommendations available.</p>";
         document.getElementById('nextRecommendation').style.display = 'none';
-        document.getElementById('favoriteBtn').style.display = 'none'; // Hide favorite button
+        document.getElementById('favoriteBtn').style.display = 'none';
         return;
     }
 
@@ -106,10 +106,10 @@ function speakText(text) {
 }
 
 function saveFavorite(rec) {
-    // Retrieve existing favorites from localStorage
+    // Retrieve existing favorites from localStorage - TEMPORARY
     let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     
-    // Optionally, check if the recommendation already exists to avoid duplicates
+    // Check if the recommendation already exists to avoid duplicates
     if (!favorites.some(item => item.top_id === rec.top_id && item.bottom_id === rec.bottom_id)) {
         favorites.push(rec);
         localStorage.setItem('favorites', JSON.stringify(favorites));
