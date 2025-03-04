@@ -1,3 +1,3 @@
 1. git clone https://github.com/migsGUIao/EYES-thetic.git
-2. npm install express body-parser csv-parser
+2. npm install express body-parser csv-parser firebase
 3. node server.js

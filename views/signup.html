@@ -5,44 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EYES-thetic 24:7</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../firestore.js"></script>
+    <script src="../server.js"></script>
 </head>
-<body>
+<body class="bg-white flex flex-col items-center justify-center min-h-screen text-center px-6 mt-20">
     <!-- Top bar -->
-    <div class="logo-bar">
+    <nav class="flow-root w-full justify-center items-center py-4 px-8 shadow-md bg-white fixed top-0 left-0">
         <!-- Website name -->
-        <div id="web-name">
-            <h2>EYES-thetic 24/7</h2>
+        <div class="flex space-x-6 items-center justify-between mx-auto">
+            <a href="/" class="font-bold" >EYES-thetic 24/7</a>
+            <a href="login.html" class="text-black hover:text-yellow-600 font-semibold transition">Login</a>
         </div>
-        <!-- Login button -->
-        <button id="login" class="button">
-            Login
-        </button>
-    </div>
+    </nav>
     <!-- Top bar end -->
 
     <!-- Sign-up form -->
-    <div class="content-register">
-        <form id="register">
-            <!-- Email -->
-            <div class="input-box">
-                <input type="text" name="email" id="email" placeholder="Enter email" required />
-                <i class="uil uil-at"></i>
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form class="space-y-6" method="post">
+            <!-- Display Name -->
+            <div>
+                <label for="displayName" class="block text-sm/6 text-left font-semibold">Name</label>
+                <div class="mt-2">
+                    <input type="text" name="displayName" id="displayName" placeholder="Enter display name" required class="block w-full rounded-md px-3 py-1.5 outline outline-solid outline-1 -outline-offset-1 outline-gray-400">
+                </div>
             </div>
             <!-- Username -->
-            <div class="input-box">
-                <input type="text" name="username" id="username" placeholder="Create username" required />
-                <i class="uil uil-at"></i>
+            <div>
+                <label for="username" class="block text-sm/6 text-left font-semibold">Username</label>
+                <div class="mt-2">
+                    <input type="text" name="username" id="username" placeholder="Enter username" required class="block w-full rounded-md px-3 py-1.5 outline outline-solid outline-1 -outline-offset-1 outline-gray-400">
+                </div>
             </div>
+            <!-- Email -->
+             <div>
+                <label for="email" class="block text-sm/6 text-left font-semibold">Email</label>
+                <div class="mt-2">
+                    <input type="text" name="email" id="email" placeholder="Enter email" required class="block w-full rounded-md px-3 py-1.5 outline outline-solid outline-1 -outline-offset-1 outline-gray-400">
+                </div>
+             </div>
             <!-- Password -->
-            <div class="input-box">
-                <input type="password" name="password" id="password" placeholder="Create password" required />
-                <i class="uil uil-lock password"></i>
-                <i class="uil uil-eye-slash pw_hide"></i>
+            <div>
+                <label for="password" class="block text-sm/6 text-left font-semibold">Password</label>
+                <div class="mt-2">
+                    <input type="text" name="password" id="password" placeholder="Enter password" required class="block w-full rounded-md px-3 py-1.5 outline outline-solid outline-1 -outline-offset-1 outline-gray-400">
+
+                </div>
             </div>
-            <!-- Login button -->
-            <button type="login" id="login" class="button">
-                Sign-up
-            </button>
+            <!-- Signup button -->
+            <button type="signup" class="text-black bg-yellow-400 hover:bg-yellow-500 transition shadow-md focus:ring-4 font-semibold rounded-lg text-sm w-full sm:w-auto py-2 px-4 text-center ">Sign up</button>
+            
         </form>
     </div>
     <!-- Sign-up form end -->

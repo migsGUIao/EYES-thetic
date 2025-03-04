@@ -3,7 +3,7 @@
     "body-parser": "^1.20.3",
     "csv-parser": "^3.2.0",
     "express": "^4.21.2",
-    "firebase": "^11.3.1"
+    "firebase": "^11.4.0"
   },
   "name": "eyes-thetic",
   "version": "1.0.0",

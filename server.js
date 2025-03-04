@@ -4,6 +4,10 @@ const csv = require('csv-parser');
 const fs = require('fs');
 const path = require('path'); // Add this line
 
+// import { createNewUser, createNewRecommendation, createNewReview, queryUser,
+//          queryRecommendation, queryReview, updateUser
+//        } from './firestore.js'; // CRUD operations to firestore db
+
 const app = express();
 const PORT = 3000;
 
@@ -165,3 +169,43 @@ function removeDuplicates(data) {
   });
   return unique;
 }
+
+
+// Firestore CRUD below
+
+// TODO: Document templates
+// User Fields:
+//    User ID (autogen)[document name],
+//    username,
+//    display name,
+//    email,
+//    password
+
+// Recommendation Fields:
+//    Recommendation ID (autogen)[document name],
+//    recomm-<clothing piece> (list),
+//    user ID
+
+// Review Fields:
+//    Review ID (autogen)[document name],
+//    number of stars,
+//    description,
+//    user ID
+
+// Register a new user
+// let createNewUser = firestoreCRUD.createNewUser();
+app.post('/signup', (req, res) => {
+  var username = req.body.username;
+  var displayName = req.body.displayName;
+  var email = req.body.email;
+  var password = req.body.password;
+
+  var newUser = {
+    username: username,
+    displayName: displayName,
+    email: email,
+    password: password
+  }
+
+  createNewUser("user", newUser);
+});
