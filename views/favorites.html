@@ -2,41 +2,102 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Favorites</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
   <style>
     .favorite-box {
       border: 1px solid #ccc;
       padding: 10px;
       margin: 10px 0;
+      text-align: center; 
+      width: 250px;
+      height: 750px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
     }
     .favorite-box img {
-      width: 150px;
-      height: auto;
+      width: 150px; 
+      height: 150px; 
+      object-fit: cover; 
+      border-radius: 5px; 
     }
   </style>
-</head>
+
 <body>
-  <h2>My Favorite Clothing Recommendations</h2>
-  <p><a href="index.html">View Homepage</a></p>
-  <div id="favoritesContainer"></div>
+  <!-- Navigation Bar -->
+  <nav class="w-full flex justify-center items-center py-4 px-8 shadow-md bg-white fixed top-0 left-0">
+    <div class="flex space-x-6">
+        <a href="index.html" class="text-gray-600 hover:text-black">HOME</a>
+        <a href="closet.html" class="text-gray-600 hover:text-black">VIRTUAL CLOSET</a>
+        <a href="favorites.html" class="font-bold text-black relative">
+            FAVORITES
+            <span class="absolute -bottom-1 left-0 w-full h-1 bg-yellow-400"></span>
+        </a>
+    </div>
+  </nav>
+
+  <div class="mt-24"> 
+    <h2 class="text-3xl font-bold ml-20">My Favorite Clothing Recommendations</h2>
+    <!-- <p><a href="index.html" class="text-blue-500 hover:underline">View Homepage</a></p> -->
+  
+    <!-- Sorting Options -->
+  <div class="mb-4 ml-20 mt-6 flex gap-4">
+    <select id="sortGender" class="p-2 border rounded">
+      <option value="">Sort by Gender</option>
+      <option value="Men">Men</option>
+      <option value="Women">Women</option>
+    </select>
+
+    <select id="sortSeason" class="p-2 border rounded">
+      <option value="">Sort by Season</option>
+      <option value="Fall">Fall</option>
+      <option value="Summer">Summer</option>
+      <option value="Winter">Winter</option>
+      <option value="Spring">Spring</option>
+    </select>
+
+    <select id="sortUsage" class="p-2 border rounded">
+      <option value="">Sort by Usage</option>
+      <option value="Casual">Casual</option>
+      <option value="Formal">Formal</option>
+      <option value="Sports">Sports</option>
+    </select>
+  </div>
+    <div id="favoritesContainer" class="mt-6 flex flex-wrap justify-center items-center gap-4"></div>
+</div>
 
   <script>
+
+    let favorites = [];
+
     function loadFavorites() {
-      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      displayFavorites(favorites);
+    }
+
+    function displayFavorites(filteredFavorites){
       let html = '';
 
-      if (favorites.length === 0) {
-        html = '<p>No favorites saved yet.</p>';
+      if (filteredFavorites.length === 0) {
+        html = '<p class="text-gray-500 text-center">No favorites saved yet.</p>';
       } else {
-        favorites.forEach(fav => {
+        filteredFavorites.forEach(fav => {
           html += `
-            <div class="favorite-box">
-              <h4>Topwear</h4>
+            <div class="favorite-box p-4 border rounded">
+              <h4 class="font-bold">Topwear</h4>
               ${fav.top_image ? `<img src="${fav.top_image}" alt="${fav.top_name}" />` : '<p>No Image Available</p>'}
               <p><b>Top:</b> ${fav.top_name} (${fav.top_colour})</p>
-              <h4>Bottomwear</h4>
+
+              <h4 class="font-bold">Bottomwear</h4>
               ${fav.bottom_image ? `<img src="${fav.bottom_image}" alt="${fav.bottom_name}" />` : '<p>No Image Available</p>'}
               <p><b>Bottom:</b> ${fav.bottom_name} (${fav.bottom_colour})</p>
+
+              <p><b>Gender:</b> ${fav.gender}</p>
               <p><b>Season:</b> ${fav.season}</p>
               <p><b>Usage:</b> ${fav.usage}</p>
             </div>
@@ -45,7 +106,26 @@
       }
 
       document.getElementById('favoritesContainer').innerHTML = html;
+
     }
+
+    function sortFavorites() {
+      const selectedGender = document.getElementById('sortGender').value;
+      const selectedSeason = document.getElementById('sortSeason').value;
+      const selectedUsage = document.getElementById('sortUsage').value;
+
+      let filteredFavorites = favorites.filter(fav => 
+        (!selectedGender || fav.gender === selectedGender) &&
+        (!selectedSeason || fav.season === selectedSeason) &&
+        (!selectedUsage || fav.usage === selectedUsage)
+      );
+
+      displayFavorites(filteredFavorites);
+    }
+
+    document.getElementById('sortGender').addEventListener('change', sortFavorites);
+    document.getElementById('sortSeason').addEventListener('change', sortFavorites);
+    document.getElementById('sortUsage').addEventListener('change', sortFavorites);
 
     // Load favorites on page load
     window.onload = loadFavorites;
