@@ -3,6 +3,8 @@ let currentIndex = 0;
 
 async function submitForm() {
     const form = document.getElementById('recommendForm');
+    
+    console.log("recommend.js is loaded!"); // Debugging
 
     // collect form data
     const data = {
@@ -51,6 +53,7 @@ function showNextRecommendation() {
     if (currentIndex >= recommendations.length) {
         document.getElementById('recommendation').innerHTML = "<p>No more recommendations available.</p>";
         document.getElementById('nextRecommendation').style.display = 'none';
+        document.getElementById('favoriteBtn').style.display = 'none';
         return;
     }
 
@@ -84,6 +87,13 @@ function showNextRecommendation() {
     document.getElementById('nextRecommendation').style.display =
         (currentIndex < recommendations.length - 1) ? 'block' : 'none';
 
+    // Show favorite button and update its function dynamically
+    const favoriteBtn = document.getElementById('favoriteBtn');
+    favoriteBtn.style.display = 'block';
+    favoriteBtn.onclick = function () {
+        saveFavorite(rec);
+    };
+
     currentIndex++;
 }
 
@@ -102,10 +112,10 @@ function speakText(text) {
 
 
 function saveFavorite(rec) {
-    // Retrieve existing favorites from localStorage
+    // Retrieve existing favorites from localStorage - TEMPORARY
     let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     
-    // Optionally, check if the recommendation already exists to avoid duplicates
+    // Check if the recommendation already exists to avoid duplicates
     if (!favorites.some(item => item.top_id === rec.top_id && item.bottom_id === rec.bottom_id)) {
         favorites.push(rec);
         localStorage.setItem('favorites', JSON.stringify(favorites));

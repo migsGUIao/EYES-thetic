@@ -1,0 +1,47 @@
+
+/* We dont need this na since we're using tailwind
+
+
+#recommendation-container {
+    margin-top: 20px;
+}
+.recommendation-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+}
+.recommendation-box img {
+    width: 150px;
+    height: auto;
+}
+.logo-bar {
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+    justify-content:space-between;
+
+}
+.button-fill {
+    background-color: #FFCD29;
+    color: black;
+    border-radius: 5px;
+}
+.button-outline {
+    border-color: #FFCD29;
+    background-color: white;
+    color: black;
+    border-radius: 8px;
+}
+.content-login {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4vh;
+}
+.input-box {
+    height: 4vh;
+}
+input[type=text] {
+    border-radius: 8px;
+} */
