@@ -4,7 +4,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     const uploadBtn = document.getElementById("uploadBtn");
     const fileInput = document.getElementById("fileInput");
-    const photoContainer = document.getElementById("photoContainer");
+    const topsContainer = document.querySelector(".tops-container");
+    const bottomsContainer = document.querySelector(".bottoms-container");
 
     if (!uploadBtn || !fileInput || !photoContainer) {
         console.error("Upload button, file input, or photo container not found! Check closet.html.");
@@ -48,7 +49,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 const imgElement = document.createElement("img");
                 imgElement.src = URL.createObjectURL(file);
                 imgElement.className = "w-24 h-24 object-cover rounded-md shadow-md";
-                photoContainer.appendChild(imgElement);
+
+                // Determine if the uploaded image is a Top or Bottom
+                detectCategory(imgElement.src)
+                    .then(category => {
+                        if (category === "top") {
+                            topsContainer.appendChild(imgElement);
+                        } else {
+                            bottomsContainer.appendChild(imgElement);
+                        }
+                    })
+                    .catch(() => {
+                        // Default to Tops if unsure
+                        topsContainer.appendChild(imgElement);
+                    });
             };
 
             reader.readAsArrayBuffer(file);
@@ -68,8 +82,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const video = document.getElementById("video");
     const canvas = document.getElementById("canvas");
     const captureBtn = document.getElementById("captureBtn");
-    const photoContainer = document.getElementById("photoContainer");
-    let stream = null; // Store camera stream
+    const topsContainer = document.querySelector(".tops-container");
+    const bottomsContainer = document.querySelector(".bottoms-container");    let stream = null; // Store camera stream
 
     // Open the Camera Popup
     openCameraBtn.addEventListener("click", function () {
@@ -110,7 +124,17 @@ document.addEventListener("DOMContentLoaded", function () {
         imgElement.className = "w-24 h-24 object-cover rounded-md shadow-md";
         
         // Append to closet
-        photoContainer.appendChild(imgElement);
+        detectCategory(imgElement.src)
+            .then(category => {
+                if (category === "top") {
+                    topsContainer.appendChild(imgElement);
+                } else {
+                    bottomsContainer.appendChild(imgElement);
+                }
+            })
+            .catch(() => {
+                topsContainer.appendChild(imgElement);
+            });
 
         // Close the modal after capturing
         cameraModal.classList.add("hidden");
@@ -122,3 +146,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+function detectCategory(imageSrc) {
+    return new Promise((resolve) => {
+        // Placeholder logic – Replace this with AI model or user selection
+        setTimeout(() => {
+            const randomCategory = Math.random() > 0.5 ? "top" : "bottom";
+            resolve(randomCategory);
+        }, 500);
+    });
+}
