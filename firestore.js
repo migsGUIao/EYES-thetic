@@ -1,7 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, addDoc, collection, query, getDocs } from "firebase/firestore";
+import { addDoc, collection, query, getDocs } from "firebase/firestore";
+import admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
+import serviceAccount from "./eyes-thetic-firebase-adminsdk-fbsvc-4940990a64.json" assert { type: "json" };
+
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -17,6 +22,11 @@ const firebaseConfig = {
     measurementId: "G-QN330BE4E4"
 };
 
+//Firebase admin SDK
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
@@ -26,12 +36,12 @@ const firestore = getFirestore();
 
 // Basic CRUD
 // Create a document in User collection (register)
-export async function createNewUser(user, userDetails) {
+export async function createNewUser(userDetails) {
     // Get user details from register page fields
     // Fields: User ID (autogen)[document name], username, display name, email, password
     try {
-        const userRef = await addDoc(collection(firestore, user), userDetails);
-        console.log("User created with ID: ", userRef.id);
+        const userRef = await firestore.collection("user").add(userDetails);
+        console.log("User created with ID:", userRef.id);
     } catch (e) {
         console.error("Error creating user: ", e);
     }
@@ -86,3 +96,4 @@ export function updateUser() {
 }
 
 // Delete
+export {firestore};

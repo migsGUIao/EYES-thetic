@@ -1,8 +1,11 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const csv = require('csv-parser');
-const fs = require('fs');
-const path = require('path'); // Add this line
+import express from "express";
+import bodyParser from "body-parser";
+import csv from "csv-parser";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";  
+import { firestore } from "./firestore.js";  
+import { createNewUser } from "./firestore.js";
 
 // import { createNewUser, createNewRecommendation, createNewReview, queryUser,
 //          queryRecommendation, queryReview, updateUser
@@ -13,6 +16,10 @@ const PORT = 3000;
 
 app.use(bodyParser.json());
 app.use(express.static('public'));
+
+// Fix __dirname for ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Serve the views folder
 app.use(express.static(path.join(__dirname, 'views')));
@@ -154,10 +161,7 @@ app.post('/recommend', (req, res) => {
   //console.log(recommendations.slice(0,10));
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+
 
 // Sanity check function to remove duplicate colors
 function removeDuplicates(data) {
@@ -194,7 +198,7 @@ function removeDuplicates(data) {
 
 // Register a new user
 // let createNewUser = firestoreCRUD.createNewUser();
-app.post('/signup', (req, res) => {
+/* app.post('/signup', (req, res) => {
   var username = req.body.username;
   var displayName = req.body.displayName;
   var email = req.body.email;
@@ -208,4 +212,64 @@ app.post('/signup', (req, res) => {
   }
 
   createNewUser("user", newUser);
+}); */
+
+//signup
+app.post("/signup", async (req, res) => {
+    const { username, displayName, email, password } = req.body;
+
+    if (!username || !email || !password) {
+        return res.status(400).json({ success: false, message: "Missing required fields." });
+    }
+
+    try {
+        // Call function from firestore.js to add the user
+        await createNewUser({ username, displayName, email, password });
+
+        res.json({ success: true, message: "User registered successfully!" });
+    } catch (error) {
+        console.error("Signup error:", error);
+        res.status(500).json({ success: false, message: "Signup failed!" });
+    }
+});
+
+//login
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+      return res.status(400).json({ success: false, message: "Username and password are required!" });
+  }
+
+  try {
+      const usersRef = firestore.collection("user");
+      const querySnapshot = await usersRef.where("username", "==", username).get();
+
+      if (querySnapshot.empty) {
+          return res.status(401).json({ success: false, message: "Invalid username or password" });
+      }
+
+      // Retrieve user data
+      let userData = null;
+      querySnapshot.forEach(doc => {
+          userData = doc.data();
+      });
+
+      // Compare passwords TO DO: HASHING
+      if (userData.password !== password) {
+          return res.status(401).json({ success: false, message: "Invalid username or password" });
+      }
+
+      // Login successful
+      res.json({ success: true, message: "Login successful!" });
+
+  } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ success: false, message: "Server error. Please try again later." });
+  }
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });

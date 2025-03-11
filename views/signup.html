@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EYES-thetic 24:7</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="../firestore.js"></script>
-    <script src="../server.js"></script>
 </head>
 <body class="bg-white flex flex-col items-center justify-center min-h-screen text-center px-6 mt-20">
     <!-- Top bar -->
@@ -21,7 +19,7 @@
 
     <!-- Sign-up form -->
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form class="space-y-6" method="post">
+        <form id="signupForm" class="space-y-6">
             <!-- Display Name -->
             <div>
                 <label for="displayName" class="block text-sm/6 text-left font-semibold">Name</label>
@@ -56,6 +54,9 @@
             
         </form>
     </div>
-    <!-- Sign-up form end -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js"></script> -->
+    <script type="module" src="js/signup.js"></script>
+
 </body>
 </html>
