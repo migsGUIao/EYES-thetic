@@ -6,6 +6,7 @@ import path from "path";
 import { fileURLToPath } from "url";  
 import { firestore } from "./firestore.js";  
 import { createNewUser } from "./firestore.js";
+import { hash, verify } from "argon2";
 
 // import { createNewUser, createNewRecommendation, createNewReview, queryUser,
 //          queryRecommendation, queryReview, updateUser
@@ -222,9 +223,11 @@ app.post("/signup", async (req, res) => {
         return res.status(400).json({ success: false, message: "Missing required fields." });
     }
 
+    const hashPw = await hash(password);
+
     try {
         // Call function from firestore.js to add the user
-        await createNewUser({ username, displayName, email, password });
+        await createNewUser({ username, displayName, email, password: hashPw });
 
         res.json({ success: true, message: "User registered successfully!" });
     } catch (error) {
@@ -256,7 +259,10 @@ app.post("/login", async (req, res) => {
       });
 
       // Compare passwords TO DO: HASHING
-      if (userData.password !== password) {
+      const pwComp = await verify(userData.password, password); // true: password match
+
+      // if (userData.password !== password) {
+      if (!pwComp) {
           return res.status(401).json({ success: false, message: "Invalid username or password" });
       }
 

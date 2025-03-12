@@ -4,7 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import admin from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
-import serviceAccount from "./eyes-thetic-firebase-adminsdk-fbsvc-4940990a64.json" assert { type: "json" };
+import serviceAccount from "./eyes-thetic-firebase-adminsdk-fbsvc-4940990a64.json" with { type: "json" };
 
 
 // TODO: Add SDKs for Firebase products that you want to use
