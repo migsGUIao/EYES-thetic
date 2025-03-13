@@ -37,6 +37,13 @@ let imageData = new Map();
 fs.createReadStream('styles.csv')
   .pipe(csv())
   .on('data', (row) => {
+    
+    if (
+      row.productDisplayName.toLowerCase().includes("kids") &&
+      row.gender.trim().toLowerCase() === "men"
+    ) {
+      row.gender = "Boys";
+    }
   
     // Push relevant columns only
     fashionData.set(row.id, {
@@ -159,7 +166,7 @@ app.post('/recommend', (req, res) => {
 
   // Return a limited set of recommendations (e.g., top 10)
   res.json(recommendations.slice(0, 50));
-  //console.log(recommendations.slice(0,10));
+  console.log(recommendations.slice(0,10));
 });
 
 
@@ -196,24 +203,6 @@ function removeDuplicates(data) {
 //    number of stars,
 //    description,
 //    user ID
-
-// Register a new user
-// let createNewUser = firestoreCRUD.createNewUser();
-/* app.post('/signup', (req, res) => {
-  var username = req.body.username;
-  var displayName = req.body.displayName;
-  var email = req.body.email;
-  var password = req.body.password;
-
-  var newUser = {
-    username: username,
-    displayName: displayName,
-    email: email,
-    password: password
-  }
-
-  createNewUser("user", newUser);
-}); */
 
 //signup
 app.post("/signup", async (req, res) => {
