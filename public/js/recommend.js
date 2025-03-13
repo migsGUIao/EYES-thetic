@@ -46,6 +46,54 @@ async function submitForm() {
     }
 }
 
+//Random Recommendation
+document.getElementById('randomRecommendationBtn').addEventListener('click', showRandomRecommendation);
+
+async function showRandomRecommendation() {
+    try {
+        const response = await fetch('/random-recommend');
+        const recommendation = await response.json();
+
+        if (recommendation.message) {
+            document.getElementById('recommendation').innerHTML = `<p>${recommendation.message}</p>`;
+            return;
+        }
+
+        const rec = recommendation;
+
+        const html = `
+            <div class="recommendation-box">
+                <h4>Topwear</h4>
+                ${rec.top_image ? `<img src="${rec.top_image}" alt="${rec.top_name}" />` : '<p>No Image Available</p>'}
+                <p><b>Top:</b> ${rec.top_name} (${rec.top_colour})</p>
+
+                <h4>Bottomwear</h4>
+                ${rec.bottom_image ? `<img src="${rec.bottom_image}" alt="${rec.bottom_name}" />` : '<p>No Image Available</p>'}
+                <p><b>Bottom:</b> ${rec.bottom_name} (${rec.bottom_colour})</p>
+
+                <p><b>Gender:<b> ${rec.gender}</p>
+                <p><b>Season:</b> ${rec.season}</p>
+                <p><b>Usage:</b> ${rec.usage}</p>
+
+            </div>
+        `;
+        document.getElementById('recommendation').innerHTML = html;
+
+        const description = `Randomly recommended outfit. Top: ${rec.top_name}. Bottom: ${rec.bottom_name}.`;
+        speakText(description);
+
+        document.getElementById('nextRecommendation').style.display = 'none';
+        document.getElementById('favoriteBtn').style.display = 'block';
+        document.getElementById('favoriteBtn').onclick = function () {
+            saveFavorite(rec);
+        };
+
+    } catch (error) {
+        console.error('Error fetching random recommendation:', error);
+        document.getElementById('recommendation').innerHTML = `<p>Error fetching random recommendation. Please try again later.</p>`;
+    }
+}
+
 function showNextRecommendation() {
     // Interrupt ongoing speech to make way for new ones
     window.speechSynthesis.cancel()
@@ -108,8 +156,6 @@ function speakText(text) {
 
     window.speechSynthesis.speak(utterance);
 }
-
-
 
 function saveFavorite(rec) {
     // Retrieve existing favorites from localStorage - TEMPORARY
