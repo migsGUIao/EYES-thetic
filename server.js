@@ -4,8 +4,7 @@ import csv from "csv-parser";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";  
-import { firestore } from "./firestore.js";  
-import { createNewUser } from "./firestore.js";
+import { firestore, verifyFirebaseToken, createNewUser } from "./firestore.js";  
 import { hash, verify } from "argon2";
 
 // import { createNewUser, createNewRecommendation, createNewReview, queryUser,
@@ -25,9 +24,29 @@ const __dirname = path.dirname(__filename);
 // Serve the views folder
 app.use(express.static(path.join(__dirname, 'views')));
 
-// Default route to serve index.html
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+// Default route (localhost:3000) should load login.html
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "login.html"));
+});
+
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "login.html"));
+});
+
+app.get("/signup", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "signup.html"));
+});
+
+app.get("/homepage", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "index.html"));
+});
+
+app.get("/favorites", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "favorites.html"));
+});
+
+app.get("/closet", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "closet.html"));
 });
 
 let fashionData = new Map();
@@ -226,8 +245,9 @@ app.post("/signup", async (req, res) => {
 });
 
 //login
-app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+app.post("/login", verifyFirebaseToken, (req, res) => {
+  res.json({ success: true, message: "Login successful!", user: req.user });
+ /*  const { username, password } = req.body;
 
   if (!username || !password) {
       return res.status(400).json({ success: false, message: "Username and password are required!" });
@@ -261,6 +281,16 @@ app.post("/login", async (req, res) => {
   } catch (error) {
       console.error("Login error:", error);
       res.status(500).json({ success: false, message: "Server error. Please try again later." });
+  } */
+});
+
+app.post("/logout", (req, res) => {
+  try {
+      // Firebase authentication is client-side, so we just clear session storage
+      res.json({ success: true, message: "User logged out successfully." });
+  } catch (error) {
+      console.error("Logout error:", error);
+      res.status(500).json({ success: false, message: "Logout failed." });
   }
 });
 

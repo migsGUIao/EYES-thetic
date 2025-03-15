@@ -32,14 +32,15 @@
   <!-- Navigation Bar -->
   <nav class="w-full flex justify-center items-center py-4 px-8 shadow-md bg-white fixed top-0 left-0">
     <div class="flex space-x-6">
-        <a href="index.html" class="text-gray-600 hover:text-black">HOME</a>
-        <a href="closet.html" class="text-gray-600 hover:text-black">VIRTUAL CLOSET</a>
-        <a href="favorites.html" class="font-bold text-black relative">
-            FAVORITES
-            <span class="absolute -bottom-1 left-0 w-full h-1 bg-yellow-400"></span>
-        </a>
+        <a href="/homepage" class="text-gray-600 hover:text-black">HOME</a>
+        <a href="/closet" class="text-gray-600 hover:text-black">VIRTUAL CLOSET</a>
+        <a href="/favorites" class="font-bold text-black relative">
+          FAVORITES
+          <span class="absolute -bottom-1 left-0 w-full h-1 bg-yellow-400"></span>
+        </a>        
+      <a href="/login" class="text-gray-600 hover:text-black">LOGOUT</a>
     </div>
-  </nav>
+</nav>
 
   <div class="mt-24"> 
     <h2 class="text-3xl font-bold ml-20">My Favorite Clothing Recommendations</h2>
@@ -130,5 +131,6 @@
     // Load favorites on page load
     window.onload = loadFavorites;
   </script>
+  <script type="module" src="js/login.js"></script>
 </body>
 </html>

@@ -1,44 +1,30 @@
-//import { auth } from "/firebase-config.js";
-//import { createUserWithEmailAndPassword } from "firebase/auth";
-document.addEventListener("DOMContentLoaded", function () {
-    const signupForm = document.getElementById("signupForm");
+import { auth, db } from './firebase-config.js';
+import { createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
 
-    if (!signupForm) {
-        console.error("Signup form not found!");
-        return;
+// Handle signup
+document.getElementById("signupForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const displayName = document.getElementById("displayName").value.trim();
+
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await addDoc(collection(db, "user"), {
+            uid: user.uid,
+            email: email,
+            username: username,
+            displayName: displayName
+        });
+
+        alert("Signup successful! Please log in.");
+        window.location.href = "/login";
+    } catch (error) {
+        console.error("Signup error:", error);
+        alert(error.message);
     }
-
-    signupForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const displayName = document.getElementById("displayName").value.trim();
-        const username = document.getElementById("username").value.trim(); 
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-
-        if (!username || !email || !password) {
-            alert("Email and Password are required!");
-            return;
-        }
-
-        try {
-            const response = await fetch("/signup", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ displayName, username, email, password }),
-            });
-
-            const result = await response.json();
-            if (result.success) {
-                alert("Signup successful!");
-                window.location.href = "/login.html";
-            } else {
-                alert(`Signup error: ${result.message}`);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            alert("Something went wrong.");
-        }
-    });
 });
-

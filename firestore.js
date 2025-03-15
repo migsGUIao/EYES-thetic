@@ -4,8 +4,9 @@ import { getAnalytics } from "firebase/analytics";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import admin from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
-import serviceAccount from "./eyes-thetic-firebase-adminsdk-fbsvc-4940990a64.json" with { type: "json" };
+import fs from "fs";
 
+const serviceAccount = JSON.parse(fs.readFileSync("./eyes-thetic-firebase-adminsdk-fbsvc-4940990a64.json", "utf8"));
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -33,6 +34,25 @@ const app = initializeApp(firebaseConfig);
 
 // Access Firestore
 const firestore = getFirestore();
+
+//auth
+export async function verifyFirebaseToken(req, res, next) {
+    const idToken = req.headers.authorization?.split("Bearer ")[1];
+
+    if (!idToken) {
+        return res.status(401).json({ message: "Unauthorized: No token provided" });
+    }
+
+    try {
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        req.user = decodedToken; // Store user data in request
+        next();
+    } catch (error) {
+        console.error("Token verification failed:", error);
+        return res.status(403).json({ message: "Unauthorized: Invalid token" });
+    }
+}
+
 
 // Basic CRUD
 // Create a document in User collection (register)
