@@ -30,6 +30,12 @@ LQC - Women, Spring, Casual
 LQF - Women, Spring, Formal
 LQS - Women, Spring, Sport
 
+0 -> Go to Homepage
+1 -> Go to Virtual Closet
+2 -> Go to favorites
+
+R -> Random Recommendation
+
 *--------------------------------*
 How to go to next recommendation?
 -> Press right arrow key

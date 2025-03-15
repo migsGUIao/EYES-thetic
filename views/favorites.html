@@ -128,6 +128,37 @@
     document.getElementById('sortSeason').addEventListener('change', sortFavorites);
     document.getElementById('sortUsage').addEventListener('change', sortFavorites);
 
+    document.addEventListener('keydown', (e) => {
+
+    const tag = document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
+        return;
+    }
+
+    if (e.key === "Escape") {
+        resetKeyBuffer();
+        return;
+    }
+
+    // Check the pressed key.
+    switch (e.key) {
+        case "0":
+        // Navigate to homepage.
+        window.location.href = "index.html";
+        break;
+        case "1":
+        // Navigate to closet page.
+        window.location.href = "closet.html";
+        break;
+        case "2":
+        // Navigate to favorites page.
+        window.location.href = "favorites.html";
+        break;
+        default:
+        break;
+    }
+  });
+
     // Load favorites on page load
     window.onload = loadFavorites;
   </script>

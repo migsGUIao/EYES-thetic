@@ -95,6 +95,8 @@ async function showRandomRecommendation() {
 }
 
 function showNextRecommendation() {
+    resetKeyBuffer();
+
     // Interrupt ongoing speech to make way for new ones
     window.speechSynthesis.cancel()
 
@@ -208,10 +210,16 @@ function reRankRecommendations(recommendations) {
 }
 
   
-
 // Keybinds
-let keyBuffer = "";
 let keyTimer = null;
+
+const allowedKeys = new Set(['M', 'L', 'F', 'Z', 'W', 'Q', 'C', 'S']);
+
+function updateVisualFeedback() {
+    // For example, update an element with id "keyBufferDisplay"
+    const display = document.getElementById('keyBufferDisplay');
+    if (display) display.textContent = keyBuffer;
+}
 
 function resetKeyBuffer() {
     keyBuffer = "";
@@ -223,27 +231,68 @@ function resetKeyBuffer() {
 
 document.addEventListener('keydown', (e) => {
 
-const tag = document.activeElement.tagName;
+    const tag = document.activeElement.tagName;
     if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
         return;
     }
 
-    if (e.key === "ArrowRight") {
-        showNextRecommendation();
+    if (e.key.startsWith("Arrow")) {
+        if (e.key === "ArrowRight") showNextRecommendation();
+        return;
     }
 
-    keyBuffer += e.key.toUpperCase();
+    if (e.key === "Escape") {
+        resetKeyBuffer();
+        return;
+    }
+
+     // Check the pressed key.
+     switch (e.key) {
+        case "0":
+        window.location.href = "index.html";
+        break;
+        case "1":
+        window.location.href = "closet.html";
+        break;
+        case "2":
+        window.location.href = "favorites.html";
+        break;
+        default:
+        break;
+    }
+
+     // "R" key triggers the random recommendation button (only on homepage)
+    if (e.key === 'R' || e.key === 'r') {
+        const randomBtn = document.getElementById("randomRecommendationBtn");
+        if (randomBtn) {
+            randomBtn.click();
+        }
+        resetKeyBuffer();
+        return;
+    }
+
+    // Only allow keys that are in the allowed set.
+    let pressedKey = e.key.toUpperCase();
+    if (!allowedKeys.has(pressedKey)) {
+        console.warn(`Ignored key: ${pressedKey}. Resetting key buffer.`);
+        resetKeyBuffer();
+        return;
+    }
+
+    keyBuffer += pressedKey;
+    updateVisualFeedback();
+    console.log("Current key buffer:", keyBuffer);
 
     // If the buffer is not yet complete, set a timeout for 1 sec to reset.
-    if (keyBuffer.length < 3) {
-        if (keyTimer) {
-            clearTimeout(keyTimer);
-        }
-        keyTimer = setTimeout(resetKeyBuffer, 1000);
-    }
+    if (keyTimer) clearTimeout(keyTimer);
+    keyTimer = setTimeout(() => {
+        console.log("Key buffer timed out, resetting.");
+        resetKeyBuffer();
+    }, 1500);
 
     // When we have exactly 3 characters, attempt to map them.
     if (keyBuffer.length === 3) {
+        console.log("Full key sequence:", keyBuffer);
         const code = keyBuffer;
         resetKeyBuffer(); 
         
@@ -254,6 +303,8 @@ const tag = document.activeElement.tagName;
         const genderVal = genderMapping[code.charAt(0)];
         const seasonVal = seasonMapping[code.charAt(1)];
         const usageVal  = usageMapping[code.charAt(2)];
+
+        console.log("Mapped values:", genderVal, seasonVal, usageVal);
 
         if (genderVal && seasonVal && usageVal) {
             document.getElementById('gender').value = genderVal;

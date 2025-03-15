@@ -189,4 +189,43 @@ async function detectCategory(imgSrc) {
     // Index 0 = "top" and index 1 = "bottom" (adjust as needed).
     const predictedIndex = prediction.indexOf(Math.max(...prediction));
     return predictedIndex === 0 ? "top" : "bottom";
-  }
+}
+
+function resetKeyBuffer() {
+    keyBuffer = "";
+    if (keyTimer) {
+        clearTimeout(keyTimer);
+        keyTimer = null;
+    }
+}
+
+document.addEventListener('keydown', (e) => {
+
+    const tag = document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
+        return;
+    }
+
+    if (e.key === "Escape") {
+        resetKeyBuffer();
+        return;
+    }
+
+     // Check the pressed key.
+     switch (e.key) {
+        case "0":
+        // Navigate to homepage.
+        window.location.href = "index.html";
+        break;
+        case "1":
+        // Navigate to closet page.
+        window.location.href = "closet.html";
+        break;
+        case "2":
+        // Navigate to favorites page.
+        window.location.href = "favorites.html";
+        break;
+        default:
+        break;
+    }
+});
