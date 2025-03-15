@@ -1,56 +1,124 @@
-import tensorflow as tf
-from tensorflow.keras.applications import ResNet50
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
+import os
+import shutil
+import pandas as pd
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.applications import ResNet50
+from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
+from tensorflow.keras.models import Model
+import tensorflow as tf
 
-# Load ResNet50 without the top classifier layers
-base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
 
+# Define file paths
+csv_path = 'styles.csv'            # Your original CSV file with metadata
+images_dir = 'images'              
+# Folder where all images are stored (e.g., "12345.jpg")
+output_dir = 'data'                # Directory where images will be organized
+''''
+topwear_dir = os.path.join(output_dir, 'topwear')
+bottomwear_dir = os.path.join(output_dir, 'bottomwear')
+
+os.makedirs(topwear_dir, exist_ok=True)
+os.makedirs(bottomwear_dir, exist_ok=True)
+
+df = pd.read_csv(csv_path)
+df = df[df['gender'].isin(['Men', 'Women'])].copy()
+
+df.loc[
+    (df['gender'] == 'Men') & (df['productDisplayName'].str.contains("Kids", case=False, na=False)),
+    'gender'
+] = 'Boys'
+
+df = df[df['subCategory'].isin(['Topwear', 'Bottomwear'])]
+
+print("Number of items after filtering:", len(df))
+print("Unique genders:", df['gender'].unique())
+
+for index, row in df.iterrows():
+    image_id = str(row['id']).strip()
+    sub_cat = row['subCategory'].strip().lower()  # expecting 'Topwear' or 'Bottomwear'
+    src_image = os.path.join(images_dir, f"{image_id}.jpg")  # adjust extension if necessary
+
+    if os.path.exists(src_image):
+        if sub_cat == 'topwear':
+            dst_image = os.path.join(topwear_dir, f"{image_id}.jpg")
+        elif sub_cat == 'bottomwear':
+            dst_image = os.path.join(bottomwear_dir, f"{image_id}.jpg")
+        else:
+            continue  # Skip if subCategory does not match
+        shutil.copy(src_image, dst_image)
+    else:
+        print(f"Image not found: {src_image}")
+
+print("Dataset preparation complete. Images are organized in the 'data' directory.")
+'''''
+# --------------------------
+# STEP 2: Data Generators
+# --------------------------
+
+IMG_SIZE = (224, 224)
+BATCH_SIZE = 32
+
+datagen = ImageDataGenerator(
+    rescale=1./255,
+    validation_split=0.2,  # 20% of data for validation
+    horizontal_flip=True,
+    rotation_range=20,
+    zoom_range=0.2
+)
+
+train_generator = datagen.flow_from_directory(
+    output_dir,             # This directory now has subdirectories 'topwear' and 'bottomwear'
+    target_size=IMG_SIZE,
+    batch_size=BATCH_SIZE,
+    class_mode='categorical',
+    subset='training'
+)
+
+validation_generator = datagen.flow_from_directory(
+    output_dir,
+    target_size=IMG_SIZE,
+    batch_size=BATCH_SIZE,
+    class_mode='categorical',
+    subset='validation'
+)
+
+# --------------------------
+# STEP 3: Build the Model
+# --------------------------
+
+# Load pre-trained ResNet50 without its top layers
+base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(IMG_SIZE[0], IMG_SIZE[1], 3))
 # Freeze the base model layers
 for layer in base_model.layers:
     layer.trainable = False
 
-# Add custom layers on top
+# Add custom classifier on top
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
-x = Dropout(0.5)(x)  # help prevent overfitting
+x = Dropout(0.5)(x)
 x = Dense(128, activation='relu')(x)
-predictions = Dense(2, activation='softmax')(x)  # 2 classes: top and bottom
+predictions = Dense(2, activation='softmax')(x)  # Two classes: topwear and bottomwear
 
-# Define the model
 model = Model(inputs=base_model.input, outputs=predictions)
-
-# Compile the model
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-# Data generators for training and validation
-train_datagen = ImageDataGenerator(
-    rescale=1./255,
-    horizontal_flip=True,
-    rotation_range=20,
-    shear_range=0.2,
-    zoom_range=0.2,
-    validation_split=0.2)
+model.summary()
 
-train_generator = train_datagen.flow_from_directory(
-    'path/to/training_data',  # directory with subfolders 'top' and 'bottom'
-    target_size=(224, 224),
-    batch_size=32,
-    class_mode='categorical',
-    subset='training')
+# --------------------------
+# STEP 4: Train the Model
+# --------------------------
 
-validation_generator = train_datagen.flow_from_directory(
-    'path/to/training_data',
-    target_size=(224, 224),
-    batch_size=32,
-    class_mode='categorical',
-    subset='validation')
+EPOCHS = 10  # Adjust as needed
 
-# Train the model
-model.fit(
+history = model.fit(
     train_generator,
-    epochs=10,
-    validation_data=validation_generator)
+    validation_data=validation_generator,
+    epochs=EPOCHS
+)
 
-model.save('resnet_fashion_classifier.h5')
+# --------------------------
+# STEP 5: Save the Model
+# --------------------------
+
+model.save("resnet_fashion_classifier.h5")
+print("Model trained and saved as resnet_fashion_classifier.h5")

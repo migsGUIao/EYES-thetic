@@ -1,13 +1,16 @@
 /* For the "Upload photo" and "Take a photo" virtual closet feature */
 
-let model; // Global variable for the model
+let resnetModel;
 
-// Load the model on page load. Adjust the path to your model.json.
-tf.loadLayersModel('/path/to/your/model.json').then(m => {
-  model = m;
-  console.log("Model loaded successfully.");
-}).catch(err => {
-  console.error("Failed to load model", err);
+// Load the model once the page loads
+window.addEventListener("load", async () => {
+    try {
+        // Update the path below to point to your model.json file
+        resnetModel = await tf.loadLayersModel('model.json');
+        console.log("ResNet50-based model loaded successfully.");
+    } catch (err) {
+        console.error("Error loading ResNet50-based model:", err);
+    }
 });
 
 //Upload Photo
@@ -160,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function detectCategory(imgSrc) {
     // Ensure the model is loaded.
-    if (!model) {
+    if (!resnetModel) {
       throw new Error("Model is not loaded yet!");
     }
   
