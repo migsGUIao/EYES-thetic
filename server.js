@@ -188,7 +188,94 @@ app.post('/recommend', (req, res) => {
   console.log(recommendations.slice(0,10));
 });
 
+// Random Recommendation route
+app.get('/random-recommend', (req, res) => {
+  const genders = ['Men', 'Women'];
+  const seasons = ['Fall', 'Summer', 'Winter', 'Spring'];
+  const usages = ['Casual', 'Formal', 'Sports'];
 
+  // Pick random values
+  const randomGender = genders[Math.floor(Math.random() * genders.length)];
+  const randomSeason = seasons[Math.floor(Math.random() * seasons.length)];
+  const randomUsage = usages[Math.floor(Math.random() * usages.length)];
+
+  console.log(`Fetching recommendation for: ${randomGender}, ${randomSeason}, ${randomUsage}`);
+
+  const recommendations = generateRecommendations(randomGender, randomSeason, randomUsage);
+
+  if (recommendations.length === 0) {
+      return res.json({ message: "No recommendations found." });
+  }
+
+  // Select a random recommendation
+  const randomIndex = Math.floor(Math.random() * recommendations.length);
+  const randomRecommendation = recommendations[randomIndex];
+
+  res.json(randomRecommendation);
+});
+
+function generateRecommendations(gender, season, usage) {
+  const neutralColors = new Set(['Black', 'White', 'Grey', 'Beige', 'Navy Blue', 'Brown']);
+
+  const seasonColorMen = {
+    fall: new Set(['Maroon', 'Burgundy', 'Coffee Brown', 'Mushroom Brown', 'Rust', 'Olive', 'Mustard', 'Taupe']),
+    summer: new Set(['Blue', 'Teal', 'Turquoise Blue', 'Fluorescent Green', 'Magenta', 'Lime Green', 'Sea Green', 'Lavender']),
+    winter: new Set(['Navy Blue', 'Blue', 'Teal', 'Turquoise Blue', 'Fluorescent Green', 'Magenta']),
+    spring: new Set(['Off White', 'Cream', 'Beige', 'Tan', 'Taupe', 'Nude', 'Peach', 'Yellow', 'Pink', 'Khaki', 'Skin'])
+  };
+  const menColors = seasonColorMen[season.toLowerCase()] || new Set();
+
+  const seasonColorWomen = {
+    fall: new Set(['Brown', 'Bronze', 'Copper', 'Maroon', 'Coffee Brown', 'Olive', 'Burgundy', 'Rust', 'Mustard', 'Taupe, Mushroom Brown']),
+    summer: new Set(['Silver', 'Grey', 'Grey Melange', 'Steel', 'Lavender', 'Sea Green', 'Mauve', 'Rose']),
+    winter: new Set(['Blue', 'Turquoise Blue', 'Teal', 'Magenta']),
+    spring: new Set(['Off White', 'Cream', 'Peach', 'Beige', 'Tan', 'Taupe', 'Nude' , 'Yellow', 'Skin'])
+  };
+  const womenColors = seasonColorWomen[season.toLowerCase()] || new Set();
+
+  let topwear = [];
+  let bottomwear = [];
+
+  for (const item of fashionData.values()) {
+    if (item.gender === gender && item.season === season && item.usage === usage) {
+      if (gender === 'Men' && menColors.has(item.baseColour)) {
+        if (item.subCategory === 'Topwear') {
+          topwear.push(item);
+        } else if (item.subCategory === 'Bottomwear') {
+          bottomwear.push(item);
+        }
+      } else if (gender === 'Women') {
+        if (item.subCategory === 'Topwear') {
+          topwear.push(item);
+        } else if (item.subCategory === 'Bottomwear') {
+          bottomwear.push(item);
+        }
+      }
+    }
+  }
+
+  const recommendations = [];
+  if (topwear.length > 0 && bottomwear.length > 0) {
+    const randomTop = topwear[Math.floor(Math.random() * topwear.length)];
+    const randomBottom = bottomwear[Math.floor(Math.random() * bottomwear.length)];
+
+    recommendations.push({
+        top_id: randomTop.id,
+        top_name: randomTop.productDisplayName,
+        top_colour: randomTop.baseColour,
+        top_image: imageData.get(randomTop.id) || null,
+        bottom_id: randomBottom.id,
+        bottom_name: randomBottom.productDisplayName,
+        bottom_colour: randomBottom.baseColour,
+        bottom_image: imageData.get(randomBottom.id) || null,
+        gender: gender,
+        season: randomTop.season,
+        usage: randomTop.usage
+    });
+  }
+
+  return recommendations;
+}
 
 // Sanity check function to remove duplicate colors
 function removeDuplicates(data) {
