@@ -1,5 +1,18 @@
 /* For the "Upload photo" and "Take a photo" virtual closet feature */
 
+let resnetModel;
+
+// Load the model once the page loads
+window.addEventListener("load", async () => {
+    try {
+        // Update the path below to point to your model.json file
+        resnetModel = await tf.loadLayersModel('model.json');
+        console.log("ResNet50-based model loaded successfully.");
+    } catch (err) {
+        console.error("Error loading ResNet50-based model:", err);
+    }
+});
+
 //Upload Photo
 document.addEventListener("DOMContentLoaded", function () {
     const uploadBtn = document.getElementById("uploadBtn");
@@ -59,7 +72,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             bottomsContainer.appendChild(imgElement);
                         }
                     })
-                    .catch(() => {
+                    .catch(err => {
+                        console.error("Error during classification:", err);
                         // Default to Tops if unsure
                         topsContainer.appendChild(imgElement);
                     });
@@ -147,12 +161,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-function detectCategory(imageSrc) {
-    return new Promise((resolve) => {
-        // Placeholder logic – Replace this with AI model or user selection
-        setTimeout(() => {
-            const randomCategory = Math.random() > 0.5 ? "top" : "bottom";
-            resolve(randomCategory);
-        }, 500);
+async function detectCategory(imgSrc) {
+    // Ensure the model is loaded.
+    if (!resnetModel) {
+      throw new Error("Model is not loaded yet!");
+    }
+  
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // in case of CORS issues
+    img.src = imgSrc;
+  
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
     });
-}
+  
+    let tensor = tf.browser.fromPixels(img)
+      .resizeNearestNeighbor([224, 224]) // resize to 224x224
+      .toFloat()
+      .div(tf.scalar(255)); // normalize pixel values between 0 and 1
+  
+    const batched = tensor.expandDims(0);
+  
+    const prediction = await model.predict(batched).data();
+  
+    // Assume your model outputs probabilities for 2 classes:
+    // Index 0 = "top" and index 1 = "bottom" (adjust as needed).
+    const predictedIndex = prediction.indexOf(Math.max(...prediction));
+    return predictedIndex === 0 ? "top" : "bottom";
+  }
