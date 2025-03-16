@@ -1,5 +1,6 @@
 let recommendations = [];
 let currentIndex = 0;
+window.currentRecommendation = null;
 
 async function submitForm() {
     const form = document.getElementById('recommendForm');
@@ -56,10 +57,12 @@ async function showRandomRecommendation() {
 
         if (recommendation.message) {
             document.getElementById('recommendation').innerHTML = `<p>${recommendation.message}</p>`;
+            window.currentRecommendation = null;
             return;
         }
 
         const rec = recommendation;
+        window.currentRecommendation = rec;
 
         const html = `
             <div class="recommendation-box">
@@ -79,8 +82,10 @@ async function showRandomRecommendation() {
         `;
         document.getElementById('recommendation').innerHTML = html;
 
-        const description = `Randomly recommended outfit. Top: ${rec.top_name}. Bottom: ${rec.bottom_name}.`;
-        speakText(description);
+        const choices = `You have picked: Gender ${rec.gender} Season: ${rec.season} Usage: ${rec.usage}`;
+        const description = `Randomly recommended outfit. Top: ${rec.top_name} Color: ${rec.top_colour}. Bottom: ${rec.bottom_name} Color: ${rec.bottom_colour}.`;
+        const result = choices.concat(description)
+        speakText(result);
 
         document.getElementById('nextRecommendation').style.display = 'none';
         document.getElementById('favoriteBtn').style.display = 'block';
@@ -104,10 +109,13 @@ function showNextRecommendation() {
         document.getElementById('recommendation').innerHTML = "<p>No more recommendations available.</p>";
         document.getElementById('nextRecommendation').style.display = 'none';
         document.getElementById('favoriteBtn').style.display = 'none';
+
+        window.currentRecommendation = null;
         return;
     }
 
     const rec = recommendations[currentIndex];
+    window.currentRecommendation = rec;
 
     const html = `
         <div class="recommendation-box">
@@ -131,8 +139,10 @@ function showNextRecommendation() {
     document.getElementById('recommendation').innerHTML = html;
 
     // Use the SpeechSynthesis API for TTS
-    const description = `Recommended outfit. Top: ${rec.top_name}. Bottom: ${rec.bottom_name}.`;
-    speakText(description);
+    const choices = `You have picked: Gender ${rec.gender} Season: ${rec.season} Usage: ${rec.usage}`;
+    const description = `Recommended outfit. Top: ${rec.top_name} Color: ${rec.top_colour}. Bottom: ${rec.bottom_name} Color: ${rec.bottom_colour}.`;
+    const result = choices.concat(description)
+    speakText(result);
 
     document.getElementById('nextRecommendation').style.display =
         (currentIndex < recommendations.length - 1) ? 'block' : 'none';
@@ -149,9 +159,10 @@ function showNextRecommendation() {
 
 function speakText(text) {
     // TTS
+    window.speechSynthesis.cancel(); // Addresses simultaneous TTS
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';  
 
+    utterance.lang = 'en-US';  
     utterance.volume = 1;
     utterance.rate = 1;
     utterance.pitch = 1;
@@ -159,17 +170,32 @@ function speakText(text) {
     window.speechSynthesis.speak(utterance);
 }
 
+// TTS For WELCOME homepage
+document.addEventListener("DOMContentLoaded", function() {
+    if (window.location.pathname.toLowerCase().endsWith("/homepage")) {
+        const welcome = document.getElementById("welcome").innerText;
+        const intro = document.getElementById("intro").innerText;
+        const random = "Try our Random Recommendation feature, press R on your keyboard!";
+        const concat = welcome.concat(intro)
+        const final = concat.concat(random)
+        speakText(final);
+    }
+});
+
 function saveFavorite(rec) {
     // Retrieve existing favorites from localStorage - TEMPORARY
     let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     
     // Check if the recommendation already exists to avoid duplicates
     if (!favorites.some(item => item.top_id === rec.top_id && item.bottom_id === rec.bottom_id)) {
+        rec.timestamp = new Date().getTime();
         favorites.push(rec);
         localStorage.setItem('favorites', JSON.stringify(favorites));
         alert('Favorite saved!');
+        speakText('Favorite saved!');
     } else {
         alert('This recommendation is already in favorites!');
+        speakText('This recommendation is already in favorites!')
     }
 }
 
@@ -246,26 +272,51 @@ document.addEventListener('keydown', (e) => {
         return;
     }
 
+    // "R" key triggers the random recommendation button (only on homepage)
+    if (e.key === 'r' || e.key === 'R') {
+        const randomBtn = document.getElementById("randomRecommendationBtn");
+        if (randomBtn) {
+            randomBtn.click();
+        }
+        resetKeyBuffer();
+        return;
+    }
+
      // Check the pressed key.
      switch (e.key) {
         case "0":
-        window.location.href = "index.html";
-        break;
+        window.speechSynthesis.cancel();
+        window.location.href = "/homepage";
+        return;
         case "1":
-        window.location.href = "closet.html";
-        break;
+        window.speechSynthesis.cancel();
+        window.location.href = "/closet";
+        return;
         case "2":
-        window.location.href = "favorites.html";
-        break;
+        window.speechSynthesis.cancel();
+        window.location.href = "/favorites";
+        return;
         default:
         break;
     }
 
-     // "R" key triggers the random recommendation button (only on homepage)
-    if (e.key === 'R' || e.key === 'r') {
-        const randomBtn = document.getElementById("randomRecommendationBtn");
-        if (randomBtn) {
-            randomBtn.click();
+    if (e.key === 'a' || e.key === 'A') {
+        if (window.currentRecommendation) {
+            saveFavorite(window.currentRecommendation);
+            showNextRecommendation();
+        } else {
+            console.warn("No current recommendation available.");
+        }
+        resetKeyBuffer();
+        return;
+    }
+    
+    if (e.key === 'X' || e.key === 'x') {
+        const logout = document.getElementById('logoutBtn')
+        
+        if(logout) {
+            logout.click();
+            speakText("Logout successful!");
         }
         resetKeyBuffer();
         return;
@@ -279,6 +330,7 @@ document.addEventListener('keydown', (e) => {
         return;
     }
 
+    
     keyBuffer += pressedKey;
     updateVisualFeedback();
     console.log("Current key buffer:", keyBuffer);
@@ -314,4 +366,5 @@ document.addEventListener('keydown', (e) => {
             submitForm();
         }
     }
+
 });

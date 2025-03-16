@@ -112,3 +112,60 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    if (window.location.pathname.toLowerCase().endsWith("/login")) {
+        const usernameField = document.getElementById("username");
+        const passwordField = document.getElementById("password");
+        const login = document.getElementById("login");
+
+        usernameField.focus();
+        speakText("You are currently in the login page. Please enter your username. Press TAB to enter password.");
+        
+        passwordField.addEventListener("focus", function () {
+            speakText("Please enter your password");
+        });
+
+        login.addEventListener("focus", function () {
+            speakText("Click Login! If you still don't have an account, press 'S' to sign up!");
+        });
+    }
+});
+
+function speakText(text) {
+    // TTS
+    window.speechSynthesis.cancel(); // Addresses simultaneous TTS
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    utterance.lang = 'en-US';  
+    utterance.volume = 1;
+    utterance.rate = 1;
+    utterance.pitch = 1;
+
+    window.speechSynthesis.speak(utterance);
+}
+
+document.addEventListener('keydown', (e) => {
+    if (window.location.pathname.toLowerCase().endsWith("/login")) {
+        const tag = document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
+            return;
+        }
+
+        if (e.key === "Escape") {
+            resetKeyBuffer();
+            return;
+        }
+
+        switch (e.key) {
+            case "S":
+            case "s":
+            window.speechSynthesis.cancel();
+            window.location.href = "/signup";
+            return;
+            default:
+            break;
+        }
+    }
+});

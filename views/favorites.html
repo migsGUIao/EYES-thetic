@@ -38,7 +38,7 @@
           FAVORITES
           <span class="absolute -bottom-1 left-0 w-full h-1 bg-yellow-400"></span>
         </a>        
-      <a href="/login" class="text-gray-600 hover:text-black">LOGOUT</a>
+      <a href="/login" id="logoutBtn" class="text-gray-600 hover:text-black">LOGOUT</a>
     </div>
 </nav>
 
@@ -130,34 +130,92 @@
 
     document.addEventListener('keydown', (e) => {
 
-    const tag = document.activeElement.tagName;
-    if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
-        return;
-    }
+      const tag = document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
+          return;
+      }
 
-    if (e.key === "Escape") {
+      if (e.key === "Escape") {
+          resetKeyBuffer();
+          return;
+      }
+
+      switch (e.key) {
+          case "0":
+          window.speechSynthesis.cancel();
+          window.location.href = "/homepage";
+          return;
+          case "1":
+          window.speechSynthesis.cancel();
+          window.location.href = "/closet";
+          return;
+          case "2":
+          window.speechSynthesis.cancel();
+          window.location.href = "/favorites";
+          return;
+          default:
+          break;
+      }
+
+      if (e.key === 'X' || e.key === 'x') {
+        const logout = document.getElementById('logoutBtn')
+        
+        if(logout) {
+            logout.click();
+            speakText("Logout successful!");
+        }
         resetKeyBuffer();
         return;
     }
 
-    // Check the pressed key.
-    switch (e.key) {
-        case "0":
-        // Navigate to homepage.
-        window.location.href = "index.html";
-        break;
-        case "1":
-        // Navigate to closet page.
-        window.location.href = "closet.html";
-        break;
-        case "2":
-        // Navigate to favorites page.
-        window.location.href = "favorites.html";
-        break;
-        default:
-        break;
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (window.location.pathname.toLowerCase().endsWith("/favorites")) {
+        speakLatestFavorites();
+      }
+    });
+
+    function speakLatestFavorites() {
+      // Retrieve favorites from localStorage
+      let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      
+      if (favorites.length === 0) {
+        speakText("You have no favorites yet.");
+        return;
+      }
+      
+        // Sort favorites by timestamp in descending order (latest first)
+        favorites.sort((a, b) => b.timestamp - a.timestamp);
+        
+        // Get the top five (or fewer if there aren't five)
+        let topFive = favorites.slice(0, 5);
+        
+        // Build a summary string.
+        // You can customize the text as needed.
+        let summary = "Your latest favorites are: ";
+        topFive.forEach((fav, index) => {
+          summary += `Favorite ${index + 1}: Topwear is ${fav.top_name} in ${fav.top_colour}, and Bottomwear is ${fav.bottom_name} in ${fav.bottom_colour}. `;
+        });
+        
+      // Use your TTS function to speak the summary
+      speakText(summary);
     }
-  });
+
+  
+
+    function speakText(text) {
+      // TTS
+      window.speechSynthesis.cancel(); // Addresses simultaneous TTS
+      const utterance = new SpeechSynthesisUtterance(text);
+
+      utterance.lang = 'en-US';  
+      utterance.volume = 1;
+      utterance.rate = 1;
+      utterance.pitch = 1;
+
+      window.speechSynthesis.speak(utterance);
+    }
 
     // Load favorites on page load
     window.onload = loadFavorites;

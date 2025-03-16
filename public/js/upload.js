@@ -211,21 +211,66 @@ document.addEventListener('keydown', (e) => {
         return;
     }
 
-     // Check the pressed key.
-     switch (e.key) {
+    switch (e.key) {
         case "0":
-        // Navigate to homepage.
-        window.location.href = "index.html";
-        break;
+        window.speechSynthesis.cancel();
+        window.location.href = "/homepage";
+        return;
         case "1":
-        // Navigate to closet page.
-        window.location.href = "closet.html";
-        break;
+        window.speechSynthesis.cancel();
+        window.location.href = "/closet";
+        return;
         case "2":
-        // Navigate to favorites page.
-        window.location.href = "favorites.html";
-        break;
+        window.speechSynthesis.cancel();
+        window.location.href = "/favorites";
+        return;
         default:
         break;
+    }
+
+    if (e.key === 'X' || e.key === 'x') {
+        const logout = document.getElementById('logoutBtn')
+        
+        if(logout) {
+            logout.click();
+            speakText("Logout successful!");
+        }
+        resetKeyBuffer();
+        return;
+    }
+});
+
+function speakText(text) {
+    // TTS
+    window.speechSynthesis.cancel(); // Addresses simultaneous TTS
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    utterance.lang = 'en-US';  
+    utterance.volume = 1;
+    utterance.rate = 1;
+    utterance.pitch = 1;
+
+    window.speechSynthesis.speak(utterance);
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    if (window.location.pathname.toLowerCase().endsWith("/closet")) {
+
+        const openCam = document.getElementById("openCamBtn");
+        const upload = document.getElementById("uploadBtn");
+
+        openCam.focus();
+        speakText("You are currently in the 'Take a Photo' button. Please type enter to take photo");
+        
+        openCam.addEventListener("focus", function () {
+            speakText("You are currently in the 'Take a Photo button'. Please type enter to open camera and take photo");
+        });
+
+        upload.addEventListener("focus", function () {
+            speakText("You are currently in the 'Upload Image button'. Please type enter to upload photo");
+        });
+
     }
 });

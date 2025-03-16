@@ -35,6 +35,11 @@ LQS - Women, Spring, Sport
 2 -> Go to favorites
 
 R -> Random Recommendation
+A -> Save favorites
+X -> Logout
+
+(Only if user is in Login page)
+S -> Sign up page
 
 *--------------------------------*
 How to go to next recommendation?
