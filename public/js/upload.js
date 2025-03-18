@@ -1,15 +1,28 @@
 /* For the "Upload photo" and "Take a photo" virtual closet feature */
 
+//for upload photo
 let resnetModel;
 
-// Load the model once the page loads
+//take photo
+let mobilenetModel;
+
+// upload photo: Load the model once the page loads
 window.addEventListener("load", async () => {
     try {
-        // Update the path below to point to your model.json file
-        resnetModel = await tf.loadLayersModel('model.json');
-        console.log("ResNet50-based model loaded successfully.");
+        resnetModel = await tf.loadLayersModel('tfjs_model/model.json'); 
+        console.log("Custom ResNet model loaded successfully.");
     } catch (err) {
-        console.error("Error loading ResNet50-based model:", err);
+        console.error("Error loading ResNet model:", err);
+    }
+});
+
+// take photo: load model
+window.addEventListener("load", async () => {
+    try {
+        mobilenetModel = await mobilenet.load({ version: 2, alpha: 1.0 }); // MobileNetV2
+        console.log("MobileNetV2 model loaded successfully.");
+    } catch (err) {
+        console.error("Error loading MobileNetV2 model:", err);
     }
 });
 
@@ -87,7 +100,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
 //Take a photo
 document.addEventListener("DOMContentLoaded", function () {
     const openCameraBtn = document.getElementById("openCamBtn");
@@ -97,7 +109,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById("canvas");
     const captureBtn = document.getElementById("captureBtn");
     const topsContainer = document.querySelector(".tops-container");
-    const bottomsContainer = document.querySelector(".bottoms-container");    let stream = null; // Store camera stream
+    const bottomsContainer = document.querySelector(".bottoms-container");    
+
+    let stream = null; // Store camera stream
+    let realTimeInterval;
 
     // Open the Camera Popup
     openCameraBtn.addEventListener("click", function () {
@@ -105,24 +120,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Start webcam stream
         navigator.mediaDevices.getUserMedia({ video: true })
-            .then((cameraStream) => {
-                stream = cameraStream;
-                video.srcObject = stream;
-            })
-            .catch((err) => {
-                console.error("Error accessing webcam: ", err);
-            });
+        .then((cameraStream) => {
+            stream = cameraStream;
+            video.srcObject = stream;
+            video.onloadedmetadata = () => {
+                video.play();
+                // Start real-time detection loop
+                realTimeInterval = setInterval(() => {
+                    classifyFrame(video);
+                }, 500); // Adjust interval (ms) for speed
+            };
+        })
+        .catch((err) => {
+            console.error("Error accessing webcam: ", err);
+        });
     });
+
+    async function classifyFrame(video) {
+        if (!mobilenetModel) return;
+    
+        const predictions = await mobilenetModel.classify(video);
+        console.log(predictions);
+    
+        // Optionally, show the result on screen:
+        const label = predictions[0].className.toLowerCase();
+        const resultElem = document.getElementById("liveResult");
+        resultElem.textContent = `Detected: ${label}`;
+    }
+    
+    function stopCamera() {
+        if (realTimeInterval) {
+            clearInterval(realTimeInterval);
+            realTimeInterval = null;
+        }
+    
+        if (stream) {
+            let tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+            stream = null;
+        }
+    }
 
     // Close the Camera Popup
     closeCameraBtn.addEventListener("click", function () {
         cameraModal.classList.add("hidden");
-
-        // Stop the webcam stream
-        if (stream) {
-            let tracks = stream.getTracks();
-            tracks.forEach(track => track.stop());
-        }
+        stopCamera();
     });
 
     // Capture Photo and Display it
@@ -138,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
         imgElement.className = "w-24 h-24 object-cover rounded-md shadow-md";
         
         // Append to closet
-        detectCategory(imgElement.src)
+        liveDetect(imgElement.src)
             .then(category => {
                 if (category === "top") {
                     topsContainer.appendChild(imgElement);
@@ -152,12 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Close the modal after capturing
         cameraModal.classList.add("hidden");
-        
-        // Stop the webcam stream
-        if (stream) {
-            let tracks = stream.getTracks();
-            tracks.forEach(track => track.stop());
-        }
+        stopCamera();
     });
 });
 
@@ -183,12 +220,42 @@ async function detectCategory(imgSrc) {
   
     const batched = tensor.expandDims(0);
   
-    const prediction = await model.predict(batched).data();
+    const prediction = await resnetModel.predict(batched).data();
   
     // Assume your model outputs probabilities for 2 classes:
     // Index 0 = "top" and index 1 = "bottom" (adjust as needed).
     const predictedIndex = prediction.indexOf(Math.max(...prediction));
     return predictedIndex === 0 ? "top" : "bottom";
+}
+
+//take photo: live detect
+async function liveDetect(imgSrc) {
+    if (!mobilenetModel) {
+        throw new Error("Model is not loaded yet!");
+    }
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = imgSrc;
+
+    await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+    });
+
+    const predictions = await mobilenetModel.classify(img);
+    console.log(predictions);
+
+    // Customize based on your dataset (assuming labels like "Topwear", "Bottomwear")
+    const label = predictions[0].className.toLowerCase();
+    if (label.includes("top", "T-Shirt", "Tee Shirt", "t-shirt", "tee shirt", "shirt", "jersey")) {
+        return "top";
+    } else if (label.includes("bottom", "pants", "jeans", "blue jeans")) {
+        return "bottom";
+    } else {
+        // Default fallback
+        return "bottom";
+    }
 }
 
 function resetKeyBuffer() {
