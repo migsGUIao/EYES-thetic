@@ -13,11 +13,13 @@ onAuthStateChanged(auth, (user) => {
 
     if (user) {
         console.log(`User is logged in: ${user.email}`);
-        loginBtn.classList.add("hidden");
-        signupBtn.classList.add("hidden");
-        logoutBtn.classList.remove("hidden");
-        closetBtn.classList.remove("hidden");
-        favBtn.classList.remove("hidden");
+        if (![ "/login", "/signup"].includes(currentPath)) {
+            loginBtn.classList.add("hidden");
+            signupBtn.classList.add("hidden");
+            logoutBtn.classList.remove("hidden");
+            closetBtn.classList.remove("hidden");
+            favBtn.classList.remove("hidden");
+        }
         
         if (currentPath === "/homepage") {
             closetRecBtn.classList.remove("hidden");
@@ -47,7 +49,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// Handle Login with Username
+// Handle Login with email
 document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById("loginForm");
     if (loginForm) {
@@ -55,25 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
         
         loginForm.addEventListener("submit", async (event) => {
             event.preventDefault();
-            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
 
             try {
                 // Retrieve email from Firestore using username
-                const usersRef = collection(db, "user");
-                const q = query(usersRef, where("username", "==", username));
-                const querySnapshot = await getDocs(q);
-
-                if (querySnapshot.empty) {
-                    throw new Error("Username not found. Please check your credentials.");
-                }
-
-                // Retrieve email
-                let email;
-                querySnapshot.forEach((doc) => {
-                    email = doc.data().email;
-                });
-
                 console.log(`Logging in with email: ${email}`);
 
                 // Sign in with Firebase Auth
@@ -93,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 const result = await response.json();
-                console.log("🔹 Server Response:", result);
+                console.log("Server Response:", result);
 
                 if (result.success) {
                     alert("Login successful!");
@@ -139,12 +127,12 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", function() {
 
     if (window.location.pathname.toLowerCase().endsWith("/login")) {
-        const usernameField = document.getElementById("username");
+        const emailField = document.getElementById("email");
         const passwordField = document.getElementById("password");
         const login = document.getElementById("login");
 
-        usernameField.focus();
-        speakText("You are currently in the login page. Please enter your username. Press TAB to enter password.");
+        emailField.focus();
+        speakText("You are currently in the login page. Please enter your email. Press TAB to enter password.");
         
         passwordField.addEventListener("focus", function () {
             speakText("Please enter your password");
