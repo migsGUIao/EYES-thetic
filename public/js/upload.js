@@ -1,5 +1,20 @@
 /* For the "Upload photo" and "Take a photo" virtual closet feature */
+import { db, auth } from "./firebase-config.js";
+import { collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc} from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
+
+let currentUser = null;
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        currentUser = user;
+        renderCloset(); // Load user's closet items from Firestore
+    } else {
+        alert("Please log in to access your closet.");
+        window.location.href = "/login";
+    }
+});
 //for upload photo
 let resnetModel;
 
@@ -99,10 +114,14 @@ viewModal.innerHTML = `
 `;
 document.body.appendChild(viewModal);
 document.getElementById("closeViewModal").addEventListener("click", () => {
+    resetViewModal(); // Reset modal state
     viewModal.classList.add("hidden");
 });
 closeViewModal.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") closeViewModal.click();
+    if (e.key === "Enter") {
+        resetViewModal();
+        closeViewModal.click();
+    }
 });
 //Upload Photo
 document.addEventListener("DOMContentLoaded", function () {
@@ -555,8 +574,55 @@ function showDetectionMessage(isRecognized) {
     }
 }
 
-// Save to closet locally
 const savePhotoBtn = document.getElementById("savePhoto");
+// Save to closet in FIREBASE
+savePhotoBtn.addEventListener("click", async () => {
+    const clothingName = document.getElementById("clothingName").value.trim();
+    const clothingType = document.getElementById("clothingType").value;
+    const clothingColor = document.getElementById("clothingColor").value.trim();
+    const gender = document.getElementById("gender").value;
+    const season = document.getElementById("season").value;
+    const usage = document.getElementById("usage").value;
+    const imgSrc = document.getElementById("uploadedImagePreview").src;
+
+    if (!clothingName || !clothingType || !clothingColor || !gender || !season || !usage) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    try {
+        // Upload image to Firebase Storage
+        const storageRef = ref(getStorage(), `closet/${currentUser.uid}/${Date.now()}.png`);
+        const response = await fetch(imgSrc);
+        const blob = await response.blob();
+        await uploadBytes(storageRef, blob);
+        const downloadURL = await getDownloadURL(storageRef);
+
+        // Save metadata to Firestore
+        await addDoc(collection(db, `user/${currentUser.uid}/closet`), {
+            name: clothingName,
+            type: clothingType,
+            color: clothingColor,
+            gender,
+            season,
+            usage,
+            imageUrl: downloadURL,
+            timestamp: new Date()
+        });
+
+        alert("Photo saved to your closet!");
+        document.getElementById("labelModal").classList.add("hidden");
+        renderCloset();
+
+    } catch (err) {
+        console.error("Error saving item:", err);
+        alert("Error saving to closet.");
+    }
+});
+
+
+// Save to closet LOCALLY
+/* 
 savePhotoBtn.addEventListener("click", function () {
     const clothingName = document.getElementById("clothingName").value.trim();
     const clothingType = document.getElementById("clothingType").value;
@@ -590,7 +656,7 @@ savePhotoBtn.addEventListener("click", function () {
     alert("Photo saved to your closet!");
     document.getElementById("labelModal").classList.add("hidden");
     renderCloset();
-});
+}); */
 
 const editBtn = viewModal.querySelector("#editDetails");
 const deleteBtn = viewModal.querySelector("#deleteDetails");
@@ -607,7 +673,43 @@ editBtn.addEventListener("click", () => {
     document.getElementById("viewName").focus();
 });
 
-saveBtn.addEventListener("click", () => {
+// edit save button FIREBASE
+saveBtn.addEventListener("click", async () => {
+    try {
+        const docId = viewModal.dataset.currentId;
+        const closetDocRef = doc(db, `user/${currentUser.uid}/closet`, docId);
+        await updateDoc(closetDocRef, {
+            name: document.getElementById("viewName").value,
+            type: document.getElementById("viewType").value,
+            color: document.getElementById("viewColor").value,
+            gender: document.getElementById("viewGender").value,
+            season: document.getElementById("viewSeason").value,
+            usage: document.getElementById("viewUsage").value
+        });
+
+        alert("Details updated!");
+        renderCloset();
+        viewModal.classList.add("hidden");
+        resetViewModal();
+
+    } catch (err) {
+        console.error("Update error:", err);
+    }
+});
+
+function resetViewModal() {
+    viewModal.querySelectorAll("input, select").forEach(input => {
+        input.disabled = true;
+        input.classList.add("bg-gray-100");
+    });
+    editBtn.classList.remove("hidden");
+    deleteBtn.classList.remove("hidden");
+    saveBtn.classList.add("hidden");
+}
+
+
+// edit save button LOCALLY
+/* saveBtn.addEventListener("click", () => {
     const closet = JSON.parse(localStorage.getItem("virtualCloset")) || [];
     const currentId = viewModal.dataset.currentId;
     const index = closet.findIndex(item => item.id == currentId);
@@ -629,16 +731,78 @@ saveBtn.addEventListener("click", () => {
     deleteBtn.classList.remove("hidden");
     saveBtn.classList.add("hidden");
     alert("Details updated successfully!");
+}); */
+
+deleteBtn.addEventListener("click", async () => {
+    try {
+        const docId = viewModal.dataset.currentId;
+        const closetDocRef = doc(db, `user/${currentUser.uid}/closet`, docId);
+
+        // Get image URL first (to delete from storage)
+        const closetDocSnap = await getDoc(closetDocRef);
+        const imageUrl = closetDocSnap.data().imageUrl;
+
+        // Delete Firestore doc
+        await deleteDoc(closetDocRef);
+
+        // Delete image from Storage
+        const imageRef = ref(getStorage(), imageUrl);
+        await deleteObject(imageRef);
+
+        alert("Item and photo deleted!");
+        viewModal.classList.add("hidden");
+        renderCloset();
+    } catch (err) {
+        console.error("Delete error:", err);
+        alert("Failed to delete item.");
+    }
 });
 
-deleteBtn.addEventListener("click", () => {
-    const currentId = viewModal.dataset.currentId;
-    deleteItem(currentId);
-    viewModal.classList.add("hidden");
-});
+// Render closet items in FIREBASE
+async function renderCloset() {
+    const topsContainer = document.querySelector(".tops-container");
+    const bottomsContainer = document.querySelector(".bottoms-container");
+    topsContainer.innerHTML = "";
+    bottomsContainer.innerHTML = "";
 
-// Render closet items
-function renderCloset() {
+    const closetRef = collection(db, `user/${currentUser.uid}/closet`);
+    const snapshot = await getDocs(closetRef);
+
+    snapshot.forEach(docSnap => {
+        const item = docSnap.data();
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "relative group";
+
+        const img = document.createElement("img");
+        img.src = item.imageUrl;
+        img.className = "w-24 h-24 object-cover rounded-md shadow-md cursor-pointer focus:outline focus:ring-2 focus:ring-yellow-400";
+        img.tabIndex = 0;
+
+        img.addEventListener("click", () => {
+            resetViewModal();
+
+            document.getElementById("viewModalImage").src = item.imageUrl;
+            document.getElementById("viewName").value = item.name;
+            document.getElementById("viewType").value = item.type;
+            document.getElementById("viewColor").value = item.color;
+            document.getElementById("viewGender").value = item.gender;
+            document.getElementById("viewSeason").value = item.season;
+            document.getElementById("viewUsage").value = item.usage;
+            viewModal.dataset.currentId = docSnap.id;
+            viewModal.classList.remove("hidden");
+        });
+
+        itemDiv.appendChild(img);
+        if (item.type === "top") {
+            topsContainer.appendChild(itemDiv);
+        } else {
+            bottomsContainer.appendChild(itemDiv);
+        }
+    });
+}
+
+// Render closet items LOCALLY
+/* function renderCloset() {
     const topsContainer = document.querySelector(".tops-container");
     const bottomsContainer = document.querySelector(".bottoms-container");
     topsContainer.innerHTML = "";
@@ -697,22 +861,15 @@ function renderCloset() {
             bottomsContainer.appendChild(itemDiv);
         }
     });
-}
+} */
 
-
-
-
-// Delete item
-function deleteItem(id) {
+// Delete item LOCALLY
+/* function deleteItem(id) {
     const closet = JSON.parse(localStorage.getItem("virtualCloset")) || [];
     const updatedCloset = closet.filter(item => item.id != id);
     localStorage.setItem("virtualCloset", JSON.stringify(updatedCloset));
     renderCloset();
-}
-
-
-// Render on load
-document.addEventListener("DOMContentLoaded", renderCloset);
+} */
 
 function resetKeyBuffer() {
     keyBuffer = "";

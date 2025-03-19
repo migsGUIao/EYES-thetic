@@ -16,10 +16,14 @@
             <a href="/homepage" class="font-bold text-black relative">
                 HOME
                 <span class="absolute -bottom-1 left-0 w-full h-1 bg-yellow-400"></span>
-            <a href="/closet" class="text-gray-600 hover:text-black">VIRTUAL CLOSET</a>
-
-            <a href="/favorites" class="text-gray-600 hover:text-black">FAVORITES</a>
-            <a href="#" id="logoutBtn" class="text-gray-600 hover:text-black">LOGOUT</a>
+            </a>
+            <a href="/closet" id="closetBtn" class="text-gray-600 hover:text-black hidden">VIRTUAL CLOSET</a>
+            <a href="/favorites" id="favBtn" class="text-gray-600 hover:text-black hidden">FAVORITES</a>
+    
+            <!-- Auth Buttons -->
+            <a href="/signup" id="loginBtn" class="text-gray-600 hover:text-black hidden">SIGN IN</a>
+            <a href="/login" id="signupBtn" class="text-gray-600 hover:text-black hidden">LOG IN</a>
+            <a href="#" id="logoutBtn" class="text-gray-600 hover:text-black hidden">LOGOUT</a>
         </div>
     </nav>
 
@@ -35,7 +39,7 @@
         <button id="randomRecommendationBtn" class="bg-yellow-400 text-black font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition shadow-md">
             Random Recommendation
         </button>        
-        <button class="bg-yellow-400 text-black font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition shadow-md">
+        <button id="closetRecBtn" class="bg-yellow-400 text-black font-semibold py-2 px-4 rounded-lg hover:bg-yellow-500 transition shadow-md">
             Recommendation From Closet
         </button>
     </div>

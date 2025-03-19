@@ -25,8 +25,12 @@ const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, 'views')));
 
 // Default route (localhost:3000) should load login.html
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "login.html"));
+app.get('/', (req, res) => {
+  res.redirect('/welcome'); // Optional: redirect root to welcome
+});
+
+app.get('/welcome', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'landing.html')); // adjust the folder if needed
 });
 
 app.get("/login", (req, res) => {
@@ -38,7 +42,7 @@ app.get("/signup", (req, res) => {
 });
 
 app.get("/homepage", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "index.html"));
+  res.sendFile(path.join(__dirname, "views", "home.html"));
 });
 
 app.get("/favorites", (req, res) => {

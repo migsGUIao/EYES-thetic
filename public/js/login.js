@@ -4,9 +4,24 @@ import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https:/
 
 onAuthStateChanged(auth, (user) => {
     const currentPath = window.location.pathname;
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const closetBtn = document.getElementById("closetBtn");
+    const favBtn = document.getElementById("favBtn");
+    const closetRecBtn = document.getElementById("closetRecBtn");
 
     if (user) {
         console.log(`User is logged in: ${user.email}`);
+        loginBtn.classList.add("hidden");
+        signupBtn.classList.add("hidden");
+        logoutBtn.classList.remove("hidden");
+        closetBtn.classList.remove("hidden");
+        favBtn.classList.remove("hidden");
+        
+        if (currentPath === "/homepage") {
+            closetRecBtn.classList.remove("hidden");
+        }
 
         // If the user is on the login page but already authenticated, redirect to homepage
         if (currentPath === "/login") {
@@ -14,10 +29,18 @@ onAuthStateChanged(auth, (user) => {
         }
 
     } else {
-        console.log("User is logged out.");
-
+        if (![ "/login", "/signup"].includes(currentPath)) {
+            console.log("User is logged out.");
+            loginBtn.classList.remove("hidden");
+            signupBtn.classList.remove("hidden");
+            logoutBtn.classList.add("hidden");
+            closetBtn.classList.add("hidden");
+            favBtn.classList.add("hidden");
+            closetRecBtn.classList.add("hidden");
+        }
+        
         // Redirect to login **ONLY** if the user is on a protected page
-        const protectedPages = ["/homepage", "/closet", "/favorites"];
+        const protectedPages = [ "/closet", "/favorites"];
         if (protectedPages.includes(currentPath)) {
             window.location.href = "/login";
         }
