@@ -1,11 +1,13 @@
 import os
 import shutil
 import pandas as pd
+import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import ResNet50
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
 from tensorflow.keras.models import Model
 import tensorflow as tf
+from sklearn.metrics import classification_report, precision_score, recall_score, f1_score
 
 
 # Define file paths
@@ -13,7 +15,7 @@ csv_path = 'styles.csv'            # Your original CSV file with metadata
 images_dir = 'images'              
 # Folder where all images are stored (e.g., "12345.jpg")
 output_dir = 'data'                # Directory where images will be organized
-''''
+
 topwear_dir = os.path.join(output_dir, 'topwear')
 bottomwear_dir = os.path.join(output_dir, 'bottomwear')
 
@@ -50,7 +52,7 @@ for index, row in df.iterrows():
         print(f"Image not found: {src_image}")
 
 print("Dataset preparation complete. Images are organized in the 'data' directory.")
-'''''
+
 # --------------------------
 # STEP 2: Data Generators
 # --------------------------
@@ -115,6 +117,24 @@ history = model.fit(
     validation_data=validation_generator,
     epochs=EPOCHS
 )
+
+# ========= Evaluate Using scikit-learn Metrics =========
+# Reset the validation generator and predict on validation data
+validation_generator.reset()
+val_steps = validation_generator.samples // validation_generator.batch_size
+predictions_np = model.predict(validation_generator, steps=val_steps + 1)
+predicted_classes = np.argmax(predictions_np, axis=1)
+
+# Ground-truth labels
+true_classes = validation_generator.classes
+class_labels = list(validation_generator.class_indices.keys())
+
+print("\nClassification Report:")
+print(classification_report(true_classes, predicted_classes, target_names=class_labels))
+
+print("Precision:", precision_score(true_classes, predicted_classes, average='weighted'))
+print("Recall:", recall_score(true_classes, predicted_classes, average='weighted'))
+print("F1 Score:", f1_score(true_classes, predicted_classes, average='weighted'))
 
 # --------------------------
 # STEP 5: Save the Model
