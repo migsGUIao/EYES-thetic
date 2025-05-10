@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">Eyes-thetic 24/7</string>
+
+    <!--  LANDING  -->
+    <string name="landing_welcome">Welcome!</string>
+    <string name="landing_message">I am your EYES-thetic assistant to help you with your fashion needs!</string>
+    <string name="landing_button">Try it now!</string>
+
+    <!--  LOGIN & REGISTER  -->
+    <string name="login_heading">Welcome back!</string>
+    <string name="login_subheading">Login to your account</string>
+    <string name="login_button">Login</string>
+    <string name="login_redirect">Don\'t have an account? Sign up!</string>
+
+    <string name="register_heading">Create an account!</string>
+    <string name="register_subheading">Sign up now</string>
+    <string name="register_email">Email</string>
+    <string name="register_emailTooltip">Enter email</string>
+    <string name="register_button">Sign up</string>
+    <string name="register_redirect">Already have an account? Login now!</string>
+
+    <string name="logreg_forgot">Forgot password?</string>
+    <string name="logreg_username">Username</string>
+    <string name="logreg_password">Password</string>
+    <string name="logreg_usernameTooltip">Enter username</string>
+    <string name="logreg_passwordTooltip">Enter password</string>
+
+    <!--  NAVBAR  -->
+    <string name="home">Home</string>
+    <string name="closet">Closet</string>
+    <string name="favorites">Favorites</string>
+
+    <!--  HOMEPAGE  -->
+    <string name="home_welcome">Welcome, User!</string>
+    <string name="home_startque">What are you looking for?</string>
+    <string name="home_random">Random Recommendation</string>
+    <string name="home_closet">Recommendation from Closet</string>
+    <string name="home_gender">Choose Gender: </string>
+    <string name="home_genderTooltip">Gender</string>
+    <string name="home_season">Choose Season: </string>
+    <string name="home_seasonTooltip">Season</string>
+    <string name="home_usage">Choose Usage: </string>
+    <string name="home_usageTooltip">Usage</string>
+    <string name="home_recBtn">Get Recommendations</string>
+
+    <!--  VIRTUAL CLOSET  -->
+    <string name="closet_heading">Your closet</string>
+    <string name="closet_top">Tops</string>
+    <string name="closet_bottom">Bottoms</string>
+    <string name="closet_addDesc">How would you like to add items to your closet?</string>
+    <string name="closet_takePhoto">Take a Photo</string>
+    <string name="closet_upload">Upload Image</string>
+
+    <!--  FAVORITES & RECOMMENDATIONS -->
+    <string name="favrec_recHeading">Recommendation</string>
+    <string name="favrec_favHeading">Favorites</string>
+    <string name="favrec_top">Top: </string>
+    <string name="favrec_bottom">Bottom: </string>
+    <string name="favrec_desc">Description: </string>
+    <string name="fav_view">View all</string>
+
+</resources>

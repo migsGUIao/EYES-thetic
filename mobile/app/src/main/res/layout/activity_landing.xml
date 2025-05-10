@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/landing"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/gradient_background">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/landingWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/landing_welcome"
+            android:textSize="42sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/inter_bold"
+            app:layout_constraintBottom_toTopOf="@+id/landingMessage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/landingMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/landing_message"
+            android:textSize="24sp"
+            android:fontFamily="@font/inter_medium"
+            android:textAlignment="center"
+            android:padding="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toTopOf="@+id/landingBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/landingWelcome" />
+
+        <Button
+            style="?attr/materialButtonOutlinedStyle"
+            android:id="@+id/landingBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/md_theme_primaryContainer"
+            android:text="@string/landing_button"
+            android:textColor="@color/md_theme_onSurfaceVariant"
+            android:textSize="24sp"
+            android:fontFamily="@font/inter_bold"
+            android:elevation="8dp"
+            android:onClick="toLogin"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/md_theme_onSurfaceVariant"
+            />
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

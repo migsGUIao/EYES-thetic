@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeIcon"
+        android:enabled="true"
+        android:icon="@drawable/home"
+        android:title="@string/home"/>
+    <item
+        android:id="@+id/closetIcon"
+        android:enabled="true"
+        android:icon="@drawable/closet"
+        android:title="@string/closet"/>
+    <item
+        android:id="@+id/favoritesIcon"
+        android:enabled="true"
+        android:icon="@drawable/favorites"
+        android:title="@string/favorites"/>
+</menu>
