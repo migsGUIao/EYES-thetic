@@ -192,12 +192,14 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/homeNavbar"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="65dp"
         android:elevation="24dp"
         android:orientation="horizontal"
         android:background="@color/md_theme_primaryContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/eyesthetic_navbar"/>
+        app:menu="@menu/eyesthetic_navbar"
+        app:labelVisibilityMode="labeled"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

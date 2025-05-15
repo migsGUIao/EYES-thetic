@@ -10,33 +10,35 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class HomepageActivity extends AppCompatActivity {
+public class FavoritesActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homepage);
+        setContentView(R.layout.activity_favorites);
 
         mAuth = FirebaseAuth.getInstance();
 
-        bottomNavigationView = findViewById(R.id.homeNavbar);
+
+        bottomNavigationView = findViewById(R.id.favNavbar);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
 
             if (id == R.id.homeIcon) {
-                // Already on Home, do nothing or refresh
+                Intent intent = new Intent(FavoritesActivity.this, HomepageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 return true;
             } else if (id == R.id.closetIcon) {
-                Intent intent = new Intent(HomepageActivity.this, ClosetActivity.class);
+                Intent intent = new Intent(FavoritesActivity.this, ClosetActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
+                return true;
             } else if (id == R.id.favoritesIcon) {
-                Intent intent = new Intent(HomepageActivity.this, FavoritesActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                return true;
             } else if (id == R.id.logoutIcon) {
                 // Logout user
                 mAuth.signOut();
@@ -50,17 +52,13 @@ public class HomepageActivity extends AppCompatActivity {
             }
             return false;
         });
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        bottomNavigationView.setSelectedItemId(R.id.homeIcon);
+        bottomNavigationView.setSelectedItemId(R.id.favoritesIcon);
     }
 
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-    }
 }

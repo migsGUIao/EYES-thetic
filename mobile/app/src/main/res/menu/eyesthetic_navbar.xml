@@ -15,4 +15,9 @@
         android:enabled="true"
         android:icon="@drawable/favorites"
         android:title="@string/favorites"/>
+    <item
+        android:id="@+id/logoutIcon"
+        android:enabled="true"
+        android:icon="@drawable/logout"
+        android:title="Logout" />
 </menu>
