@@ -20,10 +20,14 @@
     <string name="register_redirect">Already have an account? Login now!</string>
 
     <string name="logreg_forgot">Forgot password?</string>
-    <string name="logreg_username">Username</string>
+    <string name="logreg_email">Email</string>
     <string name="logreg_password">Password</string>
-    <string name="logreg_usernameTooltip">Enter username</string>
+    <string name="logreg_emailTooltip">Enter email</string>
     <string name="logreg_passwordTooltip">Enter password</string>
+    <string name="logreg_username">Username</string>
+    <string name="logreg_usernameTooltip">Enter username</string>
+
+
 
     <!--  NAVBAR  -->
     <string name="home">Home</string>
@@ -54,6 +58,9 @@
     <!--  FAVORITES & RECOMMENDATIONS -->
     <string name="favrec_recHeading">Recommendation</string>
     <string name="favrec_favHeading">Favorites</string>
+    <string name="favrec_prevDesc">Previous favorite</string>
+    <string name="favrec_nextDesc">Next favorite</string>
+    <string name="favrec_iconDesc">Favorites Button</string>
     <string name="favrec_top">Top: </string>
     <string name="favrec_bottom">Bottom: </string>
     <string name="favrec_desc">Description: </string>

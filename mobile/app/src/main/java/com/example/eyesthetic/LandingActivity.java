@@ -1,5 +1,6 @@
 package com.example.eyesthetic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +30,9 @@ public class LandingActivity extends AppCompatActivity {
 
     public void toLogin(View v) {
         //Function to go to login
+        Intent intent = new Intent(this, LoginActivity.class);  // replace LoginActivity with your login activity class name
+        startActivity(intent);
+        finish();
     }
 
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "471553883504",
+    "project_id": "eyes-thetic",
+    "storage_bucket": "eyes-thetic.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471553883504:android:444baba9618476961ce3b5",
+        "android_client_info": {
+          "package_name": "com.example.eyesthetic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlSnzYdWpMTmY-yVfUw8tMSSnLWUJ-IFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

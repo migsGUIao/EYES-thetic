@@ -62,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
+        android:contentDescription="@string/closet_addDesc"
         app:layout_constraintBottom_toTopOf="@id/closetNavbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/plus" />
