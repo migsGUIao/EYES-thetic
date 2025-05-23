@@ -7,4 +7,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/gradient_background">
 
+    <LinearLayout
+        android:id="@+id/fullFavs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="36dp"
+        android:orientation="vertical"
+        android:paddingBottom="32dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp" >
+
+        <TextView
+            android:id="@+id/favHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_bold"
+            android:gravity="start"
+            android:paddingTop="24dp"
+            android:text="@string/favrec_favHeading"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+    <!--    Gallery view    -->
+
+
+    </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/favFullNavbar"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:background="@color/md_theme_primaryContainer"
+        android:elevation="24dp"
+        android:orientation="horizontal"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/eyesthetic_navbar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

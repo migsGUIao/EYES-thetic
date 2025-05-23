@@ -8,7 +8,7 @@
     android:background="@drawable/gradient_background">
 
     <LinearLayout
-        android:id="@+id/mainMenu"
+        android:id="@+id/fullCloset"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="36dp"
@@ -70,13 +70,13 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/closetNavbar"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="96dp"
+        android:background="@color/md_theme_primaryContainer"
         android:elevation="24dp"
         android:orientation="horizontal"
-        android:background="@color/md_theme_primaryContainer"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/eyesthetic_navbar"
-        app:labelVisibilityMode="labeled" />
+        app:menu="@menu/eyesthetic_navbar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

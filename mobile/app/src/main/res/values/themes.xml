@@ -58,9 +58,7 @@
         <item name="android:elevation">2dp</item>
         <item name="android:fontFamily">@font/inter_bold</item>
         <item name="android:textColor">@color/md_theme_onSurfaceVariant</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:layout_marginTop">12dp</item>
-        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="strokeColor">@color/md_theme_onSurfaceVariant</item>
         <item name="strokeWidth">2dp</item>
     </style>
@@ -70,9 +68,7 @@
         <item name="android:elevation">2dp</item>
         <item name="android:fontFamily">@font/inter_bold</item>
         <item name="android:textColor">@color/md_theme_onSurfaceVariant</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:layout_marginTop">6dp</item>
-        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="strokeColor">@color/md_theme_onSurfaceVariant</item>
         <item name="strokeWidth">2dp</item>
     </style>
