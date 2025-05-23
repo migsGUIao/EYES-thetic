@@ -7,8 +7,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
@@ -128,8 +131,16 @@ public class ClosetActivity extends AppCompatActivity {
 
     // Add to closet dialog
     private void showDialog() {
+        LayoutInflater dialogInflater = getLayoutInflater();
+        View customDialog = dialogInflater.inflate(R.layout.custom_closet_dialog, null);
+
+//        TextView closetDesc = findViewById(R.id.closetDesc);
+//        Button takePhotoBtn = findViewById(R.id.takePhotoBtn);
+//        Button uploadBtn = findViewById(R.id.uploadBtn);
+
         // TODO: fix container size
-        new MaterialAlertDialogBuilder(this, R.style.AppTheme)
+        new MaterialAlertDialogBuilder(this, R.style.DialogTheme)
+//                .setView(customDialog)
                 .setTitle(R.string.closet_addDesc)
                 .setNegativeButton(R.string.closet_takePhoto, (dialog, which) -> {
                     // TODO: open camera
@@ -144,6 +155,26 @@ public class ClosetActivity extends AppCompatActivity {
                     startActivityForResult(openGallery,10);
                 })
                 .show();
+
+//        closetDialog.show();
+//
+//        takePhotoBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent openCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(openCamera, 12);
+//            }
+//        });
+//
+//        uploadBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent openGallery = new Intent();
+//                openGallery.setAction(Intent.ACTION_GET_CONTENT);
+//                openGallery.setType("image/*");
+//                startActivityForResult(openGallery,10);
+//            }
+//        });
     }
 
 }

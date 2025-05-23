@@ -8,6 +8,7 @@
     android:background="@drawable/gradient_background">
 
     <TextView
+        android:id="@+id/favHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="42dp"
@@ -15,7 +16,6 @@
         android:text="@string/favorites"
         android:textSize="32sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/favoritesBox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,62 +62,157 @@
         android:id="@+id/favoritesBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="48dp"
         android:background="@drawable/dark_stroke"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
         android:elevation="4dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/favViewBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/favHeading">
 
         <!--    Top Image    -->
 
-        <TextView
-            android:id="@+id/topFav"
+        <!--    ImageView    -->
+        <ImageView
+            android:id="@+id/topImg"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_bold"
-            android:gravity="center"
-            android:text="@string/favrec_top"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:layout_height="156dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/top_placeholder" />
 
-        <TextView
-            android:id="@+id/topFavDesc"
+        <LinearLayout
+            android:id="@+id/topInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/topFav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold"
+                android:layout_marginEnd="4dp"
+                android:gravity="center"
+                android:text="@string/favrec_top"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/topName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:text="placeholder top"
+                android:textColor="@color/md_theme_onPrimaryFixedVariant"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/topDescInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_bold"
-            android:gravity="center"
-            android:text="@string/favrec_desc"
-            android:textColor="@color/md_theme_primaryFixedDim"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/topFavDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:text="@string/favrec_desc"
+                android:textColor="@color/md_theme_onPrimaryFixedVariant"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/topFavDescInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:textAlignment="center"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras fringilla erat a neque varius, eget congue "
+                android:textSize="12sp"/>
+        </LinearLayout>
 
         <!--    Bottom Image    -->
 
-        <TextView
-            android:id="@+id/botFav"
+        <!--    ImageView    -->
+        <ImageView
+            android:id="@+id/botImg"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_bold"
-            android:gravity="center"
-            android:text="@string/favrec_bottom"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:layout_height="156dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/bottom_placeholder" />
 
-        <TextView
-            android:id="@+id/botFavDesc"
+        <LinearLayout
+            android:id="@+id/botInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/botFav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:text="@string/favrec_bottom"
+                android:layout_marginEnd="4dp"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/botName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:text="placeholder bottom"
+                android:textColor="@color/md_theme_onPrimaryFixedVariant"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/botDescInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_bold"
-            android:gravity="center"
-            android:text="@string/favrec_desc"
-            android:textColor="@color/md_theme_primaryFixedDim"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/botFavDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:text="@string/favrec_desc"
+                android:textColor="@color/md_theme_onPrimaryFixedVariant"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/botFavDescInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:textAlignment="center"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras fringilla erat a neque varius, eget congue "
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
@@ -126,16 +221,18 @@
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:backgroundTint="@color/md_theme_primaryContainer"
         android:elevation="2dp"
         android:fontFamily="@font/inter_bold"
         android:text="@string/fav_view"
         android:textColor="@color/md_theme_onSurfaceVariant"
         android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/favoritesBox"
+        app:layout_constraintBottom_toTopOf="@+id/favNavbar"
         app:strokeColor="@color/md_theme_onSurfaceVariant"
         app:strokeWidth="2dp" />
 
@@ -143,14 +240,14 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/favNavbar"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="96dp"
+        android:background="@color/md_theme_primaryContainer"
         android:elevation="24dp"
         android:orientation="horizontal"
-        android:background="@color/md_theme_primaryContainer"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/eyesthetic_navbar"
-        app:labelVisibilityMode="labeled" />
+        app:menu="@menu/eyesthetic_navbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
