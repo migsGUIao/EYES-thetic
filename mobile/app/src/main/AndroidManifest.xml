@@ -26,6 +26,7 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".HomepageActivity" />
+        <activity android:name=".RecommendationActivity" />
         <activity android:name=".ClosetActivity" />
         <activity android:name=".FavoritesActivity" />
 
