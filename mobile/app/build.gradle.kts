@@ -37,16 +37,18 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
     implementation(libs.tensorflow.lite.metadata)
     implementation(libs.tensorflow.lite.gpu)
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
 

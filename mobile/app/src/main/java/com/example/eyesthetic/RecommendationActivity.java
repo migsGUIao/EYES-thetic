@@ -3,16 +3,11 @@ package com.example.eyesthetic;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -39,7 +34,6 @@ public class RecommendationActivity extends AppCompatActivity {
         bottomImageView = findViewById(R.id.bottomImageView);
         nextButton     = findViewById(R.id.nextButton);
 
-        // 1) Retrieve Intent Extras
         topNames    = getIntent().getStringArrayListExtra("topNames");
         topColors   = getIntent().getStringArrayListExtra("topColors");
         topImageUrls  = getIntent().getStringArrayListExtra("topImageUrls");
@@ -48,7 +42,6 @@ public class RecommendationActivity extends AppCompatActivity {
         bottomImageUrls= getIntent().getStringArrayListExtra("bottomImageUrls");
 
         if (topNames == null || bottomNames == null || topImageUrls == null || bottomImageUrls == null) {
-            // No data passed—finish the activity
             finish();
             return;
         }
@@ -56,13 +49,11 @@ public class RecommendationActivity extends AppCompatActivity {
         totalCount = topNames.size();
         showRecommendation(currentIndex);
 
-        // 2) Next button increments index
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 currentIndex++;
                 if (currentIndex >= totalCount) {
-                    // Hide Next button if we've reached the end
                     nextButton.setVisibility(View.GONE);
                 } else {
                     showRecommendation(currentIndex);
@@ -80,70 +71,30 @@ public class RecommendationActivity extends AppCompatActivity {
         String bottomColor = bottomColors.get(index);
         String bottomUrl    = bottomImageUrls.get(index);
 
-        topTextView.setText("Top: " + topName + " (" + topColor + ")" + topUrl);
-        bottomTextView.setText("Bottom: " + bottomName + " (" + bottomColor + ")" + bottomUrl);
+        topTextView.setText("Top: " + topName + " (" + topColor + ")");
+        bottomTextView.setText("Bottom: " + bottomName + " (" + bottomColor + ")");
         indexTextView.setText("Recommendation " + (index + 1) + " / " + totalCount);
 
-        topImageView.setImageResource(R.drawable.placeholder_top);
+        // Load images with Glide
         if (!topUrl.isEmpty()) {
-            new ImageLoader(topImageView).execute(topUrl);
+            Glide.with(this)
+                    .load(topUrl)
+                    .placeholder(R.drawable.placeholder_top)
+                    .error(R.drawable.error_placeholder)
+                    .into(topImageView);
         } else {
             topImageView.setImageResource(R.drawable.error_placeholder);
         }
 
-        // Load bottom image manually
-        bottomImageView.setImageResource(R.drawable.placeholder_bottom);
         if (!bottomUrl.isEmpty()) {
-            new ImageLoader(bottomImageView).execute(bottomUrl);
+            Glide.with(this)
+                    .load(bottomUrl)
+                    .placeholder(R.drawable.placeholder_bottom)
+                    .error(R.drawable.error_placeholder)
+                    .into(bottomImageView);
         } else {
             bottomImageView.setImageResource(R.drawable.error_placeholder);
         }
     }
 
-    private static class ImageLoader extends AsyncTask<String, Void, Bitmap> {
-        private final ImageView imageView;
-
-        ImageLoader(ImageView iv) {
-            imageView = iv;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            String urlString = params[0];
-            if (urlString == null || urlString.isEmpty()) return null;
-
-            InputStream input = null;
-            HttpURLConnection connection = null;
-            try {
-                URL url = new URL(urlString);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                input = connection.getInputStream();
-                return BitmapFactory.decodeStream(input);
-            } catch (Exception e) {
-                // Log or handle the error as needed
-                e.printStackTrace();
-                return null;
-            } finally {
-                if (input != null) {
-                    try { input.close(); } catch (Exception ignored) {}
-                }
-                if (connection != null) {
-                    connection.disconnect();
-                }
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            if (bitmap != null) {
-                imageView.setImageBitmap(bitmap);
-            }
-            // If bitmap is null, you can choose to set a placeholder or error drawable:
-            else {
-                imageView.setImageResource(R.drawable.error_placeholder);
-            }
-        }
-    }
 }

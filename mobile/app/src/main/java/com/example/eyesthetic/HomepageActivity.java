@@ -230,6 +230,10 @@ public class HomepageActivity extends AppCompatActivity {
                 if (displayName.toLowerCase().contains("kids") && gender.equalsIgnoreCase("Men")) {
                     gender = "Boys";
                 }
+                if (displayName.toLowerCase().contains("suspenders") && gender.equalsIgnoreCase("Men")) {
+                    gender = "Boys";
+                }
+
 
                 // apply rule-based filters
                 if (gender.equalsIgnoreCase(genderFilter)
@@ -256,8 +260,8 @@ public class HomepageActivity extends AppCompatActivity {
             }
 
             // randomize combinations
-            //Collections.shuffle(topwearList);
-            //Collections.shuffle(bottomwearList);
+            Collections.shuffle(topwearList);
+            Collections.shuffle(bottomwearList);
 
             // build up to 10 pairs
             int pairCount = Math.min(10, Math.min(topwearList.size(), bottomwearList.size()));
