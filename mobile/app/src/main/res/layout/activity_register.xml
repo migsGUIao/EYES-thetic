@@ -30,7 +30,9 @@
             android:fontFamily="@font/inter_bold"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:contentDescription="Create an account"
+            />
         <TextView
             android:id="@+id/registerSubheading"
             android:layout_width="wrap_content"
@@ -39,7 +41,8 @@
             android:fontFamily="@font/inter_regular"
             android:textSize="16sp"
             android:textAlignment="center"
-            android:textColor="@color/md_theme_onSurfaceVariant"/>
+            android:textColor="@color/md_theme_onSurfaceVariant"
+            android:contentDescription="Sign up now"/>
 
         <TextView
             android:id="@+id/registerPromptEmail"
@@ -51,7 +54,8 @@
             android:text="@string/register_email"
             android:layout_gravity="start"
             android:fontFamily="@font/inter_bold"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:contentDescription="Enter your email"/>
 
         <EditText
             android:id="@+id/registerEmail"
@@ -66,7 +70,8 @@
             android:paddingEnd="12dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:contentDescription="Email textbox"/>
 
         <TextView
             android:id="@+id/registerPromptUsername"
@@ -78,7 +83,8 @@
             android:text="@string/logreg_username"
             android:layout_gravity="start"
             android:fontFamily="@font/inter_bold"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:contentDescription="Enter your username"/>
 
         <EditText
             android:id="@+id/registerUsername"
@@ -93,7 +99,8 @@
             android:paddingEnd="12dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:contentDescription="Username textbox"/>
 
         <TextView
             android:id="@+id/registerPromptPassword"
@@ -105,7 +112,8 @@
             android:text="@string/logreg_password"
             android:layout_gravity="start"
             android:fontFamily="@font/inter_bold"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:contentDescription="Enter your password"/>
 
         <EditText
             android:id="@+id/registerPassword"
@@ -120,7 +128,8 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:inputType="textPassword"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:contentDescription="Password textbox"/>
 
         <Button
             style="?attr/materialButtonOutlinedStyle"
@@ -136,7 +145,8 @@
             android:elevation="2dp"
             android:onClick="registerUser"
             app:strokeWidth="2dp"
-            app:strokeColor="@color/md_theme_onSurfaceVariant" />
+            app:strokeColor="@color/md_theme_onSurfaceVariant"
+            android:contentDescription="Sign up button"/>
 
         <TextView
             android:id="@+id/loginRedirect"
@@ -150,7 +160,8 @@
             android:text="@string/register_redirect"
             android:onClick="loginRedirect"
             android:textColor="@color/md_theme_outline"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:contentDescription="If you already have an account, click to login now"/>
 
     </LinearLayout>
 

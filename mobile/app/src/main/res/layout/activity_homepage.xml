@@ -76,7 +76,8 @@
             android:text="@string/home_startque"
             android:textAlignment="center"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:contentDescription="Currently in the Homepage. What are you looking for?"/>
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggleButtons"
@@ -97,7 +98,8 @@
                 android:enabled="true"
 
                 android:text="Random"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:contentDescription="Random recommendation button"/>
             <Button
                 style="?attr/materialButtonOutlinedStyle"
                 android:id="@+id/closetRec"
@@ -107,20 +109,9 @@
                 android:textAlignment="center"
                 android:maxLines="4"
                 android:text="From Closet"
+                android:contentDescription="Clothing from closet button"
                 />
         </com.google.android.material.button.MaterialButtonToggleGroup>
-
-        <TextView
-            android:id="@+id/homePromptGender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:text="@string/home_gender"
-            android:fontFamily="@font/inter_bold"
-            android:textStyle="bold"
-            android:textSize="18sp"/>
 
         <!-- Gender Spinner -->
         <TextView
@@ -135,19 +126,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:spinnerMode="dropdown" />
-
-        <TextView
-            android:id="@+id/homePromptSeason"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:text="@string/home_season"
-            android:fontFamily="@font/inter_bold"
-            android:textStyle="bold"
-            android:textSize="18sp"/>
+            android:spinnerMode="dropdown"
+            android:contentDescription="Choose gender"/>
 
         <!-- Season Spinner -->
         <TextView
@@ -156,7 +136,8 @@
             android:layout_marginTop="16dp"
             android:text="Choose Season"
             android:fontFamily="@font/inter_medium"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:contentDescription="Choose season"/>
 
         <Spinner
             android:id="@+id/spinnerSeason"
@@ -165,18 +146,6 @@
             android:layout_marginTop="4dp"
             android:spinnerMode="dropdown" />
 
-        <TextView
-            android:id="@+id/homePromptUsage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:text="@string/home_usage"
-            android:fontFamily="@font/inter_bold"
-            android:textStyle="bold"
-            android:textSize="18sp"/>
-
         <!-- Usage Spinner -->
         <TextView
             android:layout_width="match_parent"
@@ -184,7 +153,8 @@
             android:layout_marginTop="16dp"
             android:text="Choose Usage"
             android:fontFamily="@font/inter_medium"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:contentDescription="Choose usage"/>
 
         <Spinner
             android:id="@+id/spinnerUsage"
