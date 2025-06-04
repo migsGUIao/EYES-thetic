@@ -122,19 +122,20 @@
             android:textStyle="bold"
             android:textSize="18sp"/>
 
-        <EditText
-            android:id="@+id/homeGender"
+        <!-- Gender Spinner -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:hint="@string/home_genderTooltip"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/alt_filled_box"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:textSize="16sp" />
+            android:text="Choose Gender"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="14sp"/>
+
+        <Spinner
+            android:id="@+id/spinnerGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:spinnerMode="dropdown" />
 
         <TextView
             android:id="@+id/homePromptSeason"
@@ -148,19 +149,21 @@
             android:textStyle="bold"
             android:textSize="18sp"/>
 
-        <EditText
-            android:id="@+id/homeSeason"
+        <!-- Season Spinner -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:hint="@string/home_seasonTooltip"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/alt_filled_box"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:textSize="16sp" />
+            android:layout_marginTop="16dp"
+            android:text="Choose Season"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="14sp"/>
+
+        <Spinner
+            android:id="@+id/spinnerSeason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:spinnerMode="dropdown" />
 
         <TextView
             android:id="@+id/homePromptUsage"
@@ -174,19 +177,21 @@
             android:textStyle="bold"
             android:textSize="18sp"/>
 
-        <EditText
-            android:id="@+id/homeUsage"
+        <!-- Usage Spinner -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:hint="@string/home_usageTooltip"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/alt_filled_box"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:textSize="16sp" />
+            android:layout_marginTop="16dp"
+            android:text="Choose Usage"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="14sp"/>
+
+        <Spinner
+            android:id="@+id/spinnerUsage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:spinnerMode="dropdown" />
 
         <Button
             style="?attr/materialButtonOutlinedStyle"
