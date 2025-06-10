@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -129,7 +130,7 @@ public class HomepageActivity extends AppCompatActivity {
         ArrayAdapter<String> usageAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
-                new String[]{ "Casual", "Formal", "Sport" }
+                new String[]{ "Casual", "Formal", "Sports" }
         );
         spinnerUsage.setAdapter(usageAdapter);
 
@@ -215,16 +216,74 @@ public class HomepageActivity extends AppCompatActivity {
 
             String clothingJSON = new String(buffer, StandardCharsets.UTF_8);
 
+            // neutral colors
+            Set<String> neutralColors = new HashSet<>(Arrays.asList(
+                    "Black", "White", "Grey", "Beige", "Navy Blue", "Brown"
+            ));
+
+            // colors according to season
+            Set<String> allowedColors;
+            if (genderFilter.equalsIgnoreCase("Men")) {
+                switch (seasonFilter.toLowerCase()) {
+                    case "fall":
+                        allowedColors = new HashSet<>(Arrays.asList(
+                                "Maroon","Burgundy","Coffee Brown","Mushroom Brown",
+                                "Rust","Olive","Mustard","Taupe"
+                        ));
+                        break;
+                    case "summer":
+                        allowedColors = new HashSet<>(Arrays.asList(
+                                "Blue","Teal","Turquoise Blue","Fluorescent Green",
+                                "Magenta","Lime Green","Sea Green","Lavender"
+                        ));
+                        break;
+                    case "winter":
+                        allowedColors = new HashSet<>(Arrays.asList(
+                                "Navy Blue","Blue","Teal","Turquoise Blue","Fluorescent Green","Magenta"
+                        ));
+                        break;
+                    case "spring":
+                        allowedColors = new HashSet<>(Arrays.asList(
+                                "Off White","Cream","Beige","Tan","Taupe","Nude",
+                                "Peach","Yellow","Pink","Khaki","Skin"
+                        ));
+                        break;
+                    default:
+                        allowedColors = neutralColors;
+                }
+            } else {
+                switch (seasonFilter.toLowerCase()) {
+                    case "fall":
+                        allowedColors = new HashSet<>(Arrays.asList(
+                                "Brown", "Bronze", "Copper", "Maroon", "Coffee Brown",
+                                "Olive", "Burgundy", "Rust", "Mustard", "Taupe", "Mushroom Brown"
+                        ));
+                        break;
+                    case "summer":
+                        allowedColors = new HashSet<>(Arrays.asList(
+                                "Silver", "Grey", "Grey Melange", "Steel", "Lavender", "Sea Green",
+                                "Mauve", "Rose"
+                        ));
+                        break;
+                    case "winter":
+                        allowedColors = new HashSet<>(Arrays.asList(
+                                "Blue", "Turquoise Blue", "Teal", "Magenta"
+                        ));
+                        break;
+                    case "spring":
+                        allowedColors = new HashSet<>(Arrays.asList(
+                                "Off White", "Cream", "Beige", "Tan", "Taupe", "Nude",
+                                "Yellow", "Skin"
+                        ));
+                        break;
+                    default:
+                        allowedColors = neutralColors;
+                }
+            }
+
+            JSONArray jsonArray = new JSONArray(clothingJSON);
             List<JSONObject> topwearList = new ArrayList<>();
             List<JSONObject> bottomwearList = new ArrayList<>();
-
-            // Neutral colors set (exact matches)
-            Set<String> neutralColors = new HashSet<>();
-            Collections.addAll(neutralColors,
-                    "Black", "White", "Grey", "Beige", "Navy Blue", "Brown");
-
-            // === 3. Parse and filter ===
-            JSONArray jsonArray = new JSONArray(clothingJSON);
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
@@ -250,7 +309,8 @@ public class HomepageActivity extends AppCompatActivity {
                 // apply rule-based filters
                 if (gender.equalsIgnoreCase(genderFilter)
                         && season.equalsIgnoreCase(seasonFilter)
-                        && usage.equalsIgnoreCase(usageFilter)) {
+                        && usage.equalsIgnoreCase(usageFilter)
+                        && allowedColors.contains(baseColour)) {
 
                     // separate by subCategory
                     if (subCategory.equalsIgnoreCase("Topwear")) {
