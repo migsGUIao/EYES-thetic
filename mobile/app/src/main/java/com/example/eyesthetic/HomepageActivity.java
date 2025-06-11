@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -119,6 +120,7 @@ public class HomepageActivity extends AppCompatActivity {
                 new String[]{ "Men", "Women" }
         );
         spinnerGender.setAdapter(genderAdapter);
+        spinnerGender.setSelection(0);
 
         ArrayAdapter<String> seasonAdapter = new ArrayAdapter<>(
                 this,
@@ -133,6 +135,31 @@ public class HomepageActivity extends AppCompatActivity {
                 new String[]{ "Casual", "Formal", "Sports" }
         );
         spinnerUsage.setAdapter(usageAdapter);
+
+        // talkback sr for spinner
+        spinnerGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                String selection = parent.getItemAtPosition(pos).toString();
+                spinnerGender.announceForAccessibility("Gender: " + selection);
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
+        spinnerSeason.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                String selection = parent.getItemAtPosition(pos).toString();
+                spinnerSeason.announceForAccessibility("Season: " + selection);
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
+        spinnerUsage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                String selection = parent.getItemAtPosition(pos).toString();
+                spinnerUsage.announceForAccessibility("Usage: " + selection);
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) { }
+        });
 
 
         getRecBtn = findViewById(R.id.getRecBtn);

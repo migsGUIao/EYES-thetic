@@ -6,6 +6,9 @@
     android:fillViewport="true">
 
     <LinearLayout
+        android:id="@+id/recommendationContainer"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -24,7 +27,7 @@
             android:layout_height="200dp"
             android:layout_marginTop="16dp"
             android:scaleType="centerCrop"
-            android:contentDescription="Topwear Image" />
+            android:contentDescription="Topwear Image"/>
 
         <TextView
             android:id="@+id/topTextView"
@@ -32,7 +35,8 @@
             android:layout_height="wrap_content"
             android:text="Top: …"
             android:textSize="18sp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:importantForAccessibility="yes"/>
 
         <View
             android:layout_width="match_parent"
@@ -46,7 +50,7 @@
             android:layout_height="200dp"
             android:layout_marginTop="16dp"
             android:scaleType="centerCrop"
-            android:contentDescription="Bottomwear Image" />
+            android:contentDescription="Bottomwear Image"/>
 
         <TextView
             android:id="@+id/bottomTextView"
@@ -54,7 +58,8 @@
             android:layout_height="wrap_content"
             android:text="Bottom: …"
             android:textSize="18sp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:importantForAccessibility="yes"/>
 
         <Button
             android:id="@+id/nextButton"
@@ -62,7 +67,9 @@
             android:layout_height="wrap_content"
             android:text="Next"
             android:layout_marginTop="24dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:importantForAccessibility="yes"
+            android:focusable="true"/>
 
         <Button
             android:id="@+id/favoriteButton"
@@ -70,6 +77,9 @@
             android:layout_height="wrap_content"
             android:text="★ Favorite"
             android:layout_marginTop="16dp"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:importantForAccessibility="yes"
+            android:focusable="true"/>
     </LinearLayout>
+
 </ScrollView>

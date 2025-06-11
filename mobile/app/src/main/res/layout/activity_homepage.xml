@@ -15,7 +15,9 @@
         android:gravity="center_vertical"
         android:paddingBottom="32dp"
         android:paddingStart="32dp"
-        android:paddingEnd="32dp" >
+        android:paddingEnd="32dp"
+        android:importantForAccessibility="no"
+        android:contentDescription="@null">
 
         <LinearLayout
             android:id="@+id/homeWelcomeUser"
@@ -119,15 +121,16 @@
             android:layout_height="wrap_content"
             android:text="Choose Gender"
             android:fontFamily="@font/inter_medium"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:labelFor="@id/spinnerGender"
+            android:importantForAccessibility="yes"/>
 
         <Spinner
             android:id="@+id/spinnerGender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:spinnerMode="dropdown"
-            android:contentDescription="Choose gender"/>
+            android:spinnerMode="dropdown" />
 
         <!-- Season Spinner -->
         <TextView
@@ -137,7 +140,8 @@
             android:text="Choose Season"
             android:fontFamily="@font/inter_medium"
             android:textSize="14sp"
-            android:contentDescription="Choose season"/>
+            android:labelFor="@id/spinnerSeason"
+            android:importantForAccessibility="yes"/>
 
         <Spinner
             android:id="@+id/spinnerSeason"
@@ -154,14 +158,16 @@
             android:text="Choose Usage"
             android:fontFamily="@font/inter_medium"
             android:textSize="14sp"
-            android:contentDescription="Choose usage"/>
+            android:labelFor="@id/spinnerUsage"
+            android:importantForAccessibility="yes"/>
 
         <Spinner
             android:id="@+id/spinnerUsage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            />
 
         <Button
             style="?attr/materialButtonOutlinedStyle"
@@ -178,7 +184,9 @@
             android:elevation="2dp"
             android:onClick="getRec"
             app:strokeWidth="2dp"
-            app:strokeColor="@color/md_theme_onSurfaceVariant" />
+            app:strokeColor="@color/md_theme_onSurfaceVariant"
+            android:importantForAccessibility="yes"
+            android:contentDescription="Get recommendations"/>
 
     </LinearLayout>
 
