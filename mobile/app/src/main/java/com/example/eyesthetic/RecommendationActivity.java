@@ -54,11 +54,6 @@ public class RecommendationActivity extends AppCompatActivity {
             return;
         }
 
-        View container = findViewById(R.id.recommendationContainer);
-        container.setFocusable(true);
-        container.requestFocus();
-        container.announceForAccessibility("Welcome. Swipe right for next recommendation.");
-
         totalCount = topNames.size();
         showRecommendation(currentIndex);
 
@@ -97,12 +92,10 @@ public class RecommendationActivity extends AppCompatActivity {
 
         // sr for top and bottom
         String combinedDesc = "Recommendation " + (index + 1) + " of " + totalCount
-                + ". Top: " + topName + ", color " + topColor
-                + ". Bottom: " + bottomName + ", color " + bottomColor + ".";
+                + "Top: " + topName + ", color " + topColor
+                + "Bottom: " + bottomName + ", color " + bottomColor + ".";
 
-        View container = findViewById(R.id.recommendationContainer);
-        container.setContentDescription(combinedDesc);
-        container.announceForAccessibility(combinedDesc);
+        topTextView.announceForAccessibility(combinedDesc);
 
         // Load images with Glide
         if (!topUrl.isEmpty()) {

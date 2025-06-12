@@ -27,7 +27,9 @@
             android:textStyle="bold"
             android:fontFamily="@font/inter_bold"
             android:contentDescription="Welcome"
-            android:importantForAccessibility="yes"/>
+            android:importantForAccessibility="yes"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
             <!--app:layout_constraintBottom_toTopOf="@+id/landingMessage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +45,9 @@
             android:textAlignment="center"
             android:padding="64dp"
             android:contentDescription="I am your EYES-thetic assistant to help you with your fashion needs!"
-            android:importantForAccessibility="yes"/>
+            android:importantForAccessibility="yes"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
             <!--app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toTopOf="@+id/landingBtn"
             app:layout_constraintStart_toStartOf="parent"

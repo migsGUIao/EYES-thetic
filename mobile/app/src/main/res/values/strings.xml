@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Eyes-thetic 24/7</string>
+    <string name="app_name">.</string>
 
     <!--  LANDING  -->
     <string name="landing_welcome">Welcome!</string>
@@ -61,7 +61,7 @@
     <string name="favrec_prevDesc">Previous favorite</string>
     <string name="favrec_nextDesc">Next favorite</string>
     <string name="favrec_iconDesc">Favorites Button</string>
-    <string name="favrec_top">Top: </string>
+    <string name="favrec_combo">Combo: </string>
     <string name="favrec_bottom">Bottom: </string>
     <string name="favrec_desc">Description: </string>
     <string name="fav_view">View all</string>

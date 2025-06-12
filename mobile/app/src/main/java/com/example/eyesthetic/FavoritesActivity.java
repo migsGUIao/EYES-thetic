@@ -53,8 +53,8 @@ public class FavoritesActivity extends AppCompatActivity {
         botImg          = findViewById(R.id.botImg);
         topName         = findViewById(R.id.topName);
         topFavDescInfo  = findViewById(R.id.topFavDescInfo);
-        botName         = findViewById(R.id.botName);
-        botFavDescInfo  = findViewById(R.id.botFavDescInfo);
+//        botName         = findViewById(R.id.botName);
+//        botFavDescInfo  = findViewById(R.id.botFavDescInfo);
 
         prevBtn   = findViewById(R.id.prevBtn);
         nextBtn   = findViewById(R.id.nextBtn);
@@ -159,17 +159,23 @@ public class FavoritesActivity extends AppCompatActivity {
         String botColor      = favObj.optString("bottomColor", "");
         String botImageUrl   = favObj.optString("bottomImageUrl", "");
 
-        // 1) Set the name TextViews
-        topName.setText(topNameStr);
-        botName.setText(botNameStr);
+        // Set the name TextViews
+        String combo = "Top: " + topNameStr + "\nBottom: " + botNameStr;
+        topName.setText(combo);
 
-        // 2) Set the description Info TextViews (e.g. “Color: X   Age: Y”)
-        String topDesc = "Color: " + topColor + "\nAge: (no age yet)";
-        String botDesc = "Color: " + botColor + "\nAge: (no age yet)";
-        topFavDescInfo.setText(topDesc);
-        botFavDescInfo.setText(botDesc);
+        // set description
+        String topDesc = "Top: Color " + topColor + " Age: (no age yet)\n";
+        String botDesc = "Bottom: Color " + botColor + " Age: (no age yet)";
+        String comboDesc = topDesc + botDesc;
+        topFavDescInfo.setText(comboDesc);
 
-        // 3) Load each image (placeholder → downloaded → error fallback)
+        // sir for top and bottom
+        String combinedDesc = "Recommendation " + (index+1)
+                + "Top: " + topName + ", color" + topColor
+                + "Bottom: " + botName + ", color" + botColor + ".";
+
+        topName.announceForAccessibility(combinedDesc);
+
         // Load images with Glide
         if (!topImageUrl.isEmpty()) {
             Glide.with(this)
@@ -195,8 +201,6 @@ public class FavoritesActivity extends AppCompatActivity {
         prevBtn.setEnabled(index > 0);
         nextBtn.setEnabled(index < favoritesList.size() - 1);
     }
-
-
 
     @Override
     protected void onResume() {
