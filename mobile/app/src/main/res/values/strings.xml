@@ -51,9 +51,21 @@
     <string name="closet_heading">Your closet</string>
     <string name="closet_top">Tops</string>
     <string name="closet_bottom">Bottoms</string>
+    <string name="closet_addItems">Add Items</string>
     <string name="closet_addDesc">How would you like to add items to your closet?</string>
     <string name="closet_takePhoto">Take a Photo</string>
     <string name="closet_upload">Upload Image</string>
+
+
+    <!--  CLOSET DETAILS  -->
+    <string name="closetDetail_Image">Image Placeholder</string>
+    <string name="closetDetail_Name">Name</string>
+    <string name="closetDetail_Color">Color</string>
+    <string name="closet_additionalDetails">Additional Details:</string>
+    <string name="closetDetail_Save">Save</string>
+    <string name="closetDetail_Delete">Delete</string>
+    <string name="closetDetail_Edit">Edit</string>
+    <string name="closetDetail_Cancel">Cancel</string>
 
     <!--  FAVORITES & RECOMMENDATIONS -->
     <string name="favrec_recHeading">Recommendation</string>

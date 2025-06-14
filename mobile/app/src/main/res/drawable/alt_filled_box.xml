@@ -3,8 +3,8 @@
     <corners
         android:radius="12dp"/>
     <stroke
-        android:color="@color/md_theme_primaryContainer"
+        android:color="@android:color/black"
         android:width="2dp" />
     <solid
-        android:color="@color/md_theme_surface"/>
+        android:color="@android:color/white"/>
 </shape>
