@@ -1,5 +1,6 @@
 package com.example.eyesthetic;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ public class HomepageActivity extends AppCompatActivity {
     MaterialButtonToggleGroup toggleButtons;
     MaterialButton selectedRec;
     private Spinner spinnerGender, spinnerSeason, spinnerUsage;
-    Button getRecBtn;
+    Button getRecBtn, closetRecBtn;
     int selectedRecId;
     private static final String TAG = "HomepageActivity";
 
@@ -64,6 +65,7 @@ public class HomepageActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         bottomNavigationView = findViewById(R.id.homeNavbar);
+        /*
         toggleButtons = findViewById(R.id.toggleButtons);
 
         // Toggle buttons, select random rec by default
@@ -71,15 +73,36 @@ public class HomepageActivity extends AppCompatActivity {
             toggleButtons.check(R.id.randomRec);
         }
 
-        // Button selection changes
-        toggleButtons.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
-            @Override
-            public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
-                if(isChecked) {
-                    selectedRec = findViewById(checkedId);
-                    selectedRecId = checkedId;
-                }
+
+        selectedRecId = toggleButtons.getCheckedButtonId();
+
+        toggleButtons.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                selectedRecId = checkedId;
             }
+        });
+
+        if (selectedRecId == R.id.closetRec) {
+              Intent intent = new Intent(HomepageActivity.this, ClosetRecommendationActivity.class);
+              startActivity(intent);
+            try {
+                Intent intent = new Intent(this, ClosetRecommendationActivityOld.class);
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Log.e("HomepageActivity", "Could not start ClosetRecommendationActivity", e);
+                Toast.makeText(this, "Cannot open Closet Recommendations", Toast.LENGTH_LONG).show();
+            }
+
+            return;
+        }
+        */
+
+        closetRecBtn = findViewById(R.id.closetRec);
+
+        closetRecBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(HomepageActivity.this, ClosetRecommendationActivity.class);
+            startActivity(intent);
+
         });
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -96,7 +119,7 @@ public class HomepageActivity extends AppCompatActivity {
                 Intent intent = new Intent(HomepageActivity.this, FavoritesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
-            } /*else if (id == R.id.logoutIcon) {
+            } else if (id == R.id.logoutIcon) {
                 // Logout user
                 mAuth.signOut();
 
@@ -106,7 +129,7 @@ public class HomepageActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 return true;
-            }*/
+            }
             return false;
         });
 
@@ -190,40 +213,6 @@ public class HomepageActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-    }
-
-    // TODO: Recommender system here
-    public void getRec() {
-        // IMPORT MODEL
-        //        try {
-        //            ResnetFashionClassifier model;
-        //            model = ResnetFashionClassifier.newInstance(context);
-        //
-        //            // Creates inputs for reference.
-        //            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
-        //            inputFeature0.loadBuffer(byteBuffer);
-        //
-        //            // Runs model inference and gets result.
-        //            ResnetFashionClassifier.Outputs outputs = model.process(inputFeature0);
-        //            TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
-        //
-        //            // Releases model resources if no longer used.
-        //            model.close();
-        //        } catch (IOException e) {
-        //            // TODO Handle the exception
-        //        }
-
-
-
-        /*
-        // With random toggle button selected
-        if (selectedRecId == R.id.randomRec) {
-        }
-        // With from closet toggle button selected
-        else if (selectedRecId == R.id.closetRec) {
-
-        }*/
-
     }
 
     /**

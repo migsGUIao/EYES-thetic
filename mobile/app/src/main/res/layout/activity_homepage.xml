@@ -81,6 +81,7 @@
             android:textStyle="bold"
             android:contentDescription="Currently in the Homepage. What are you looking for?"/>
 
+        <!--
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggleButtons"
             android:layout_width="match_parent"
@@ -113,7 +114,22 @@
                 android:text="From Closet"
                 android:contentDescription="Clothing from closet button"
                 />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+        </com.google.android.material.button.MaterialButtonToggleGroup> -->
+
+        <Button
+            style="?attr/materialButtonOutlinedStyle"
+            android:id="@+id/closetRec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_gravity="center"
+            android:text="Closet Recommendation"
+            android:textColor="@color/md_theme_onSurfaceVariant"
+            android:textSize="16sp"
+            android:fontFamily="@font/inter_bold"
+            android:elevation="2dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/md_theme_onSurfaceVariant"/>
 
         <!-- Gender Spinner -->
         <TextView
