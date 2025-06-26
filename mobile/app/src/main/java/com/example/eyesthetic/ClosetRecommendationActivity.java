@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -50,11 +51,16 @@ public class ClosetRecommendationActivity extends AppCompatActivity {
     private Map<String,String> idToUrl  = new HashMap<>();
     private List<ClothingRec> recs      = new ArrayList<>();
     private int currentIndex = 0;
+    private FirebaseFirestore db;
+    private String uid;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_closet_recommendation);
+
+        db = FirebaseFirestore.getInstance();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         bindViews();
         loadImageUrlMap();
@@ -101,37 +107,26 @@ public class ClosetRecommendationActivity extends AppCompatActivity {
     // fetch closet from firestore
     private void fetchClosetItems() {
         showLoading(true);
-        String uid = FirebaseAuth.getInstance().getCurrentUser() != null
-                ? FirebaseAuth.getInstance().getCurrentUser().getUid()
-                : null;
 
-        if (uid == null) {
-            Toast.makeText(this, "Not signed in; redirecting to login.", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return;
-        }
+        db.collection("user").document(uid).collection("closet")
+                        .get()
+                        .addOnSuccessListener(querySnapshot -> {
+                            List<ClosetItem> items = new ArrayList<>();
+                            items = querySnapshot.toObjects(ClosetItem.class);
+                            if (items.isEmpty()) {
+                                showError("Your closet is empty.");
+                            } else {
+                                buildRecommendations(items);
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e(TAG, "Error loading closet", e);
+                            // show on error but stay on screen
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(this, "Error loading your closet:\n" + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        });
 
-        FirebaseFirestore.getInstance()
-                .collection("users")
-                .document(uid)
-                .collection("closet")
-                .get()
-                .addOnSuccessListener((QuerySnapshot qs) -> {
-                    List<ClosetItem> items = qs.toObjects(ClosetItem.class);
-                    if (items.isEmpty()) {
-                        showError("Your closet is empty.");
-                    } else {
-                        buildRecommendations(items);
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error loading closet", e);
-                    // show on error but stay on screen
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(this, "Error loading your closet:\n" + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                });
     }
 
     private void buildRecommendations(List<ClosetItem> items) {
@@ -143,8 +138,8 @@ public class ClosetRecommendationActivity extends AppCompatActivity {
             seasons.add(ci.getSeason());
             usages.add(ci.getUsage());
 
-            if ("Topwear".equalsIgnoreCase(ci.getType()))    hasTops = true;
-            if ("Bottomwear".equalsIgnoreCase(ci.getType())) hasBottoms = true;
+            if ("Top".equalsIgnoreCase(ci.getType()))    hasTops = true;
+            if ("Bottom".equalsIgnoreCase(ci.getType())) hasBottoms = true;
         }
 
         Set<String> targetSubcats = new HashSet<>();
@@ -242,24 +237,19 @@ public class ClosetRecommendationActivity extends AppCompatActivity {
 
 
     private void saveFavorite(ClothingRec r) {
-        String uid = FirebaseAuth.getInstance().getUid();
         String docId = r.name.toLowerCase()
                 .replaceAll("[^a-z0-9]", "_");
 
-        FirebaseFirestore.getInstance()
-                .collection("users")
-                .document(uid)
-                .collection("favorites")
-                .document(docId)
-                .set(r)  // assumes ClothingRec has public fields name & imageUrl
-                .addOnSuccessListener(aVoid ->
-                        Toast.makeText(this, "Added to favorites!", Toast.LENGTH_SHORT).show()
-                )
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Failed to save favorite.", Toast.LENGTH_SHORT).show()
-                );
+        db.collection("user").document(uid).collection("favorites")
+                        .document(docId)
+                        .set(r)
+                        .addOnSuccessListener(aVoid ->
+                                Toast.makeText(this, "Added to favorites!", Toast.LENGTH_SHORT).show()
+                        )
+                        .addOnFailureListener(e ->
+                                Toast.makeText(this, "Failed to save favorite.", Toast.LENGTH_SHORT).show()
+                        );
     }
-
 
     private void showLoading(boolean show) {
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
