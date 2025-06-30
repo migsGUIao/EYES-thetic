@@ -29,15 +29,64 @@
             android:textSize="32sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/closetTop"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_bold"
-            android:paddingTop="18dp"
-            android:text="@string/closet_top"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+            android:id="@+id/closetFilterBtns"
+            android:orientation="horizontal"
+            android:layout_margin="8dp">
+
+            <Button
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/filterAllBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/md_theme_primaryContainer"
+                android:textColor="@color/md_theme_onSurfaceVariant"
+                android:textSize="14sp"
+                android:fontFamily="@font/inter_bold"
+                android:elevation="2dp"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/md_theme_onSurfaceVariant"
+                android:importantForAccessibility="yes"
+
+                android:text="All"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/filterTopsBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/md_theme_primaryContainer"
+                android:textColor="@color/md_theme_onSurfaceVariant"
+                android:textSize="14sp"
+                android:fontFamily="@font/inter_bold"
+                android:elevation="2dp"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/md_theme_onSurfaceVariant"
+                android:importantForAccessibility="yes"
+                android:text="Tops"
+                android:layout_marginEnd="5dp" />
+
+            <Button
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/filterBottomsBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/md_theme_primaryContainer"
+                android:textColor="@color/md_theme_onSurfaceVariant"
+                android:textSize="14sp"
+                android:fontFamily="@font/inter_bold"
+                android:elevation="2dp"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/md_theme_onSurfaceVariant"
+                android:importantForAccessibility="yes"
+                android:text="Bottoms" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- RecyclerView -->

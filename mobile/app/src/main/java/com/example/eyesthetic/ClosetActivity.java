@@ -41,6 +41,11 @@ public class ClosetActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String uid;
 
+    private List<ClosetItem> allItems = new ArrayList<>();
+    private List<ClosetItem> tops = new ArrayList<>();
+    private List<ClosetItem> bottoms = new ArrayList<>();
+
+
     static final int REQUEST_IMAGE_CAPTURE = 1;
     Uri photoURI;
     String currentPhotoPath;
@@ -82,6 +87,11 @@ public class ClosetActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         loadClosetItems();
+
+        findViewById(R.id.filterAllBtn).setOnClickListener(v -> adapter.submitList(allItems));
+        findViewById(R.id.filterTopsBtn).setOnClickListener(v -> adapter.submitList(tops));
+        findViewById(R.id.filterBottomsBtn).setOnClickListener(v -> adapter.submitList(bottoms));
+
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -183,7 +193,11 @@ public class ClosetActivity extends AppCompatActivity {
         db.collection("user").document(uid).collection("closet")
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
-                    List<ClosetItem> items = new ArrayList<>();
+                    //List<ClosetItem> items = new ArrayList<>();
+                    allItems.clear();
+                    tops.clear();
+                    bottoms.clear();
+
                     for (DocumentSnapshot doc : querySnapshot) {
                         Log.d("FirestoreData", "Raw data: " + doc.getData());
 
@@ -191,6 +205,16 @@ public class ClosetActivity extends AppCompatActivity {
 
                         if (item != null) {
                             item.setId(doc.getId());
+                            allItems.add(item);
+
+                            String type = item.getType();
+                            if (type != null) {
+                                if (type.equalsIgnoreCase("Top")) {
+                                    tops.add(item);
+                                } else if (type.equalsIgnoreCase("Bottom")) {
+                                    bottoms.add(item);
+                                }
+                            }
                             Log.d("MappedItem", "Name: " + item.getName() +
                                     ", Type: " + item.getType() +
                                     ", Color: " + item.getColor() +
@@ -198,13 +222,11 @@ public class ClosetActivity extends AppCompatActivity {
                                     ", Season: " + item.getSeason() +
                                     ", Usage: " + item.getUsage() +
                                     ", ImageUrl: " + item.getImageUrl());
-                            items.add(item);
                         } else {
                             Log.w("MappedItem", "Failed to map document: " + doc.getId());
                         }
                     }
-
-                    adapter.submitList(items);
+                    adapter.submitList(allItems);
                 })
                 .addOnFailureListener(e -> Log.e("FirestoreError", "Failed to load closet items", e));
     }

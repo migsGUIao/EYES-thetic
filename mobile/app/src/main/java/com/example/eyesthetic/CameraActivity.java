@@ -47,6 +47,7 @@ public class CameraActivity extends AppCompatActivity {
     private TextView detectionStatusText;
     private TextView clothingStatusText;
     private Bitmap latestBitmap = null;
+    private volatile boolean isClassifying = false;
 
 
     private ExecutorService cameraExecutor;
@@ -199,51 +200,59 @@ public class CameraActivity extends AppCompatActivity {
     @ExperimentalGetImage
     private void analyzeImage(@NonNull ImageProxy imageProxy) {
         Image mediaImage = imageProxy.getImage();
-        if (mediaImage != null && classifier != null) {
-            try {
-                Bitmap bitmap = yuvToRgbConverter.yuvToRgb(this, mediaImage, imageProxy.getImageInfo().getRotationDegrees());
-                Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 260, 260, true);
-                latestBitmap = resizedBitmap;
 
-                List<Classifications> results = classifier.classify(TensorImage.fromBitmap(resizedBitmap));
+        // Prevent re-entry while the previous classification is still running
+        if (mediaImage == null || classifier == null || isClassifying) {
+            imageProxy.close();
+            return;
+        }
 
-                runOnUiThread(() -> {
-                    StringBuilder sb = new StringBuilder();
-                    boolean foundClothing = false;
+        isClassifying = true;
 
-                    for (Classifications classification : results) {
-                        List<Category> categories = new ArrayList<>(classification.getCategories());
-                        categories.sort((a, b) -> Float.compare(b.getScore(), a.getScore()));
+        try {
+            Bitmap bitmap = yuvToRgbConverter.yuvToRgb(this, mediaImage, imageProxy.getImageInfo().getRotationDegrees());
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 260, 260, true);
+            latestBitmap = resizedBitmap;
 
-                        int topN = Math.min(5, categories.size());
+            List<Classifications> results = classifier.classify(TensorImage.fromBitmap(resizedBitmap));
 
-                        for (int i = 0; i < topN; i++) {
-                            Category category = categories.get(i);
-                            String label = category.getLabel().toLowerCase();
-                            float score = category.getScore();
+            runOnUiThread(() -> {
+                StringBuilder sb = new StringBuilder();
+                boolean foundClothing = false;
 
-                            sb.append(label).append(": ").append(String.format("%.2f", score)).append("\n");
+                for (Classifications classification : results) {
+                    List<Category> categories = new ArrayList<>(classification.getCategories());
+                    categories.sort((a, b) -> Float.compare(b.getScore(), a.getScore()));
 
-                            for (String clothing : CLOTHING_LABELS) {
-                                if (label.contains(clothing.toLowerCase()) && score > 0.6) {
-                                    foundClothing = true;
-                                    break;
-                                }
+                    int topN = Math.min(5, categories.size());
+
+                    for (int i = 0; i < topN; i++) {
+                        Category category = categories.get(i);
+                        String label = category.getLabel().toLowerCase();
+                        float score = category.getScore();
+
+                        sb.append(label).append(": ").append(String.format("%.2f", score)).append("\n");
+
+                        for (String clothing : CLOTHING_LABELS) {
+                            if (label.contains(clothing.toLowerCase()) && score > 0.6f) {
+                                foundClothing = true;
+                                break;
                             }
                         }
                     }
+                }
 
-                    detectionStatusText.setText(sb.toString());
-                    isClothingDetected = foundClothing;
-                    clothingStatusText.setText(foundClothing ? "Clothing item detected" : "Detecting clothing...");
-                });
+                detectionStatusText.setText(sb.toString());
+                isClothingDetected = foundClothing;
+                clothingStatusText.setText(foundClothing ? "Clothing item detected" : "Detecting clothing...");
+            });
 
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            isClassifying = false;
+            imageProxy.close();
         }
-        imageProxy.close();
     }
 
 
