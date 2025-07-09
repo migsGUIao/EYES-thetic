@@ -79,7 +79,7 @@
             android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:contentDescription="Currently in the Homepage. What are you looking for?"/>
+            android:contentDescription="What are you looking for?"/>
 
         <!--
         <com.google.android.material.button.MaterialButtonToggleGroup
@@ -121,13 +121,12 @@
             android:id="@+id/closetRec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="5dp"
             android:layout_gravity="center"
             android:text="Closet Recommendation"
             android:textColor="@color/md_theme_onSurfaceVariant"
             android:textSize="16sp"
             android:fontFamily="@font/inter_bold"
-            android:elevation="2dp"
             app:strokeWidth="2dp"
             app:strokeColor="@color/md_theme_onSurfaceVariant"/>
 

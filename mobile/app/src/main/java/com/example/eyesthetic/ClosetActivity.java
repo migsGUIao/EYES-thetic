@@ -134,7 +134,7 @@ public class ClosetActivity extends AppCompatActivity {
 
 
         Button takePhoto = dialog.findViewById(R.id.takePhotoBtn);
-        Button uploadImage = dialog.findViewById(R.id.uploadImageBtn);
+        //Button uploadImage = dialog.findViewById(R.id.uploadImageBtn);
 
         takePhoto.setOnClickListener(v -> {
             dialog.dismiss();
@@ -143,10 +143,10 @@ public class ClosetActivity extends AppCompatActivity {
         });
 
 
-        uploadImage.setOnClickListener(v -> {
-            dialog.dismiss();
-            // Handle image upload here
-        });
+//        uploadImage.setOnClickListener(v -> {
+//            dialog.dismiss();
+//            // Handle image upload here
+//        });
 
         dialog.show();
     }
