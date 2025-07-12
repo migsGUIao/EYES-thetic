@@ -13,6 +13,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:importantForAccessibility="no" />
+
+    <!-- Guidance Button -->
+    <ImageButton
+        android:id="@+id/guidanceToggleButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Toggle voice guidance"
+        android:padding="8dp"
+        app:tint="@android:color/white"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@android:drawable/ic_lock_silent_mode_off"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Detection status text -->
@@ -27,7 +43,8 @@
         app:layout_constraintBottom_toTopOf="@id/captureButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:importantForAccessibility="no" />
 
     <TextView
         android:id="@+id/clothingStatusText"
@@ -40,7 +57,8 @@
         app:layout_constraintBottom_toTopOf="@id/detectionStatusText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white"
+        android:importantForAccessibility="no" />
 
     <!-- Capture button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton

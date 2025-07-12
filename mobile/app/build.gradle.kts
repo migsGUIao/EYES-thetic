@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
 //    id("com.android.application")
     id("com.google.gms.google-services")
+    id("org.jetbrains.kotlin.android") version "1.7.10"
 }
 
 android {
@@ -33,6 +34,7 @@ android {
     }
     buildFeatures {
         mlModelBinding = true
+        buildConfig = true
     }
 }
 
@@ -45,6 +47,7 @@ dependencies {
     implementation(libs.tensorflow.lite.gpu)
     implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("androidx.camera:camera-view:1.4.2")
+    implementation(project(":sdk"))
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
@@ -67,6 +70,8 @@ dependencies {
     implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.0")
     implementation("org.tensorflow:tensorflow-lite-support:0.4.0")
     implementation("org.tensorflow:tensorflow-lite:2.x.x")
+    //implementation ("com.google.mediapipe:tasks-vision:0.91.1")
+    implementation ("com.google.mediapipe:tasks-vision:latest.release")
 
     //implementation(libs.litert)
     //implementation(libs.litert.support)

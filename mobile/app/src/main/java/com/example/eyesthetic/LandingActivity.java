@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.util.Log;
+import android.widget.Toast;
+
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +17,9 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.opencv.android.OpenCVLoader;
+
+
 public class LandingActivity extends AppCompatActivity {
     Button landingBtn;
     public FirebaseAuth mAuth;
@@ -23,6 +29,15 @@ public class LandingActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         super.onCreate(savedInstanceState);
+
+        if (OpenCVLoader.initLocal()) {
+            //Log.i(TAG, "OpenCV loaded successfully");
+            (Toast.makeText(this, "OpenCV loaded successfully!", Toast.LENGTH_LONG)).show();
+        } else {
+            //Log.e(TAG, "OpenCV initialization failed!");
+            (Toast.makeText(this, "OpenCV initialization failed!", Toast.LENGTH_LONG)).show();
+            return;
+        }
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {

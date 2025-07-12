@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Eyesthetic"
 include(":app")
- 
+include(":sdk")

@@ -159,6 +159,11 @@ public class ClosetDetailsActivity extends AppCompatActivity {
                 setSpinnerSelection(typeSpinner, detectedType);
             }
 
+            String detectedColor = getIntent().getStringExtra("detected_color");
+            if (detectedColor != null && !detectedColor.isEmpty()) {
+                colorInput.setText(detectedColor);
+            }
+
         } else if (isViewMode) {
             // Populate fields
             String name = getIntent().getStringExtra("name");
