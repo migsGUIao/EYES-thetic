@@ -1,5 +1,6 @@
 package com.example.eyesthetic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,17 +28,22 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class ClosetRecommendationActivity extends AppCompatActivity {
+    FirebaseAuth mAuth;
+
     private static final String TAG = "ClosetRecoActivity";
 
-    private View    scrollView;
-    private View    container;
+    //private View    scrollView;
+    //private View    container;
     private ProgressBar progressBar;
     private TextView indexTextView, topTextView, bottomTextView;
     private ImageView topImageView, bottomImageView;
-    private Button  nextButton, favoriteButton;
+    private Button favoriteButton;
+    private FloatingActionButton nextBtn, prevBtn;
 
     private FirebaseFirestore db;
     private String uid;
+    BottomNavigationView bottomNavigationView;
+
 
     private final Executor executor = Executors.newSingleThreadExecutor();
     private final Handler  mainHandler = new Handler(Looper.getMainLooper());
@@ -49,6 +57,40 @@ public class ClosetRecommendationActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        bottomNavigationView = findViewById(R.id.recoNavbar);
+
+        mAuth = FirebaseAuth.getInstance();
+
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.homeIcon) {
+                Intent intent = new Intent(ClosetRecommendationActivity.this, HomepageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                return true;
+            } else if (id == R.id.closetIcon) {
+                Intent intent = new Intent(ClosetRecommendationActivity.this, ClosetActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+            } else if (id == R.id.favoritesIcon) {
+                Intent intent = new Intent(ClosetRecommendationActivity.this, FavoritesActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+            } else if (id == R.id.logoutIcon) {
+                // Logout user
+                mAuth.signOut();
+
+                // Go to login and clear back stack
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+                return true;
+            }
+            return false;
+        });
 
         bindViews();
         loadClosetAndBuildPairs();
@@ -56,24 +98,31 @@ public class ClosetRecommendationActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
-        scrollView      = findViewById(R.id.scrollView);
-        container       = findViewById(R.id.recommendationContainer);
+        //scrollView      = findViewById(R.id.scrollView);
+        //container       = findViewById(R.id.recommendationContainer);
         progressBar     = findViewById(R.id.progressBar);
         indexTextView   = findViewById(R.id.indexTextView);
         topTextView     = findViewById(R.id.topTextView);
         bottomTextView  = findViewById(R.id.bottomTextView);
         topImageView    = findViewById(R.id.topImageView);
         bottomImageView = findViewById(R.id.bottomImageView);
-        nextButton      = findViewById(R.id.nextButton);
+        nextBtn      = findViewById(R.id.nextBtn);
+        prevBtn      = findViewById(R.id.prevBtn);
         favoriteButton  = findViewById(R.id.favoriteButton);
     }
 
     private void setupListeners() {
-        nextButton.setOnClickListener(v -> {
+        nextBtn.setOnClickListener(v -> {
             if (currentIndex < recs.size() - 1) {
                 showPair(++currentIndex);
             }
         });
+        prevBtn.setOnClickListener(v -> {
+            if (currentIndex > 0) {
+                showPair(--currentIndex);
+            }
+        });
+
         favoriteButton.setOnClickListener(v ->
                 Toast.makeText(this,
                         "★ Favorited: " + recs.get(currentIndex).topName
@@ -159,16 +208,17 @@ public class ClosetRecommendationActivity extends AppCompatActivity {
         String ann = "Outfit " + (idx+1) + " of " + recs.size()
                 + ". Top: "    + p.topName
                 + ". Bottom: " + p.bottomName;
-        container.setContentDescription(ann);
-        container.announceForAccessibility(ann);
+        findViewById(R.id.recommendationBox).setContentDescription(ann);
+        findViewById(R.id.recommendationBox).announceForAccessibility(ann);
 
-        nextButton.setEnabled(idx < recs.size() - 1);
-        scrollView.setVisibility(View.VISIBLE);
+        nextBtn.setEnabled(idx < recs.size() - 1);
+        prevBtn.setEnabled(idx > 0);
+        //scrollView.setVisibility(View.VISIBLE);
     }
 
     private void showLoading(boolean loading) {
         progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
-        scrollView .setVisibility(loading ? View.GONE    : View.VISIBLE);
+        findViewById(R.id.recommendationBox).setVisibility(loading ? View.GONE : View.VISIBLE);
     }
 
     private void showError(String msg) {

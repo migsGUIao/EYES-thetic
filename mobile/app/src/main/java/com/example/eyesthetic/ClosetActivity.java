@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -88,10 +90,36 @@ public class ClosetActivity extends AppCompatActivity {
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         loadClosetItems();
 
-        findViewById(R.id.filterAllBtn).setOnClickListener(v -> adapter.submitList(allItems));
-        findViewById(R.id.filterTopsBtn).setOnClickListener(v -> adapter.submitList(tops));
-        findViewById(R.id.filterBottomsBtn).setOnClickListener(v -> adapter.submitList(bottoms));
+        //findViewById(R.id.filterAllBtn).setOnClickListener(v -> adapter.submitList(allItems));
+        //findViewById(R.id.filterTopsBtn).setOnClickListener(v -> adapter.submitList(tops));
+        //findViewById(R.id.filterBottomsBtn).setOnClickListener(v -> adapter.submitList(bottoms));
 
+        Button filterAllBtn = findViewById(R.id.filterAllBtn);
+        Button filterTopsBtn = findViewById(R.id.filterTopsBtn);
+        Button filterBottomsBtn = findViewById(R.id.filterBottomsBtn);
+
+        final String[] selectedFilter = {"All"};
+
+        setToggleState(filterAllBtn, filterTopsBtn, filterBottomsBtn);
+        adapter.submitList(allItems);
+
+        filterAllBtn.setOnClickListener(v -> {
+            selectedFilter[0] = "All";
+            setToggleState(filterAllBtn, filterTopsBtn, filterBottomsBtn);
+            adapter.submitList(allItems);
+        });
+
+        filterTopsBtn.setOnClickListener(v -> {
+            selectedFilter[0] = "Tops";
+            setToggleState(filterTopsBtn, filterAllBtn, filterBottomsBtn);
+            adapter.submitList(tops);
+        });
+
+        filterBottomsBtn.setOnClickListener(v -> {
+            selectedFilter[0] = "Bottoms";
+            setToggleState(filterBottomsBtn, filterAllBtn, filterTopsBtn);
+            adapter.submitList(bottoms);
+        });
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -123,6 +151,18 @@ public class ClosetActivity extends AppCompatActivity {
             return false;
         });
 
+    }
+
+    private void setToggleState(Button selected, Button... unselectedButtons) {
+        // selected
+        selected.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.md_theme_primaryContainer));
+        selected.setTextColor(ContextCompat.getColor(this, android.R.color.black));
+
+        // Unselected styling
+        for (Button btn : unselectedButtons) {
+            btn.setBackgroundTintList(ContextCompat.getColorStateList(this, android.R.color.white));
+            btn.setTextColor(ContextCompat.getColor(this, android.R.color.black));
+        }
     }
 
     private void showPopup() {

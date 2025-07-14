@@ -37,7 +37,7 @@
     <string name="favorites">Favorites</string>
 
     <!--  HOMEPAGE  -->
-    <string name="home_welcome">Hi,</string>
+    <string name="home_welcome">Welcome!</string>
     <string name="home_startque">What are you looking for?</string>
     <string name="home_random">Random Recommendation</string>
     <string name="home_closet">Recommendation from Closet</string>

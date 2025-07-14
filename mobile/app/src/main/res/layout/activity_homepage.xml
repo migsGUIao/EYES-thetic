@@ -36,7 +36,7 @@
                     android:text="@string/home_welcome"
                     android:textSize="28sp"
                     android:textStyle="bold" />
-
+            <!--
                 <TextView
                     android:id="@+id/homeUser"
                     android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
                     android:layout_marginEnd="8dp"
                     android:text="User!"
                     android:textSize="28sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold" /> -->
             </LinearLayout>
 
             <TextView
