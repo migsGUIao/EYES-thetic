@@ -1,5 +1,6 @@
 package com.example.eyesthetic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,12 +18,18 @@ import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class RecommendationActivity extends AppCompatActivity {
+    FirebaseAuth mAuth;
 
     TextView topTextView, bottomTextView, indexTextView;
     ImageView topImageView, bottomImageView;
-    Button nextButton;
+    FloatingActionButton nextBtn, prevBtn;
+    BottomNavigationView bottomNavigationView;
+
 
     ArrayList<String> topNames, topColors, topImageUrls;
     ArrayList<String> bottomNames, bottomColors, bottomImageUrls;
@@ -34,20 +41,25 @@ public class RecommendationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommendation);
 
-        topTextView    = findViewById(R.id.topTextView);
-        bottomTextView = findViewById(R.id.bottomTextView);
-        indexTextView  = findViewById(R.id.indexTextView);
+        topTextView     = findViewById(R.id.topTextView);
+        bottomTextView  = findViewById(R.id.bottomTextView);
+        indexTextView   = findViewById(R.id.indexTextView);
         topImageView    = findViewById(R.id.topImageView);
         bottomImageView = findViewById(R.id.bottomImageView);
-        nextButton     = findViewById(R.id.nextButton);
+        nextBtn         = findViewById(R.id.nextBtn);
+        prevBtn         = findViewById(R.id.prevBtn);
+        bottomNavigationView = findViewById(R.id.recoNavbar);
+
+        mAuth = FirebaseAuth.getInstance();
+
         Button favoriteButton = findViewById(R.id.favoriteButton);
 
-        topNames    = getIntent().getStringArrayListExtra("topNames");
-        topColors   = getIntent().getStringArrayListExtra("topColors");
-        topImageUrls  = getIntent().getStringArrayListExtra("topImageUrls");
-        bottomNames  = getIntent().getStringArrayListExtra("bottomNames");
-        bottomColors = getIntent().getStringArrayListExtra("bottomColors");
-        bottomImageUrls= getIntent().getStringArrayListExtra("bottomImageUrls");
+        topNames        = getIntent().getStringArrayListExtra("topNames");
+        topColors       = getIntent().getStringArrayListExtra("topColors");
+        topImageUrls    = getIntent().getStringArrayListExtra("topImageUrls");
+        bottomNames     = getIntent().getStringArrayListExtra("bottomNames");
+        bottomColors    = getIntent().getStringArrayListExtra("bottomColors");
+        bottomImageUrls = getIntent().getStringArrayListExtra("bottomImageUrls");
 
         if (topNames == null || bottomNames == null || topImageUrls == null || bottomImageUrls == null) {
             finish();
@@ -57,13 +69,21 @@ public class RecommendationActivity extends AppCompatActivity {
         totalCount = topNames.size();
         showRecommendation(currentIndex);
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentIndex++;
-                if (currentIndex >= totalCount) {
-                    nextButton.setVisibility(View.GONE);
-                } else {
+                if (currentIndex < totalCount - 1) {
+                    currentIndex++;
+                    showRecommendation(currentIndex);
+                }
+            }
+        });
+
+        prevBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentIndex > 0) {
+                    currentIndex--;
                     showRecommendation(currentIndex);
                 }
             }
@@ -74,6 +94,36 @@ public class RecommendationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 saveFavorite(currentIndex);
             }
+        });
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.homeIcon) {
+                Intent intent = new Intent(RecommendationActivity.this, HomepageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                return true;
+            } else if (id == R.id.closetIcon) {
+                Intent intent = new Intent(RecommendationActivity.this, ClosetActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+            } else if (id == R.id.favoritesIcon) {
+                Intent intent = new Intent(RecommendationActivity.this, FavoritesActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+            } else if (id == R.id.logoutIcon) {
+                // Logout user
+                mAuth.signOut();
+
+                // Go to login and clear back stack
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+                return true;
+            }
+            return false;
         });
     }
 

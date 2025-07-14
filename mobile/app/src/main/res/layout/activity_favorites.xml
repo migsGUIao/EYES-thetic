@@ -45,7 +45,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/favViewBtn"
+        app:layout_constraintBottom_toTopOf="@+id/unfavBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/favHeading"
@@ -56,7 +56,9 @@
         <LinearLayout
             android:id="@+id/topInfo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/topFav"
@@ -166,14 +168,14 @@
         app:srcCompat="@drawable/right_arrow" />
 
     <Button
-        android:id="@+id/favViewBtn"
+        android:id="@+id/unfavBtn"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/md_theme_primaryContainer"
         android:elevation="2dp"
         android:fontFamily="@font/inter_bold"
-        android:text="@string/fav_view"
+        android:text="@string/fav_unfav"
         android:textColor="@color/md_theme_onSurfaceVariant"
         android:textSize="16sp"
         android:layout_marginTop="16dp"

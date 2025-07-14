@@ -78,6 +78,6 @@
     <string name="favrec_combo">Combo: </string>
     <string name="favrec_bottom">Bottom: </string>
     <string name="favrec_desc">Description: </string>
-    <string name="fav_view">View all</string>
+    <string name="fav_unfav">Remove Favorite</string>
 
 </resources>

@@ -38,7 +38,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private TextView topName, topFavDescInfo;
     private TextView botName, botFavDescInfo;
     private FloatingActionButton prevBtn, nextBtn;
-    private Button favViewBtn;      // not used here but bound in XML
+    private Button unfavBtn;
     private LinearLayout favoritesBox;
 
 
@@ -58,7 +58,7 @@ public class FavoritesActivity extends AppCompatActivity {
 
         prevBtn   = findViewById(R.id.prevBtn);
         nextBtn   = findViewById(R.id.nextBtn);
-        favViewBtn= findViewById(R.id.favViewBtn);
+        unfavBtn = findViewById(R.id.unfavBtn);
         favoritesBox = findViewById(R.id.favoritesBox);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -113,6 +113,45 @@ public class FavoritesActivity extends AppCompatActivity {
             }
         });
 
+        unfavBtn.setOnClickListener(view -> {
+            if (favoritesList.isEmpty()) return;
+
+            JSONObject toRemove = favoritesList.get(currentIndex);
+            String favToRemoveString = toRemove.toString();
+
+            Set<String> existing = prefs.getStringSet("favorites", null);
+            if (existing == null) return;
+
+            Set<String> updatedSet = new java.util.HashSet<>(existing);
+            updatedSet.remove(favToRemoveString);
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putStringSet("favorites", updatedSet);
+            editor.apply();
+
+            // 5. Remove from list and update UI
+            favoritesList.remove(currentIndex);
+
+            if (favoritesList.isEmpty()) {
+                Toast.makeText(this, "No more favorites.", Toast.LENGTH_SHORT).show();
+                topName.setText("");
+                topFavDescInfo.setText("");
+                topImg.setImageResource(R.drawable.error_placeholder);
+                botImg.setImageResource(R.drawable.error_placeholder);
+                prevBtn.setEnabled(false);
+                nextBtn.setEnabled(false);
+                unfavBtn.setEnabled(false);
+            } else {
+                if (currentIndex >= favoritesList.size()) {
+                    currentIndex = favoritesList.size() - 1;
+                }
+                displayFavorite(currentIndex);
+            }
+
+            Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+        });
+
+
         bottomNavigationView = findViewById(R.id.favNavbar);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -130,7 +169,7 @@ public class FavoritesActivity extends AppCompatActivity {
                 return true;
             } else if (id == R.id.favoritesIcon) {
                 return true;
-            } /* else if (id == R.id.logoutIcon) {
+            } else if (id == R.id.logoutIcon) {
                 // Logout user
                 mAuth.signOut();
 
@@ -141,7 +180,6 @@ public class FavoritesActivity extends AppCompatActivity {
                 finish();
                 return true;
             }
-            */
             return false;
         });
 
