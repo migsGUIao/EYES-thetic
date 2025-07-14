@@ -54,7 +54,7 @@
             android:layout_gravity="start"
             android:fontFamily="@font/inter_bold"
             android:textSize="16sp"
-            android:contentDescription="Enter your email"/>
+            android:contentDescription="@string/login_emailLabel"/>
 
         <EditText
             android:id="@+id/loginEmail"
@@ -70,7 +70,7 @@
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:textSize="16sp"
-            android:contentDescription="Textbox for email"/>
+            android:contentDescription="@string/login_emailTb"/>
 
         <TextView
             android:id="@+id/loginPromptPassword"

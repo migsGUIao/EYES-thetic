@@ -4,15 +4,18 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
@@ -44,7 +47,7 @@ public class HomepageActivity extends AppCompatActivity {
     MaterialButtonToggleGroup toggleButtons;
     MaterialButton selectedRec;
     private Spinner spinnerGender, spinnerSeason, spinnerUsage;
-    Button getRecBtn, closetRecBtn;
+    Button getRecBtn, closetRecBtn, randomRecBtn;
     int selectedRecId;
     private static final String TAG = "HomepageActivity";
 
@@ -61,6 +64,10 @@ public class HomepageActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+        TextView homeMessage = findViewById(R.id.homeMessage);
+        homeMessage.setText(Html.fromHtml(getString(R.string.landing_message), Html.FROM_HTML_MODE_LEGACY));
+
+
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -98,11 +105,20 @@ public class HomepageActivity extends AppCompatActivity {
         */
 
         closetRecBtn = findViewById(R.id.closetRec);
+        randomRecBtn = findViewById(R.id.randomRec);
+
+        setToggleState(randomRecBtn, closetRecBtn);
+
+        final boolean[] isRandomSelected = {true};
+
+        randomRecBtn.setOnClickListener(v -> {
+            setToggleState(randomRecBtn, closetRecBtn);
+            isRandomSelected[0] = true;
+        });
 
         closetRecBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(HomepageActivity.this, ClosetRecommendationActivity.class);
-            startActivity(intent);
-
+            setToggleState(closetRecBtn, randomRecBtn);
+            isRandomSelected[0] = false;
         });
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -190,9 +206,10 @@ public class HomepageActivity extends AppCompatActivity {
         idToImageUrl = loadImageMapFromJson();
 
         getRecBtn.setOnClickListener(v -> {
-                String selGender = (String)spinnerGender.getSelectedItem();
-                String selSeason = (String)spinnerSeason.getSelectedItem();
-                String selUsage = (String)spinnerUsage.getSelectedItem();
+            if (isRandomSelected[0]) {
+                String selGender = (String) spinnerGender.getSelectedItem();
+                String selSeason = (String) spinnerSeason.getSelectedItem();
+                String selUsage = (String) spinnerUsage.getSelectedItem();
 
                 if (selGender == null || selSeason == null || selUsage == null) {
                     Toast.makeText(this, "Please select all fields.", Toast.LENGTH_SHORT).show();
@@ -200,8 +217,24 @@ public class HomepageActivity extends AppCompatActivity {
                 }
 
                 gatherRecommendations(selGender, selSeason, selUsage);
+            } else {
+                Intent intent = new Intent(HomepageActivity.this, ClosetRecommendationActivity.class);
+                startActivity(intent);
+            }
         });
+
     }
+
+    private void setToggleState(Button selected, Button unselected) {
+        // selected
+        selected.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.md_theme_primaryContainer));
+        selected.setTextColor(ContextCompat.getColor(this, android.R.color.black));
+
+        //unselected
+        unselected.setBackgroundTintList(ContextCompat.getColorStateList(this, android.R.color.white));
+        unselected.setTextColor(ContextCompat.getColor(this, android.R.color.black));
+    }
+
 
     @Override
     protected void onResume() {

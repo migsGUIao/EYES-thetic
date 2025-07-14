@@ -38,7 +38,7 @@
         android:id="@+id/favoritesBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/dark_stroke"
+        android:background="@drawable/alt_filled_box"
         android:layout_marginStart="48dp"
         android:layout_marginEnd="48dp"
         android:elevation="4dp"
@@ -182,22 +182,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/favoritesBox"
         app:layout_constraintBottom_toTopOf="@+id/favNavbar"
-        app:strokeColor="@color/md_theme_onSurfaceVariant"
         app:strokeWidth="2dp"
-        android:importantForAccessibility="no"/>
+        app:cornerRadius="12dp"
+        app:strokeColor="@color/md_theme_onSurfaceVariant"
+        android:importantForAccessibility="yes" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        app:layout_constraintBottom_toTopOf="@id/favNavbar"
+        android:background="@drawable/nav_shadow"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/favNavbar"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
+        android:layout_height="64dp"
         android:background="@color/md_theme_primaryContainer"
-        android:elevation="24dp"
         android:orientation="horizontal"
+        android:elevation="24dp"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/eyesthetic_navbar" />
+        app:itemActiveIndicatorStyle="@null"
+        app:itemIconTint="@null"
+        app:menu="@menu/eyesthetic_navbar" />/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">.</string>
+    <string name="app_name">Eyesthetic</string>
 
     <!--  LANDING  -->
     <string name="landing_welcome">Welcome!</string>
-    <string name="landing_message">I am your EYES-thetic assistant to help you with your fashion needs!</string>
+    <string name="landing_message">I am your &lt;b&gt;EYES-thetic&lt;/b&gt; assistant to help you with your fashion needs!</string>
     <string name="landing_button">Try it now!</string>
 
     <!--  LOGIN & REGISTER  -->
@@ -11,6 +11,8 @@
     <string name="login_subheading">Login to your account</string>
     <string name="login_button">Login</string>
     <string name="login_redirect">Don\'t have an account? Sign up!</string>
+    <string name="login_emailLabel">Enter your email</string>
+    <string name="login_emailTb">Textbox for email</string>
 
     <string name="register_heading">Create an account!</string>
     <string name="register_subheading">Sign up now</string>
@@ -35,7 +37,7 @@
     <string name="favorites">Favorites</string>
 
     <!--  HOMEPAGE  -->
-    <string name="home_welcome">Welcome,</string>
+    <string name="home_welcome">Hi,</string>
     <string name="home_startque">What are you looking for?</string>
     <string name="home_random">Random Recommendation</string>
     <string name="home_closet">Recommendation from Closet</string>

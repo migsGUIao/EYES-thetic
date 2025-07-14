@@ -111,16 +111,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/plus" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        app:layout_constraintBottom_toTopOf="@id/closetNavbar"
+        android:background="@drawable/nav_shadow"/>
+
     <!-- Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/closetNavbar"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:elevation="24dp"
         android:background="@color/md_theme_primaryContainer"
+        android:orientation="horizontal"
+        android:elevation="24dp"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:menu="@menu/eyesthetic_navbar"
-        app:labelVisibilityMode="labeled" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:itemActiveIndicatorStyle="@null"
+        app:itemIconTint="@null"
+        app:menu="@menu/eyesthetic_navbar"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
