@@ -6,21 +6,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ImageView;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.HashSet;
-import java.util.Set;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RecommendationActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
@@ -29,7 +30,6 @@ public class RecommendationActivity extends AppCompatActivity {
     ImageView topImageView, bottomImageView;
     FloatingActionButton nextBtn, prevBtn;
     BottomNavigationView bottomNavigationView;
-
 
     ArrayList<String> topNames, topColors, topImageUrls;
     ArrayList<String> bottomNames, bottomColors, bottomImageUrls;
@@ -69,57 +69,39 @@ public class RecommendationActivity extends AppCompatActivity {
         totalCount = topNames.size();
         showRecommendation(currentIndex);
 
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentIndex < totalCount - 1) {
-                    currentIndex++;
-                    showRecommendation(currentIndex);
-                }
+        nextBtn.setOnClickListener(view -> {
+            if (currentIndex < totalCount - 1) {
+                currentIndex++;
+                showRecommendation(currentIndex);
             }
         });
 
-        prevBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    showRecommendation(currentIndex);
-                }
+        prevBtn.setOnClickListener(view -> {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showRecommendation(currentIndex);
             }
         });
 
-        favoriteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveFavorite(currentIndex);
-            }
-        });
+        favoriteButton.setOnClickListener(view -> saveFavoriteToFirestore(currentIndex));
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
 
             if (id == R.id.homeIcon) {
-                Intent intent = new Intent(RecommendationActivity.this, HomepageActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                startActivity(new Intent(this, HomepageActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
                 return true;
             } else if (id == R.id.closetIcon) {
-                Intent intent = new Intent(RecommendationActivity.this, ClosetActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                startActivity(new Intent(this, ClosetActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
             } else if (id == R.id.favoritesIcon) {
-                Intent intent = new Intent(RecommendationActivity.this, FavoritesActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                startActivity(new Intent(this, FavoritesActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
             } else if (id == R.id.logoutIcon) {
-                // Logout user
                 mAuth.signOut();
-
-                // Go to login and clear back stack
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                startActivity(new Intent(this, LoginActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                 finish();
                 return true;
             }
@@ -134,23 +116,20 @@ public class RecommendationActivity extends AppCompatActivity {
 
         String bottomName  = bottomNames.get(index);
         String bottomColor = bottomColors.get(index);
-        String bottomUrl    = bottomImageUrls.get(index);
+        String bottomUrl   = bottomImageUrls.get(index);
 
         topTextView.setText("Top: " + topName + " (" + topColor + ")");
         bottomTextView.setText("Bottom: " + bottomName + " (" + bottomColor + ")");
         indexTextView.setText("Recommendation " + (index + 1) + " / " + totalCount);
 
-        // sr for top and bottom
         String combinedDesc = "Recommendation " + (index + 1) + " of " + totalCount
                 + "Top: " + topName + ", color " + topColor
                 + "Bottom: " + bottomName + ", color " + bottomColor + ".";
 
         topTextView.announceForAccessibility(combinedDesc);
 
-        // Load images with Glide
         if (!topUrl.isEmpty()) {
-            Glide.with(this)
-                    .load(topUrl)
+            Glide.with(this).load(topUrl)
                     .placeholder(R.drawable.placeholder_top)
                     .error(R.drawable.error_placeholder)
                     .into(topImageView);
@@ -159,8 +138,7 @@ public class RecommendationActivity extends AppCompatActivity {
         }
 
         if (!bottomUrl.isEmpty()) {
-            Glide.with(this)
-                    .load(bottomUrl)
+            Glide.with(this).load(bottomUrl)
                     .placeholder(R.drawable.placeholder_bottom)
                     .error(R.drawable.error_placeholder)
                     .into(bottomImageView);
@@ -169,7 +147,7 @@ public class RecommendationActivity extends AppCompatActivity {
         }
     }
 
-    private void saveFavorite(int index) {
+    private void saveFavoriteToFirestore(int index) {
         try {
             JSONObject favObject = new JSONObject();
             favObject.put("topName", topNames.get(index));
@@ -180,28 +158,32 @@ public class RecommendationActivity extends AppCompatActivity {
             favObject.put("bottomColor", bottomColors.get(index));
             favObject.put("bottomImageUrl", bottomImageUrls.get(index));
 
-            String favJsonString = favObject.toString();
-
-            // retrieve existing favorites set from SharedPreferences
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            Set<String> existing = prefs.getStringSet("favorites", null);
-
-            // copy into a new HashSet so we can edit it
-            Set<String> newSet = (existing == null) ? new HashSet<>() : new HashSet<>(existing);
-
-            // add our new favorite JSON
-            newSet.add(favJsonString);
-
-            // save back to SharedPreferences
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putStringSet("favorites", newSet);
-            editor.apply();
-
-            Toast.makeText(this, "Saved to favorites!", Toast.LENGTH_SHORT).show();
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("user").document(uid)
+                    .collection("favorites")
+                    .add(jsonToMap(favObject))
+                    .addOnSuccessListener(documentReference ->
+                            Toast.makeText(this, "Saved to favorites!", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e ->
+                            Toast.makeText(this, "Failed to save favorite.", Toast.LENGTH_SHORT).show());
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "Failed to save favorite.", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private Map<String, Object> jsonToMap(JSONObject json) {
+        Map<String, Object> map = new HashMap<>();
+        Iterator<String> keys = json.keys();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            try {
+                map.put(key, json.get(key));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return map;
+    }
 }

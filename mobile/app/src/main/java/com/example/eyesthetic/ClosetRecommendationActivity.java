@@ -22,8 +22,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -123,13 +128,36 @@ public class ClosetRecommendationActivity extends AppCompatActivity {
             }
         });
 
-        favoriteButton.setOnClickListener(v ->
-                Toast.makeText(this,
-                        "★ Favorited: " + recs.get(currentIndex).topName
-                                + " + " + recs.get(currentIndex).bottomName,
-                        Toast.LENGTH_SHORT).show()
-        );
+        favoriteButton.setOnClickListener(v -> saveCurrentPairToFavorites());
     }
+    private void saveCurrentPairToFavorites() {
+        if (recs.isEmpty()) return;
+
+        PairRec pair = recs.get(currentIndex);
+        try {
+            JSONObject favObject = new JSONObject();
+            favObject.put("topName", pair.topName);
+            favObject.put("topImageUrl", pair.topImageUrl);
+            favObject.put("bottomName", pair.bottomName);
+            favObject.put("bottomImageUrl", pair.bottomImageUrl);
+
+            db.collection("user").document(uid)
+                    .collection("favorites")
+                    .add(jsonToMap(favObject))
+                    .addOnSuccessListener(docRef -> {
+                        Toast.makeText(this, "Saved to favorites!", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Failed to save favorite", e);
+                        Toast.makeText(this, "Failed to save favorite.", Toast.LENGTH_SHORT).show();
+                    });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Failed to prepare favorite data.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     private void loadClosetAndBuildPairs() {
         if (uid == null) {
@@ -184,6 +212,21 @@ public class ClosetRecommendationActivity extends AppCompatActivity {
                     showError("Failed to load your closet.");
                 });
     }
+    private Map<String, Object> jsonToMap(JSONObject json) {
+        Map<String, Object> map = new HashMap<>();
+        Iterator<String> keys = json.keys();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            try {
+                map.put(key, json.get(key));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return map;
+    }
+
+
 
     private void showPair(int idx) {
         currentIndex = idx;
