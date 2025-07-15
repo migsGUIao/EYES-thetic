@@ -69,6 +69,40 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    public void resetPassword(View view) {
+        EditText input = new EditText(this);
+        input.setHint("Enter your email");
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Reset Password")
+                .setMessage("We'll send a reset link to your email.")
+                .setView(input)
+                .setPositiveButton("Send", (dialog, which) -> {
+                    String email = input.getText().toString().trim();
+                    if (email.isEmpty()) {
+                        Toast.makeText(LoginActivity.this, "Email is required", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        Toast.makeText(LoginActivity.this, "Please enter a valid email", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    mAuth.sendPasswordResetEmail(email)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(LoginActivity.this, "Password reset link sent to your email", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+
     public void registerRedirect(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
