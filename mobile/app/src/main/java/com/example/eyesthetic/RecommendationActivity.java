@@ -18,6 +18,7 @@ import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -84,6 +85,14 @@ public class RecommendationActivity extends AppCompatActivity {
         });
 
         favoriteButton.setOnClickListener(view -> saveFavoriteToFirestore(currentIndex));
+
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        topAppBar.setNavigationOnClickListener(v -> {
+            Intent intent = new Intent(RecommendationActivity.this, HomepageActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        });
+
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();

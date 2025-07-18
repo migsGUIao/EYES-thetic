@@ -285,7 +285,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/homeNavbar"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:background="@color/md_theme_primaryContainer"
         android:orientation="horizontal"
         android:elevation="24dp"

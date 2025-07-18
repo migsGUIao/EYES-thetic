@@ -74,6 +74,8 @@
     <string name="favrec_favHeading">Favorites</string>
     <string name="favrec_prevDesc">Previous favorite</string>
     <string name="favrec_nextDesc">Next favorite</string>
+    <string name="rec_prevDesc">Previous recommendation</string>
+    <string name="rec_nextDesc">Next recommendation</string>
     <string name="favrec_iconDesc">Favorites Button</string>
     <string name="favrec_combo">Combo: </string>
     <string name="favrec_bottom">Bottom: </string>

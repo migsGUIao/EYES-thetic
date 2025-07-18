@@ -174,12 +174,17 @@ public class ClosetActivity extends AppCompatActivity {
 
 
         Button takePhoto = dialog.findViewById(R.id.takePhotoBtn);
+        Button cancelBtn = dialog.findViewById(R.id.cancelBtn);
         //Button uploadImage = dialog.findViewById(R.id.uploadImageBtn);
 
         takePhoto.setOnClickListener(v -> {
             dialog.dismiss();
             Intent intent = new Intent(this, CameraActivity.class);
             startActivity(intent);
+        });
+
+        cancelBtn.setOnClickListener(v -> {
+            dialog.dismiss(); // dismiss the dialog
         });
 
 

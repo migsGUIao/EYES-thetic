@@ -1,0 +1,2 @@
+ninja: Entering directory `C:\Users\Rain\Desktop\THESIS\app versions\7.12\mobile\sdk\.cxx\Debug\1t1q3hfn\x86_64'
+ninja: no work to do.

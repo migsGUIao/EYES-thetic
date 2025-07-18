@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -65,6 +66,14 @@ public class ClosetRecommendationActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.recoNavbar);
 
         mAuth = FirebaseAuth.getInstance();
+
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        topAppBar.setNavigationOnClickListener(v -> {
+            Intent intent = new Intent(ClosetRecommendationActivity.this, HomepageActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        });
+
 
 
         bottomNavigationView.setOnItemSelectedListener(item -> {

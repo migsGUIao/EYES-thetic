@@ -30,14 +30,14 @@ public class LandingActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        /*if (OpenCVLoader.initLocal()) {
+        if (OpenCVLoader.initLocal()) {
             //Log.i(TAG, "OpenCV loaded successfully");
             (Toast.makeText(this, "OpenCV loaded successfully!", Toast.LENGTH_LONG)).show();
         } else {
             //Log.e(TAG, "OpenCV initialization failed!");
             (Toast.makeText(this, "OpenCV initialization failed!", Toast.LENGTH_LONG)).show();
             return;
-        } */
+        }
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {

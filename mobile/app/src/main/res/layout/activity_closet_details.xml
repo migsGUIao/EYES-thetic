@@ -26,6 +26,16 @@
             android:layout_marginBottom="24dp"
             android:layout_marginTop="36dp"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Name:"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="16sp"
+            android:labelFor="@id/nameInput"
+            android:importantForAccessibility="yes"/>
+
         <EditText
             android:id="@+id/nameInput"
             android:layout_width="match_parent"
@@ -43,6 +53,16 @@
             android:autofillHints="name"
             android:layout_marginBottom="12dp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Clothing Type:"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="16sp"
+            android:labelFor="@id/typeSpinner"
+            android:importantForAccessibility="yes"/>
+
         <Spinner
             android:id="@+id/typeSpinner"
             android:layout_width="match_parent"
@@ -54,6 +74,16 @@
             android:paddingEnd="12dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Clothing Color:"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="16sp"
+            android:labelFor="@id/colorInput"
+            android:importantForAccessibility="yes"/>
 
         <EditText
             android:id="@+id/colorInput"
@@ -81,6 +111,16 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Clothing Gender:"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="16sp"
+            android:labelFor="@id/genderSpinner"
+            android:importantForAccessibility="yes"/>
+
         <Spinner
             android:id="@+id/genderSpinner"
             android:layout_width="match_parent"
@@ -93,6 +133,16 @@
             android:paddingBottom="8dp"
             android:layout_marginBottom="8dp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Clothing Season:"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="16sp"
+            android:labelFor="@id/seasonSpinner"
+            android:importantForAccessibility="yes"/>
+
         <Spinner
             android:id="@+id/seasonSpinner"
             android:layout_width="match_parent"
@@ -104,6 +154,16 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Clothing Usage:"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="16sp"
+            android:labelFor="@id/usageSpinner"
+            android:importantForAccessibility="yes"/>
 
         <Spinner
             android:id="@+id/usageSpinner"
