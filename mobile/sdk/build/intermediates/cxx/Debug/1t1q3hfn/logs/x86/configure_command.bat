@@ -5,15 +5,15 @@
   "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" ^
   "-DCMAKE_SYSTEM_VERSION=21" ^
   "-DANDROID_PLATFORM=android-21" ^
-  "-DANDROID_ABI=arm64-v8a" ^
-  "-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a" ^
+  "-DANDROID_ABI=x86" ^
+  "-DCMAKE_ANDROID_ARCH_ABI=x86" ^
   "-DANDROID_NDK=C:\\Users\\Rain\\AppData\\Local\\Android\\Sdk\\ndk\\27.0.12077973" ^
   "-DCMAKE_ANDROID_NDK=C:\\Users\\Rain\\AppData\\Local\\Android\\Sdk\\ndk\\27.0.12077973" ^
   "-DCMAKE_TOOLCHAIN_FILE=C:\\Users\\Rain\\AppData\\Local\\Android\\Sdk\\ndk\\27.0.12077973\\build\\cmake\\android.toolchain.cmake" ^
   "-DCMAKE_MAKE_PROGRAM=C:\\Users\\Rain\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe" ^
-  "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\\Users\\Rain\\Desktop\\THESIS\\app versions\\7.31\\mobile\\sdk\\build\\intermediates\\cxx\\Debug\\1t1q3hfn\\obj\\arm64-v8a" ^
-  "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\\Users\\Rain\\Desktop\\THESIS\\app versions\\7.31\\mobile\\sdk\\build\\intermediates\\cxx\\Debug\\1t1q3hfn\\obj\\arm64-v8a" ^
+  "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\\Users\\Rain\\Desktop\\THESIS\\app versions\\7.31\\mobile\\sdk\\build\\intermediates\\cxx\\Debug\\1t1q3hfn\\obj\\x86" ^
+  "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\\Users\\Rain\\Desktop\\THESIS\\app versions\\7.31\\mobile\\sdk\\build\\intermediates\\cxx\\Debug\\1t1q3hfn\\obj\\x86" ^
   "-DCMAKE_BUILD_TYPE=Debug" ^
-  "-BC:\\Users\\Rain\\Desktop\\THESIS\\app versions\\7.31\\mobile\\sdk\\.cxx\\Debug\\1t1q3hfn\\arm64-v8a" ^
+  "-BC:\\Users\\Rain\\Desktop\\THESIS\\app versions\\7.31\\mobile\\sdk\\.cxx\\Debug\\1t1q3hfn\\x86" ^
   -GNinja ^
   "-DANDROID_STL=c++_shared"

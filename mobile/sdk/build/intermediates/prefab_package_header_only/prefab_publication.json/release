@@ -1,5 +1,5 @@
 {
-  "installationFolder": "C:\\Users\\Rain\\Desktop\\THESIS\\app versions\\7.12\\mobile\\sdk\\build\\intermediates\\prefab_package\\release\\prefab",
+  "installationFolder": "C:\\Users\\Rain\\Desktop\\THESIS\\app versions\\7.31\\mobile\\sdk\\build\\intermediates\\prefab_package\\release\\prefab",
   "gradlePath": ":sdk",
   "packageInfo": {
     "packageName": "sdk",
@@ -8,7 +8,7 @@
     "modules": [
       {
         "moduleName": "opencv_jni_shared",
-        "moduleHeaders": "C:\\Users\\Rain\\Desktop\\THESIS\\app versions\\7.12\\mobile\\sdk\\native\\jni\\include",
+        "moduleHeaders": "C:\\Users\\Rain\\Desktop\\THESIS\\app versions\\7.31\\mobile\\sdk\\native\\jni\\include",
         "moduleExportLibraries": [],
         "abis": []
       }
