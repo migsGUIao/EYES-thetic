@@ -2,9 +2,11 @@ package com.example.eyesthetic;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -29,6 +31,7 @@ public class LandingActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         super.onCreate(savedInstanceState);
+
 
         if (OpenCVLoader.initLocal()) {
             //Log.i(TAG, "OpenCV loaded successfully");
@@ -55,6 +58,10 @@ public class LandingActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        TextView landingMessage = findViewById(R.id.landingMessage);
+        landingMessage.setText(Html.fromHtml(getString(R.string.landing_message), Html.FROM_HTML_MODE_LEGACY));
+
 
         landingBtn = findViewById(R.id.landingBtn);
     }
